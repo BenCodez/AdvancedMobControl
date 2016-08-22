@@ -1,0 +1,12 @@
+# Display debug messages
+Debug: false
+
+# Max number of mobs before money is 0
+# Higher the number the more money players get
+MaxMobs: 20
+
+Format:
+  # Message when player is given money for killing entity
+  Money: 'You were given $%Money% for killing %Entity%'
+  # Message when player is given money for killing entity via specific damage
+  MoneyDamage: 'You were given $%Money% for killing %Entity% by %Damage%'

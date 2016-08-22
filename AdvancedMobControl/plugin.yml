@@ -1,0 +1,8 @@
+name: AdvancedMobControl
+version: 1.0
+main: com.Ben12345rocks.AdvancedMobControl.Main
+softdepend: [AdvancedCore]
+commands:
+  advancedmobcontrol:
+    description: Plugin command
+    aliases: [mobcontrol]
