@@ -1,0 +1,2 @@
+# AdvancedMobControl
+Plugin on SpigotMC
