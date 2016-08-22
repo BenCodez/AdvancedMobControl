@@ -13,14 +13,24 @@ import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
+/**
+ * The Class CommandLoader.
+ */
 public class CommandLoader {
 
+	/** The plugin. */
 	public Main plugin = Main.plugin;
 
+	/**
+	 * Instantiates a new command loader.
+	 */
 	public CommandLoader() {
 		loadCommands();
 	}
 
+	/**
+	 * Load commands.
+	 */
 	public void loadCommands() {
 		plugin.advancedMobControlCommands = new ArrayList<CommandHandler>();
 		plugin.advancedMobControlCommands.add(new CommandHandler(
@@ -89,19 +99,19 @@ public class CommandLoader {
 		});
 
 		plugin.advancedMobControlCommands
-				.add(new CommandHandler(new String[] { "Entity", "(entity)",
-						"SetMoney", "(number)", "(entitydamagecause)" },
-						"AdvancedMobControl.Entity.SetMoney.Damage",
-						"Set the amount of money for killing entity on specific damage") {
+		.add(new CommandHandler(new String[] { "Entity", "(entity)",
+				"SetMoney", "(number)", "(entitydamagecause)" },
+				"AdvancedMobControl.Entity.SetMoney.Damage",
+				"Set the amount of money for killing entity on specific damage") {
 
-					@Override
-					public void execute(CommandSender sender, String[] args) {
-						ConfigEntity.getInstance().setMoney(args[1], args[4],
-								Integer.parseInt(args[3]));
-						sender.sendMessage(Utils.getInstance().colorize(
-								"&cMoney set"));
-					}
-				});
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				ConfigEntity.getInstance().setMoney(args[1], args[4],
+						Integer.parseInt(args[3]));
+				sender.sendMessage(Utils.getInstance().colorize(
+						"&cMoney set"));
+			}
+		});
 
 		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
 				"Entity", "(entity)", "SetExp", "(number)" },
@@ -118,7 +128,7 @@ public class CommandLoader {
 
 		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
 				"Entity", "(entity)", "SetHealth", "(entityspawnreason)",
-				"(number)" }, "AdvancedMobControl.Entity.SetHealth",
+		"(number)" }, "AdvancedMobControl.Entity.SetHealth",
 				"Set the amount of exp dropped on death of entity") {
 
 			@Override

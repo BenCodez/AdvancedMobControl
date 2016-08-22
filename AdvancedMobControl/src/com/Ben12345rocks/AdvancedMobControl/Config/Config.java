@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package com.Ben12345rocks.AdvancedMobControl.Config;
 
@@ -76,18 +76,33 @@ public class Config {
 		return getData().getBoolean("Debug");
 	}
 
+	/**
+	 * Gets the format money.
+	 *
+	 * @return the format money
+	 */
 	public String getFormatMoney() {
 		return getData().getString("Format.Money",
 				"You were given $%Money% for killing %Entity%");
 	}
 
-	public int getMaxMobs() {
-		return getData().getInt("MaxMobs", 20);
-	}
-
+	/**
+	 * Gets the format money damage.
+	 *
+	 * @return the format money damage
+	 */
 	public String getFormatMoneyDamage() {
 		return getData().getString("Format.MoneyDamage",
 				"You were given $%Money% for killing %Entity% by %Damage%");
+	}
+
+	/**
+	 * Gets the max mobs.
+	 *
+	 * @return the max mobs
+	 */
+	public int getMaxMobs() {
+		return getData().getInt("MaxMobs", 20);
 	}
 
 	/**
@@ -123,7 +138,7 @@ public class Config {
 				plugin.saveResource("Config.yml", true);
 			} catch (IOException e) {
 				Bukkit.getServer().getLogger()
-						.severe(ChatColor.RED + "Could not create Config.yml!");
+				.severe(ChatColor.RED + "Could not create Config.yml!");
 			}
 		}
 

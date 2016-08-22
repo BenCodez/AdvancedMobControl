@@ -13,7 +13,7 @@ import com.Ben12345rocks.AdvancedMobControl.Main;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ConfigEntitys.
+ * The Class ConfigEntity.
  */
 public class ConfigEntity {
 
@@ -24,35 +24,22 @@ public class ConfigEntity {
 	static Main plugin = Main.plugin;
 
 	/**
-	 * Gets the single instance of ConfigEntitys.
+	 * Gets the single instance of ConfigEntity.
 	 *
-	 * @return single instance of ConfigEntitys
+	 * @return single instance of ConfigEntity
 	 */
 	public static ConfigEntity getInstance() {
 		return instance;
 	}
 
 	/**
-	 * Gets the data.
-	 *
-	 * @param Entity
-	 *            the site name
-	 * @return the data
-	 */
-	public FileConfiguration getData(String entity) {
-		File dFile = getEntityFile(entity);
-		FileConfiguration data = YamlConfiguration.loadConfiguration(dFile);
-		return data;
-	}
-
-	/**
-	 * Instantiates a new config vote sites.
+	 * Instantiates a new config entity.
 	 */
 	private ConfigEntity() {
 	}
 
 	/**
-	 * Instantiates a new config vote sites.
+	 * Instantiates a new config entity.
 	 *
 	 * @param plugin
 	 *            the plugin
@@ -62,11 +49,24 @@ public class ConfigEntity {
 	}
 
 	/**
-	 * Gets the vote site file.
+	 * Gets the data.
 	 *
-	 * @param Entity
-	 *            the site name
-	 * @return the vote site file
+	 * @param entity
+	 *            the entity
+	 * @return the data
+	 */
+	public FileConfiguration getData(String entity) {
+		File dFile = getEntityFile(entity);
+		FileConfiguration data = YamlConfiguration.loadConfiguration(dFile);
+		return data;
+	}
+
+	/**
+	 * Gets the entity file.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @return the entity file
 	 */
 	public File getEntityFile(String entity) {
 		File dFile = new File(plugin.getDataFolder() + File.separator
@@ -78,7 +78,7 @@ public class ConfigEntity {
 			} catch (IOException e) {
 				plugin.getLogger().severe(
 						ChatColor.RED + "Could not create Entity/" + entity
-								+ ".yml!");
+						+ ".yml!");
 
 			}
 		}
@@ -87,21 +87,22 @@ public class ConfigEntity {
 	}
 
 	/**
-	 * Gets the vote sites files.
+	 * Gets the entitys files.
 	 *
-	 * @return the vote sites files
+	 * @return the entitys files
 	 */
 	public ArrayList<String> getEntitysFiles() {
 		File folder = new File(plugin.getDataFolder() + File.separator
 				+ "Entity");
 		String[] fileNames = folder.list();
-		return com.Ben12345rocks.AdvancedCore.Utils.getInstance().convertArray(fileNames);
+		return com.Ben12345rocks.AdvancedCore.Utils.getInstance().convertArray(
+				fileNames);
 	}
 
 	/**
-	 * Gets the vote sites names.
+	 * Gets the entitys names.
 	 *
-	 * @return the vote sites names
+	 * @return the entitys names
 	 */
 	public ArrayList<String> getEntitysNames() {
 		ArrayList<String> Entitys = getEntitysFiles();
@@ -126,10 +127,58 @@ public class ConfigEntity {
 	}
 
 	/**
-	 * Rename vote site.
+	 * Gets the exp.
 	 *
-	 * @param Entity
-	 *            the site name
+	 * @param entity
+	 *            the entity
+	 * @return the exp
+	 */
+	public int getExp(String entity) {
+		return getData(entity).getInt("EXP");
+	}
+
+	/**
+	 * Gets the health.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param spawnReason
+	 *            the spawn reason
+	 * @return the health
+	 */
+	public double getHealth(String entity, String spawnReason) {
+		return getData(entity).getDouble(spawnReason + ".Health");
+	}
+
+	/**
+	 * Gets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @return the money
+	 */
+	public int getMoney(String entity) {
+		return getData(entity).getInt("Money");
+	}
+
+	/**
+	 * Gets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param damage
+	 *            the damage
+	 * @return the money
+	 */
+	public int getMoney(String entity, String damage) {
+		return getData(entity).getInt(damage + ".Money");
+	}
+
+	/**
+	 * Rename entity.
+	 *
+	 * @param entity
+	 *            the entity
 	 * @param newName
 	 *            the new name
 	 * @return true, if successful
@@ -141,10 +190,28 @@ public class ConfigEntity {
 	}
 
 	/**
+	 * Save data.
+	 *
+	 * @param dFile
+	 *            the d file
+	 * @param data
+	 *            the data
+	 */
+	public void saveData(File dFile, FileConfiguration data) {
+		try {
+			data.save(dFile);
+		} catch (IOException e) {
+			Bukkit.getServer()
+			.getLogger()
+			.severe(ChatColor.RED + "Could not save " + dFile.getName());
+		}
+	}
+
+	/**
 	 * Sets the.
 	 *
-	 * @param Entity
-	 *            the site name
+	 * @param entity
+	 *            the entity
 	 * @param path
 	 *            the path
 	 * @param value
@@ -159,22 +226,61 @@ public class ConfigEntity {
 	}
 
 	/**
-	 * Save data.
+	 * Sets the exp.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param value
+	 *            the value
 	 */
-	public void saveData(File dFile, FileConfiguration data) {
-		try {
-			data.save(dFile);
-		} catch (IOException e) {
-			Bukkit.getServer()
-					.getLogger()
-					.severe(ChatColor.RED + "Could not save " + dFile.getName());
-		}
+	public void setExp(String entity, int value) {
+		set(entity, "EXP", value);
+	}
+
+	/**
+	 * Sets the health.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param spawnReason
+	 *            the spawn reason
+	 * @param value
+	 *            the value
+	 */
+	public void setHealth(String entity, String spawnReason, double value) {
+		set(entity, spawnReason + ".Health", value);
+	}
+
+	/**
+	 * Sets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param value
+	 *            the value
+	 */
+	public void setMoney(String entity, int value) {
+		set(entity, "Money", value);
+	}
+
+	/**
+	 * Sets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param damage
+	 *            the damage
+	 * @param value
+	 *            the value
+	 */
+	public void setMoney(String entity, String damage, int value) {
+		set(entity, damage + ".Money", value);
 	}
 
 	/**
 	 * Sets the up.
 	 *
-	 * @param Entity
+	 * @param entity
 	 *            the new up
 	 */
 	public void setup(String entity) {
@@ -195,40 +301,8 @@ public class ConfigEntity {
 			} catch (IOException e) {
 				plugin.getLogger().severe(
 						ChatColor.RED + "Could not create Entity/" + entity
-								+ ".yml!");
+						+ ".yml!");
 			}
 		}
-	}
-
-	public int getMoney(String entity) {
-		return getData(entity).getInt("Money");
-	}
-
-	public void setMoney(String entity, int value) {
-		set(entity, "Money", value);
-	}
-
-	public int getMoney(String entity, String damage) {
-		return getData(entity).getInt(damage + ".Money");
-	}
-
-	public void setMoney(String entity, String damage, int value) {
-		set(entity, damage + ".Money", value);
-	}
-
-	public void setExp(String entity, int value) {
-		set(entity, "EXP", value);
-	}
-
-	public int getExp(String entity) {
-		return getData(entity).getInt("EXP");
-	}
-
-	public double getHealth(String entity, String spawnReason) {
-		return getData(entity).getDouble(spawnReason + ".Health");
-	}
-
-	public void setHealth(String entity, String spawnReason, double value) {
-		set(entity, spawnReason + ".Health", value);
 	}
 }

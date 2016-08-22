@@ -18,7 +18,7 @@ import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class VoteTabCompleter.
+ * The Class AdvancedMobControlTabCompleter.
  */
 public class AdvancedMobControlTabCompleter implements TabCompleter {
 
@@ -113,7 +113,7 @@ public class AdvancedMobControlTabCompleter implements TabCompleter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.
 	 * CommandSender, org.bukkit.command.Command, java.lang.String,
 	 * java.lang.String[])

@@ -25,7 +25,21 @@ public class Main extends JavaPlugin {
 	/** The plugin. */
 	public static Main plugin;
 
+	/** The advanced mob control commands. */
 	public ArrayList<CommandHandler> advancedMobControlCommands;
+
+	/**
+	 * Check advanced core.
+	 */
+	public void checkAdvancedCore() {
+		if (Bukkit.getPluginManager().getPlugin("AdvancedCore") != null) {
+			plugin.getLogger().info("Found AdvancedCore");
+		} else {
+			plugin.getLogger().severe(
+					"Failed to find AdvancedCore, plugin disabling");
+			Bukkit.getPluginManager().disablePlugin(plugin);
+		}
+	}
 
 	/**
 	 * Debug.
@@ -54,7 +68,7 @@ public class Main extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
 	 */
 	@Override
@@ -64,7 +78,7 @@ public class Main extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
 	 */
 	@Override
@@ -80,16 +94,6 @@ public class Main extends JavaPlugin {
 				"Enabled " + plugin.getName() + " "
 						+ plugin.getDescription().getVersion());
 
-	}
-	
-	public void checkAdvancedCore() {
-		if (Bukkit.getPluginManager().getPlugin("AdvancedCore") != null) {
-			plugin.getLogger().info("Found AdvancedCore");
-		} else {
-			plugin.getLogger().severe(
-					"Failed to find AdvancedCore, plugin disabling");
-			Bukkit.getPluginManager().disablePlugin(plugin);
-		}
 	}
 
 	/**
