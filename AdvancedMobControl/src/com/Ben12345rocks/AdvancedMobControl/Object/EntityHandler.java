@@ -76,7 +76,7 @@ public class EntityHandler {
 		int exp = ConfigEntity.getInstance().getExp(entityType.toString());
 		if (exp == 0) {
 			ConfigEntity.getInstance()
-			.setExp(entityType.toString(), defaultExp);
+					.setExp(entityType.toString(), defaultExp);
 			exp = defaultExp;
 		}
 		if (exp < 0) {
@@ -138,12 +138,11 @@ public class EntityHandler {
 		double money = ConfigEntity.getInstance().getMoney(
 				entityType.toString());
 		money = money * percent;
-		money = Utils.getInstance().roundDecimals(money, 2);
 		user.giveMoney(money);
 		// Main.plugin.debug("Money: " + money);
 		if (money != 0) {
 			user.sendMessage(Config.getInstance().getFormatMoney()
-					.replace("%Money%", "" + money)
+					.replace("%Money%", Utils.getInstance().roundDecimals(money, 2))
 					.replace("%Entity%", entityType.toString()));
 		}
 
@@ -151,12 +150,11 @@ public class EntityHandler {
 			money = ConfigEntity.getInstance().getMoney(entityType.toString(),
 					damage);
 			money = money * percent;
-			money = Utils.getInstance().roundDecimals(money, 2);
 			user.giveMoney(money);
 			// Main.plugin.debug("SpecificDamageMoney: " + money);
 			if (money != 0) {
 				user.sendMessage(Config.getInstance().getFormatMoneyDamage()
-						.replace("%Money%", "" + money)
+						.replace("%Money%", Utils.getInstance().roundDecimals(money, 2))
 						.replace("%Entity%", entityType.toString())
 						.replace("%Damage%", damage));
 			}
@@ -165,5 +163,4 @@ public class EntityHandler {
 
 		removeKills(user);
 	}
-
 }
