@@ -37,6 +37,8 @@ public class Main extends JavaPlugin {
 		} else {
 			plugin.getLogger().severe(
 					"Failed to find AdvancedCore, plugin disabling");
+			plugin.getLogger()
+					.severe("Download at: https://www.spigotmc.org/resources/advancedcore.28295/");
 			Bukkit.getPluginManager().disablePlugin(plugin);
 		}
 	}
@@ -68,7 +70,7 @@ public class Main extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
 	 */
 	@Override
@@ -78,7 +80,7 @@ public class Main extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
 	 */
 	@Override
