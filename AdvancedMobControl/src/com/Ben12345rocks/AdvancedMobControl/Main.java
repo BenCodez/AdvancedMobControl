@@ -135,7 +135,7 @@ public class Main extends JavaPlugin {
 					public void run() {
 						checkUpdate();
 					}
-				}, 10l);
+				}, 15l);
 
 	}
 
