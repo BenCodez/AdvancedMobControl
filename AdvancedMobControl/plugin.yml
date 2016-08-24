@@ -1,5 +1,5 @@
 name: AdvancedMobControl
-version: 1.0
+version: 1.0.1
 main: com.Ben12345rocks.AdvancedMobControl.Main
 softdepend: [AdvancedCore]
 commands:
