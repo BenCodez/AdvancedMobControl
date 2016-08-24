@@ -41,7 +41,7 @@ public class MobSpawn implements Listener {
 		event.getEntity().setMaxHealth(
 				entityHandle.creatureSpawn(event.getEntity().getMaxHealth(),
 						event.getSpawnReason()));
-		event.getEntity().setHealth(1.0);
+		event.getEntity().setHealth(event.getEntity().getMaxHealth());
 	}
 
 }
