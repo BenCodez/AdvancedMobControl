@@ -95,61 +95,7 @@ public class CommandLoader {
 		});
 
 		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
-				"Entity", "(entity)", "SetMoney", "(number)" },
-				"AdvancedMobControl.Entity.SetMoney",
-				"Set the amount of money for killing entity") {
-
-			@Override
-			public void execute(CommandSender sender, String[] args) {
-				ConfigEntity.getInstance().setMoney(args[1],
-						Integer.parseInt(args[3]));
-				sender.sendMessage(Utils.getInstance().colorize("&cMoney set"));
-			}
-		});
-
-		plugin.advancedMobControlCommands
-				.add(new CommandHandler(new String[] { "Entity", "(entity)",
-						"SetMoney", "(number)", "(entitydamagecause)" },
-						"AdvancedMobControl.Entity.SetMoney.Damage",
-						"Set the amount of money for killing entity on specific damage") {
-
-					@Override
-					public void execute(CommandSender sender, String[] args) {
-						ConfigEntity.getInstance().setMoney(args[1], args[4],
-								Integer.parseInt(args[3]));
-						sender.sendMessage(Utils.getInstance().colorize(
-								"&cMoney set"));
-					}
-				});
-
-		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
-				"Entity", "(entity)", "SetExp", "(number)" },
-				"AdvancedMobControl.Entity.SetEXP",
-				"Set the amount of exp dropped on death of entity") {
-
-			@Override
-			public void execute(CommandSender sender, String[] args) {
-				ConfigEntity.getInstance().setExp(args[1],
-						Integer.parseInt(args[3]));
-				sender.sendMessage(Utils.getInstance().colorize("&cEXP set"));
-			}
-		});
-
-		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
-				"Entity", "(entity)", "SetHealth", "(entityspawnreason)",
-				"(number)" }, "AdvancedMobControl.Entity.SetHealth",
-				"Set the amount of exp dropped on death of entity") {
-
-			@Override
-			public void execute(CommandSender sender, String[] args) {
-				ConfigEntity.getInstance().setHealth(args[1], args[3],
-						Integer.parseInt(args[4]));
-				sender.sendMessage(Utils.getInstance().colorize("&cHealth set"));
-			}
-		});
-
-		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
-				"EntityGUI", "(Entity)" }, "AdvancedMobControl.EntityGUI",
+				"Entity", "(Entity)" }, "AdvancedMobControl.EntityGUI",
 				"Open GUI to edit entities") {
 
 			@Override
@@ -180,6 +126,7 @@ public class CommandLoader {
 									@Override
 									public void onAnvilClick(
 											AInventory.AnvilClickEvent event) {
+										Player player = event.getPlayer();
 										if (event.getSlot() == AInventory.AnvilSlot.OUTPUT) {
 
 											event.setWillClose(true);
@@ -260,9 +207,12 @@ public class CommandLoader {
 											InventoryClickEvent event) {
 										AInventory gui = new AInventory(player,
 												new AnvilClickEventHandler() {
+
 													@Override
 													public void onAnvilClick(
 															AInventory.AnvilClickEvent event) {
+														Player player = event
+																.getPlayer();
 														if (event.getSlot() == AInventory.AnvilSlot.OUTPUT) {
 
 															event.setWillClose(true);
@@ -370,9 +320,12 @@ public class CommandLoader {
 												AInventory gui = new AInventory(
 														player,
 														new AnvilClickEventHandler() {
+
 															@Override
 															public void onAnvilClick(
 																	AInventory.AnvilClickEvent event) {
+																Player player = event
+																		.getPlayer();
 																if (event
 																		.getSlot() == AInventory.AnvilSlot.OUTPUT) {
 
@@ -468,6 +421,7 @@ public class CommandLoader {
 									@Override
 									public void onAnvilClick(
 											AInventory.AnvilClickEvent event) {
+										Player player = event.getPlayer();
 										if (event.getSlot() == AInventory.AnvilSlot.OUTPUT) {
 
 											event.setWillClose(true);
