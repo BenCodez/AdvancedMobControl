@@ -95,7 +95,7 @@ public class CommandLoader {
 		});
 
 		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
-				"Entity", "(Entity)" }, "AdvancedMobControl.EntityGUI",
+				"Entity", "(Entity)" }, "AdvancedMobControl.Entity",
 				"Open GUI to edit entities") {
 
 			@Override
