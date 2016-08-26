@@ -54,8 +54,8 @@ public class EntityDeath implements Listener {
 	 * @param event
 	 *            the event
 	 */
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onCreatureSpawn(EntityDamageByEntityEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onCreatureDamage(EntityDamageByEntityEvent event) {
 		if (event.getDamager() instanceof Player
 				&& (event.getEntity() instanceof LivingEntity)) {
 			LivingEntity entity = (LivingEntity) event.getEntity();

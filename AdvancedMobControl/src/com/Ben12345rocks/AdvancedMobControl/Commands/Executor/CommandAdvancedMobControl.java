@@ -64,7 +64,7 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 
 		// invalid command
 		sender.sendMessage(ChatColor.RED
-				+ "No valid arguments, see /vote help!");
+				+ "No valid arguments, see /mobcontrol help!");
 		return true;
 	}
 
