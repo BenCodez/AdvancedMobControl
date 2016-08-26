@@ -129,13 +129,19 @@ public class Main extends JavaPlugin {
 				"Enabled " + plugin.getName() + " "
 						+ plugin.getDescription().getVersion());
 
-		Thread.getInstance().run(new Runnable() {
-
+Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+			
 			@Override
 			public void run() {
-				checkUpdate();
+				Thread.getInstance().run(new Runnable() {
+
+					@Override
+					public void run() {
+						checkUpdate();
+					}
+				});
 			}
-		});
+		}, 10l);
 
 	}
 
