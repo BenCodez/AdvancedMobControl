@@ -8,6 +8,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.Metrics;
 import com.Ben12345rocks.AdvancedCore.Util.Updater.Updater;
 import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
@@ -128,14 +129,19 @@ public class Main extends JavaPlugin {
 				"Enabled " + plugin.getName() + " "
 						+ plugin.getDescription().getVersion());
 
-		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin,
-				new Runnable() {
+Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				Thread.getInstance().run(new Runnable() {
 
 					@Override
 					public void run() {
 						checkUpdate();
 					}
-				}, 15l);
+				});
+			}
+		}, 10l);
 
 	}
 
