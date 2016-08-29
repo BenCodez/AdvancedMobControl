@@ -46,10 +46,12 @@ public class EntityDeath implements Listener {
 			if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event
 						.getEntity().getLastDamageCause();
-				Player player = (Player) damage.getDamager();
-				User user = new User(plugin, player);
-				handle.addKill(user);
-				handle.runRewards(user, damage.getCause().toString());
+				if (damage.getDamager() instanceof Player) {
+					Player player = (Player) damage.getDamager();
+					User user = new User(plugin, player);
+					handle.addKill(user);
+					handle.runRewards(user, damage.getCause().toString());
+				}
 			}
 		}
 	}
