@@ -1,5 +1,5 @@
 # AdvancedMobControl
-UpComing Plugin on SpigotMC
+Plugin on SpigotMC
 
 
 ##License
