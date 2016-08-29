@@ -30,6 +30,7 @@ public class Main extends JavaPlugin {
 	/** The advanced mob control commands. */
 	public ArrayList<CommandHandler> advancedMobControlCommands;
 
+	/** The updater. */
 	public Updater updater;
 
 	/**
@@ -47,6 +48,9 @@ public class Main extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Check update.
+	 */
 	public void checkUpdate() {
 		plugin.updater = new Updater(plugin, 28297, false);
 		final Updater.UpdateResult result = plugin.updater.getResult();

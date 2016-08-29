@@ -41,10 +41,18 @@ public class EntityDeath implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureDeath(EntityDeathEvent event) {
 		if (event.getEntity() instanceof LivingEntity) {
-
 			EntityHandler handle = new EntityHandler(event.getEntityType());
 			event.setDroppedExp(handle.getExp(event.getDroppedExp()));
-
+			if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event
+						.getEntity().getLastDamageCause();
+				if (damage.getDamager() instanceof Player) {
+					Player player = (Player) damage.getDamager();
+					User user = new User(plugin, player);
+					handle.addKill(user);
+					handle.runRewards(user, damage.getCause().toString());
+				}
+			}
 		}
 	}
 
@@ -54,19 +62,16 @@ public class EntityDeath implements Listener {
 	 * @param event
 	 *            the event
 	 */
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onCreatureDamage(EntityDamageByEntityEvent event) {
-		if (event.getDamager() instanceof Player
-				&& (event.getEntity() instanceof LivingEntity)) {
-			LivingEntity entity = (LivingEntity) event.getEntity();
-			if (event.getDamage() >= entity.getHealth()) {
-				Player player = (Player) event.getDamager();
-				EntityHandler handle = new EntityHandler(event.getEntityType());
-				User user = new User(plugin, player);
-				handle.addKill(user);
-				handle.runRewards(user, event.getCause().toString());
-			}
-		}
-	}
+	/*
+	 * @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	 * public void onCreatureDamage(EntityDamageByEntityEvent event) { if
+	 * (event.getDamager() instanceof Player && (event.getEntity() instanceof
+	 * LivingEntity)) { LivingEntity entity = (LivingEntity) event.getEntity();
+	 * if (event.getDamage() >= entity.getHealth()) { Player player = (Player)
+	 * event.getDamager(); EntityHandler handle = new
+	 * EntityHandler(event.getEntityType()); User user = new User(plugin,
+	 * player); handle.addKill(user); handle.runRewards(user,
+	 * event.getCause().toString()); } } }
+	 */
 
 }

@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -15,10 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import com.Ben12345rocks.AdvancedCore.Utils;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
-import com.Ben12345rocks.AdvancedCore.Util.AnvilInventory.AInventory;
-import com.Ben12345rocks.AdvancedCore.Util.AnvilInventory.AInventory.AnvilClickEventHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
+import com.Ben12345rocks.AdvancedCore.Util.Request.InputListener;
+import com.Ben12345rocks.AdvancedCore.Util.Request.RequestManager;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
@@ -94,6 +95,43 @@ public class CommandLoader {
 			}
 		});
 
+		plugin.advancedMobControlCommands.add(new CommandHandler(
+				new String[] { "Entity" }, "AdvancedMobControl.Entity",
+				"open list of entities") {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+
+				if (sender instanceof Player) {
+					BInventory inv = new BInventory("Entities");
+					int count = 0;
+					for (String entity : ConfigEntity.getInstance()
+							.getEntitysNames()) {
+						inv.addButton(count, new BInventoryButton(entity,
+								new String[0], new ItemStack(Material.STONE)) {
+
+							@Override
+							public void onClick(InventoryClickEvent event) {
+								if (event.getWhoClicked() instanceof Player) {
+									String entity = event.getCurrentItem()
+											.getItemMeta().getDisplayName();
+									Player player = (Player) event.getWhoClicked();
+									player.closeInventory();
+									player.performCommand("advancedmobcontrol Entity "
+											+ entity);
+								}
+
+							}
+						});
+						count++;
+					}
+					inv.openInventory((Player) sender);
+				} else {
+					sender.sendMessage("Must be player");
+				}
+			}
+		});
+
 		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] {
 				"Entity", "(Entity)" }, "AdvancedMobControl.Entity",
 				"Open GUI to edit entities") {
@@ -121,58 +159,42 @@ public class CommandLoader {
 						String entity = event.getInventory().getTitle()
 								.split(" ")[1];
 						Player player = (Player) event.getWhoClicked();
-						AInventory gui = new AInventory(player,
-								new AnvilClickEventHandler() {
+						player.closeInventory();
+						User user = new User(Main.plugin, player);
+						new RequestManager(
+								(Conversable) player,
+								user.getInputMethod(),
+								new InputListener() {
+
 									@Override
-									public void onAnvilClick(
-											AInventory.AnvilClickEvent event) {
-										Player player = event.getPlayer();
-										if (event.getSlot() == AInventory.AnvilSlot.OUTPUT) {
-
-											event.setWillClose(true);
-											event.setWillDestroy(true);
-
-											if (Utils.getInstance().isInt(
-													event.getName())) {
-												ConfigEntity
-														.getInstance()
-														.setMoney(
-																entity,
-																Integer.parseInt(event
-																		.getName()));
-												player.sendMessage(Utils
-														.getInstance()
-														.colorize("&cMoney set"));
-											} else {
-												player.sendMessage(Utils
-														.getInstance()
-														.colorize(
-																"&cError on: "
-																		+ event.getName()
-																		+ " Must be a number!"));
-											}
-
+									public void onInput(
+											Conversable conversable,
+											String input) {
+										String entity = event.getInventory()
+												.getTitle().split(" ")[1];
+										if (Utils.getInstance().isInt(input)) {
+											ConfigEntity
+													.getInstance()
+													.setMoney(
+															entity,
+															Integer.parseInt(input));
+											conversable
+													.sendRawMessage("Value set");
 										} else {
-											event.setWillClose(false);
-											event.setWillDestroy(false);
+											conversable
+													.sendRawMessage("Must be a interger");
 										}
-									}
-								});
 
-						ItemStack item = new ItemStack(Material.NAME_TAG);
-						item = Utils.getInstance().setName(
-								item,
+										plugin.reload();
+
+									}
+								}
+
+								,
+								"Type value in chat to send, cancel by typing cancel",
 								""
 										+ ConfigEntity.getInstance().getMoney(
 												entity));
-						ArrayList<String> lore = new ArrayList<String>();
-						lore.add("&cRename item and take out to set value");
-						lore.add("&cDoes not cost exp");
-						item = Utils.getInstance().addLore(item, lore);
-
-						gui.setSlot(AInventory.AnvilSlot.INPUT_LEFT, item);
-
-						gui.open();
 
 					}
 				});
@@ -205,74 +227,54 @@ public class CommandLoader {
 									@Override
 									public void onClick(
 											InventoryClickEvent event) {
-										AInventory gui = new AInventory(player,
-												new AnvilClickEventHandler() {
+										String entity = event.getInventory()
+												.getTitle().split(" ")[1];
+										Player player = (Player) event
+												.getWhoClicked();
+										player.closeInventory();
+										User user = new User(Main.plugin,
+												player);
+										new RequestManager(
+												(Conversable) player,
+												user.getInputMethod(),
+												new InputListener() {
 
 													@Override
-													public void onAnvilClick(
-															AInventory.AnvilClickEvent event) {
-														Player player = event
-																.getPlayer();
-														if (event.getSlot() == AInventory.AnvilSlot.OUTPUT) {
-
-															event.setWillClose(true);
-															event.setWillDestroy(true);
-
-															if (Utils
+													public void onInput(
+															Conversable conversable,
+															String input) {
+														String entity = event
+																.getInventory()
+																.getTitle()
+																.split(" ")[1];
+														if (Utils.getInstance()
+																.isInt(input)) {
+															ConfigEntity
 																	.getInstance()
-																	.isInt(event
-																			.getName())) {
-																ConfigEntity
-																		.getInstance()
-																		.setMoney(
-																				entity,
-																				damage.toString(),
-
-																				Integer.parseInt(event
-																						.getName()));
-																player.sendMessage(Utils
-																		.getInstance()
-																		.colorize(
-																				"&cMoney set"));
-															} else {
-																player.sendMessage(Utils
-																		.getInstance()
-																		.colorize(
-																				"&cError on: "
-																						+ event.getName()
-																						+ " Must be a number!"));
-															}
-
+																	.setMoney(
+																			entity,
+																			damage.toString(),
+																			Integer.parseInt(input));
+															conversable
+																	.sendRawMessage("Value set");
 														} else {
-															event.setWillClose(false);
-															event.setWillDestroy(false);
+															conversable
+																	.sendRawMessage("Must be a interger");
 														}
+
+														plugin.reload();
+
 													}
-												});
+												}
 
-										ItemStack item = new ItemStack(
-												Material.NAME_TAG);
-										item = Utils
-												.getInstance()
-												.setName(
-														item,
-														""
-																+ ConfigEntity
-																		.getInstance()
-																		.getMoney(
-																				entity,
-																				damage.toString()));
-										ArrayList<String> lore = new ArrayList<String>();
-										lore.add("&cRename item and take out to set value");
-										lore.add("&cDoes not cost exp");
-										item = Utils.getInstance().addLore(
-												item, lore);
-
-										gui.setSlot(
-												AInventory.AnvilSlot.INPUT_LEFT,
-												item);
-
-										gui.open();
+												,
+												"Type value in chat to send, cancel by typing cancel",
+												""
+														+ ConfigEntity
+																.getInstance()
+																.getMoney(
+																		entity,
+																		damage.toString()));
 
 									}
 								});
@@ -317,77 +319,58 @@ public class CommandLoader {
 											@Override
 											public void onClick(
 													InventoryClickEvent event) {
-												AInventory gui = new AInventory(
-														player,
-														new AnvilClickEventHandler() {
+												String entity = event
+														.getInventory()
+														.getTitle().split(" ")[1];
+												Player player = (Player) event
+														.getWhoClicked();
+												player.closeInventory();
+												User user = new User(
+														Main.plugin, player);
+												new RequestManager(
+														(Conversable) player,
+														user.getInputMethod(),
+														new InputListener() {
 
 															@Override
-															public void onAnvilClick(
-																	AInventory.AnvilClickEvent event) {
-																Player player = event
-																		.getPlayer();
-																if (event
-																		.getSlot() == AInventory.AnvilSlot.OUTPUT) {
-
-																	event.setWillClose(true);
-																	event.setWillDestroy(true);
-
-																	if (Utils
+															public void onInput(
+																	Conversable conversable,
+																	String input) {
+																String entity = event
+																		.getInventory()
+																		.getTitle()
+																		.split(" ")[1];
+																if (Utils
+																		.getInstance()
+																		.isInt(input)) {
+																	ConfigEntity
 																			.getInstance()
-																			.isInt(event
-																					.getName())) {
-																		ConfigEntity
-																				.getInstance()
-																				.setHealth(
-																						entity,
-																						spawnReason
-																								.toString(),
-																						Integer.parseInt(event
-																								.getName()));
-																		player.sendMessage(Utils
-																				.getInstance()
-																				.colorize(
-																						"&cHealth set"));
-																	} else {
-																		player.sendMessage(Utils
-																				.getInstance()
-																				.colorize(
-																						"&cError on: "
-																								+ event.getName()
-																								+ " Must be a number!"));
-																	}
-
+																			.setMoney(
+																					entity,
+																					spawnReason
+																							.toString(),
+																					Integer.parseInt(input));
+																	conversable
+																			.sendRawMessage("Value set");
 																} else {
-																	event.setWillClose(false);
-																	event.setWillDestroy(false);
+																	conversable
+																			.sendRawMessage("Must be a interger");
 																}
+
+																plugin.reload();
+
 															}
-														});
+														}
 
-												ItemStack item = new ItemStack(
-														Material.NAME_TAG);
-												item = Utils
-														.getInstance()
-														.setName(
-																item,
-																""
-																		+ ConfigEntity
-																				.getInstance()
-																				.getHealth(
-																						entity,
-																						spawnReason
-																								.toString()));
-												ArrayList<String> lore = new ArrayList<String>();
-												lore.add("&cRename item and take out to set value");
-												lore.add("&cDoes not cost exp");
-												item = Utils.getInstance()
-														.addLore(item, lore);
-
-												gui.setSlot(
-														AInventory.AnvilSlot.INPUT_LEFT,
-														item);
-
-												gui.open();
+														,
+														"Type value in chat to send, cancel by typing cancel",
+														""
+																+ ConfigEntity
+																		.getInstance()
+																		.getMoney(
+																				entity,
+																				spawnReason
+																						.toString()));
 
 											}
 										});
@@ -416,54 +399,39 @@ public class CommandLoader {
 						String entity = event.getInventory().getTitle()
 								.split(" ")[1];
 						Player player = (Player) event.getWhoClicked();
-						AInventory gui = new AInventory(player,
-								new AnvilClickEventHandler() {
+
+						player.closeInventory();
+						User user = new User(Main.plugin, player);
+						new RequestManager(
+								(Conversable) player,
+								user.getInputMethod(),
+								new InputListener() {
+
 									@Override
-									public void onAnvilClick(
-											AInventory.AnvilClickEvent event) {
-										Player player = event.getPlayer();
-										if (event.getSlot() == AInventory.AnvilSlot.OUTPUT) {
-
-											event.setWillClose(true);
-											event.setWillDestroy(true);
-
-											if (Utils.getInstance().isInt(
-													event.getName())) {
-												ConfigEntity
-														.getInstance()
-														.setExp(entity,
-																Integer.parseInt(event
-																		.getName()));
-												player.sendMessage(Utils
-														.getInstance()
-														.colorize("&cEXP set"));
-											} else {
-												player.sendMessage(Utils
-														.getInstance()
-														.colorize(
-																"&cError on: "
-																		+ event.getName()
-																		+ " Must be a number!"));
-											}
-
+									public void onInput(
+											Conversable conversable,
+											String input) {
+										String entity = event.getInventory()
+												.getTitle().split(" ")[1];
+										if (Utils.getInstance().isInt(input)) {
+											ConfigEntity.getInstance().setExp(
+													entity,
+													Integer.parseInt(input));
+											conversable
+													.sendRawMessage("Value set");
 										} else {
-											event.setWillClose(false);
-											event.setWillDestroy(false);
+											conversable
+													.sendRawMessage("Must be a interger");
 										}
+
+										plugin.reload();
+
 									}
-								});
+								}
 
-						ItemStack item = new ItemStack(Material.NAME_TAG);
-						item = Utils.getInstance().setName(item,
+								,
+								"Type value in chat to send, cancel by typing cancel",
 								"" + ConfigEntity.getInstance().getExp(entity));
-						ArrayList<String> lore = new ArrayList<String>();
-						lore.add("&cRename item and take out to set value");
-						lore.add("&cDoes not cost exp");
-						item = Utils.getInstance().addLore(item, lore);
-
-						gui.setSlot(AInventory.AnvilSlot.INPUT_LEFT, item);
-
-						gui.open();
 
 					}
 				});
