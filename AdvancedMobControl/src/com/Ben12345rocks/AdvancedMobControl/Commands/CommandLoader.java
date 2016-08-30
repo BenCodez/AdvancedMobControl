@@ -6,7 +6,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -115,7 +114,8 @@ public class CommandLoader {
 								if (event.getWhoClicked() instanceof Player) {
 									String entity = event.getCurrentItem()
 											.getItemMeta().getDisplayName();
-									Player player = (Player) event.getWhoClicked();
+									Player player = (Player) event
+											.getWhoClicked();
 									player.closeInventory();
 									player.performCommand("advancedmobcontrol Entity "
 											+ entity);
@@ -162,13 +162,12 @@ public class CommandLoader {
 						player.closeInventory();
 						User user = new User(Main.plugin, player);
 						new RequestManager(
-								(Conversable) player,
+								player,
 								user.getInputMethod(),
 								new InputListener() {
 
 									@Override
-									public void onInput(
-											Conversable conversable,
+									public void onInput(Player player,
 											String input) {
 										String entity = event.getInventory()
 												.getTitle().split(" ")[1];
@@ -178,11 +177,9 @@ public class CommandLoader {
 													.setMoney(
 															entity,
 															Integer.parseInt(input));
-											conversable
-													.sendRawMessage("Value set");
+											player.sendMessage("Value set");
 										} else {
-											conversable
-													.sendRawMessage("Must be a interger");
+											player.sendMessage("Must be a interger");
 										}
 
 										plugin.reload();
@@ -235,13 +232,13 @@ public class CommandLoader {
 										User user = new User(Main.plugin,
 												player);
 										new RequestManager(
-												(Conversable) player,
+												player,
 												user.getInputMethod(),
 												new InputListener() {
 
 													@Override
 													public void onInput(
-															Conversable conversable,
+															Player player,
 															String input) {
 														String entity = event
 																.getInventory()
@@ -255,11 +252,9 @@ public class CommandLoader {
 																			entity,
 																			damage.toString(),
 																			Integer.parseInt(input));
-															conversable
-																	.sendRawMessage("Value set");
+															player.sendMessage("Value set");
 														} else {
-															conversable
-																	.sendRawMessage("Must be a interger");
+															player.sendMessage("Must be a interger");
 														}
 
 														plugin.reload();
@@ -328,13 +323,13 @@ public class CommandLoader {
 												User user = new User(
 														Main.plugin, player);
 												new RequestManager(
-														(Conversable) player,
+														player,
 														user.getInputMethod(),
 														new InputListener() {
 
 															@Override
 															public void onInput(
-																	Conversable conversable,
+																	Player player,
 																	String input) {
 																String entity = event
 																		.getInventory()
@@ -350,11 +345,9 @@ public class CommandLoader {
 																					spawnReason
 																							.toString(),
 																					Integer.parseInt(input));
-																	conversable
-																			.sendRawMessage("Value set");
+																	player.sendMessage("Value set");
 																} else {
-																	conversable
-																			.sendRawMessage("Must be a interger");
+																	player.sendMessage("Must be a interger");
 																}
 
 																plugin.reload();
@@ -403,13 +396,12 @@ public class CommandLoader {
 						player.closeInventory();
 						User user = new User(Main.plugin, player);
 						new RequestManager(
-								(Conversable) player,
+								player,
 								user.getInputMethod(),
 								new InputListener() {
 
 									@Override
-									public void onInput(
-											Conversable conversable,
+									public void onInput(Player player,
 											String input) {
 										String entity = event.getInventory()
 												.getTitle().split(" ")[1];
@@ -417,11 +409,9 @@ public class CommandLoader {
 											ConfigEntity.getInstance().setExp(
 													entity,
 													Integer.parseInt(input));
-											conversable
-													.sendRawMessage("Value set");
+											player.sendMessage("Value set");
 										} else {
-											conversable
-													.sendRawMessage("Must be a interger");
+											player.sendMessage("Must be a interger");
 										}
 
 										plugin.reload();
@@ -441,27 +431,38 @@ public class CommandLoader {
 			}
 		});
 	}
-	/*
-	 * AInventory gui = new AInventory(player, new AnvilClickEventHandler() {
-	 * 
-	 * @Override public void onAnvilClick( AnvilGUI.AnvilClickEvent event) { if
-	 * (event.getSlot() == AnvilGUI.AnvilSlot.OUTPUT) {
-	 * event.setWillClose(true); event.setWillDestroy(true);
-	 * 
-	 * player.sendMessage(event.getName()); } else { event.setWillClose(false);
-	 * event.setWillDestroy(false); } }
-	 * 
-	 * @Override public void onAnvilClick( AnvilClickEvent event) {
-	 * 
-	 * 
-	 * } });
-	 * 
-	 * gui.setSlot(AnvilSlot.INPUT_LEFT, )); Utils.getInstance().setName(new
-	 * ItemStack(Material.NAME_TAG, ConfigEntity.getInstance().getHealth(entity,
-	 * spawnReason))
-	 * 
-	 * gui.open();
-	 * 
-	 * }
-	 */
+
+	public void loadTabComplete() {
+		ArrayList<String> optionsEntity = new ArrayList<String>();
+		for (String entity : ConfigEntity.getInstance().getEntitysNames()) {
+			if (!optionsEntity.contains(entity)) {
+				optionsEntity.add(entity);
+			}
+		}
+
+		ArrayList<String> optionsDamage = new ArrayList<String>();
+		for (DamageCause damage : DamageCause.values()) {
+			String str = damage.toString();
+			if (!optionsDamage.contains(str)) {
+				optionsDamage.add(str);
+			}
+		}
+
+		ArrayList<String> optionsSpawn = new ArrayList<String>();
+		for (SpawnReason spawn : SpawnReason.values()) {
+			String str = spawn.toString();
+			if (!optionsSpawn.contains(str)) {
+				optionsSpawn.add(str);
+			}
+		}
+
+		for (int i = 0; i < plugin.advancedMobControlCommands.size(); i++) {
+			plugin.advancedMobControlCommands.get(i).addTabCompleteOption(
+					"(Entity)", optionsEntity);
+			plugin.advancedMobControlCommands.get(i).addTabCompleteOption(
+					"(EntitySpawnReason)", optionsSpawn);
+			plugin.advancedMobControlCommands.get(i).addTabCompleteOption(
+					"(EntityDamageCause)", optionsDamage);
+		}
+	}
 }

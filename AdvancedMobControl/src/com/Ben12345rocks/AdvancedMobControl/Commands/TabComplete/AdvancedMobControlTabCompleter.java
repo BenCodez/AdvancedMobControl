@@ -113,7 +113,7 @@ public class AdvancedMobControlTabCompleter implements TabCompleter {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.
 	 * CommandSender, org.bukkit.command.Command, java.lang.String,
 	 * java.lang.String[])
@@ -126,7 +126,11 @@ public class AdvancedMobControlTabCompleter implements TabCompleter {
 
 		ArrayList<String> cmds = new ArrayList<String>();
 
-		cmds.addAll(getTabCompleteOptions(sender, args, args.length - 1));
+		for (CommandHandler commandHandler : plugin.advancedMobControlCommands) {
+			commandHandler.updateTabComplete();
+			cmds.addAll(commandHandler.getTabCompleteOptions(sender, args,
+					args.length - 1));
+		}
 
 		for (int i = 0; i < cmds.size(); i++) {
 			if (Utils.getInstance().startsWithIgnoreCase(cmds.get(i),
