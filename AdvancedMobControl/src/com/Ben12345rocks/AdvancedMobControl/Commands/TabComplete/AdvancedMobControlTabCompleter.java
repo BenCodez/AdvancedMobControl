@@ -2,7 +2,9 @@ package com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -124,19 +126,20 @@ public class AdvancedMobControlTabCompleter implements TabCompleter {
 
 		ArrayList<String> tab = new ArrayList<String>();
 
-		ArrayList<String> cmds = new ArrayList<String>();
+		Set<String> cmds = new HashSet<String>();
 
 		for (CommandHandler commandHandler : plugin.advancedMobControlCommands) {
 			cmds.addAll(commandHandler.getTabCompleteOptions(sender, args,
 					args.length - 1));
 		}
 
-		for (int i = 0; i < cmds.size(); i++) {
-			if (Utils.getInstance().startsWithIgnoreCase(cmds.get(i),
+		for (String str : cmds) {
+			if (Utils.getInstance().startsWithIgnoreCase(str,
 					args[args.length - 1])) {
-				tab.add(cmds.get(i));
+				tab.add(str);
 			}
 		}
+		Collections.sort(tab, String.CASE_INSENSITIVE_ORDER);
 
 		return tab;
 
