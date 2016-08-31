@@ -127,7 +127,6 @@ public class AdvancedMobControlTabCompleter implements TabCompleter {
 		ArrayList<String> cmds = new ArrayList<String>();
 
 		for (CommandHandler commandHandler : plugin.advancedMobControlCommands) {
-			commandHandler.updateTabComplete();
 			cmds.addAll(commandHandler.getTabCompleteOptions(sender, args,
 					args.length - 1));
 		}
