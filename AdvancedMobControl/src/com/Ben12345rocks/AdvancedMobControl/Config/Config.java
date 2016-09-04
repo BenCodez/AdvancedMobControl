@@ -68,15 +68,6 @@ public class Config {
 	}
 
 	/**
-	 * Gets the debug enabled.
-	 *
-	 * @return the debug enabled
-	 */
-	public boolean getDebugEnabled() {
-		return getData().getBoolean("Debug");
-	}
-
-	/**
 	 * Gets the format money.
 	 *
 	 * @return the format money

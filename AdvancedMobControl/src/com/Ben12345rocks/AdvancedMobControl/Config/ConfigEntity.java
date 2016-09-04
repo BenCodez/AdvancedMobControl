@@ -3,6 +3,7 @@ package com.Ben12345rocks.AdvancedMobControl.Config;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -78,7 +79,7 @@ public class ConfigEntity {
 			} catch (IOException e) {
 				plugin.getLogger().severe(
 						ChatColor.RED + "Could not create Entity/" + entity
-						+ ".yml!");
+								+ ".yml!");
 
 			}
 		}
@@ -150,28 +151,16 @@ public class ConfigEntity {
 		return getData(entity).getDouble(spawnReason + ".Health");
 	}
 
-	/**
-	 * Gets the money.
-	 *
-	 * @param entity
-	 *            the entity
-	 * @return the money
-	 */
-	public int getMoney(String entity) {
-		return getData(entity).getInt("Money");
+	@SuppressWarnings("unchecked")
+	public List<String> getRewards(String entity) {
+		return (List<String>) getData(entity).getList("Rewards",
+				new ArrayList<String>());
 	}
 
-	/**
-	 * Gets the money.
-	 *
-	 * @param entity
-	 *            the entity
-	 * @param damage
-	 *            the damage
-	 * @return the money
-	 */
-	public int getMoney(String entity, String damage) {
-		return getData(entity).getInt(damage + ".Money");
+	@SuppressWarnings("unchecked")
+	public List<String> getRewards(String entity, String damage) {
+		return (List<String>) getData(entity).getList(damage + ".Rewards",
+				new ArrayList<String>());
 	}
 
 	/**
@@ -202,8 +191,8 @@ public class ConfigEntity {
 			data.save(dFile);
 		} catch (IOException e) {
 			Bukkit.getServer()
-			.getLogger()
-			.severe(ChatColor.RED + "Could not save " + dFile.getName());
+					.getLogger()
+					.severe(ChatColor.RED + "Could not save " + dFile.getName());
 		}
 	}
 
@@ -259,6 +248,29 @@ public class ConfigEntity {
 	 * @param value
 	 *            the value
 	 */
+	public void setRewards(String entity, List<String> value) {
+		set(entity, "Rewards", value);
+	}
+	
+	/**
+	 * Gets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @return the money
+	 */
+	public int getMoney(String entity) {
+		return getData(entity).getInt("Money");
+	}
+	
+	/**
+	 * Sets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param value
+	 *            the value
+	 */
 	public void setMoney(String entity, int value) {
 		set(entity, "Money", value);
 	}
@@ -275,6 +287,33 @@ public class ConfigEntity {
 	 */
 	public void setMoney(String entity, String damage, int value) {
 		set(entity, damage + ".Money", value);
+	}
+
+	/**
+	 * Gets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param damage
+	 *            the damage
+	 * @return the money
+	 */
+	public int getMoney(String entity, String damage) {
+		return getData(entity).getInt(damage + ".Money");
+	}
+
+	/**
+	 * Sets the money.
+	 *
+	 * @param entity
+	 *            the entity
+	 * @param damage
+	 *            the damage
+	 * @param value
+	 *            the value
+	 */
+	public void setRewards(String entity, String damage, List<String> value) {
+		set(entity, damage + ".Rewards", value);
 	}
 
 	/**
@@ -301,7 +340,7 @@ public class ConfigEntity {
 			} catch (IOException e) {
 				plugin.getLogger().severe(
 						ChatColor.RED + "Could not create Entity/" + entity
-						+ ".yml!");
+								+ ".yml!");
 			}
 		}
 	}
