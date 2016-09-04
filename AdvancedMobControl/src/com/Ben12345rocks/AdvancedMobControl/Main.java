@@ -87,9 +87,7 @@ public class Main extends JavaPlugin {
 	 *            the message
 	 */
 	public void debug(String message) {
-		if (Config.getInstance().getDebugEnabled()) {
-			plugin.getLogger().info("Debug: " + message);
-		}
+		com.Ben12345rocks.AdvancedCore.Main.plugin.debug(plugin, message);
 	}
 
 	/**
@@ -133,19 +131,22 @@ public class Main extends JavaPlugin {
 				"Enabled " + plugin.getName() + " "
 						+ plugin.getDescription().getVersion());
 
-Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
-			
-			@Override
-			public void run() {
-				Thread.getInstance().run(new Runnable() {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin,
+				new Runnable() {
 
 					@Override
 					public void run() {
-						checkUpdate();
+						Thread.getInstance().run(new Runnable() {
+
+							@Override
+							public void run() {
+								checkUpdate();
+							}
+						});
 					}
-				});
-			}
-		}, 10l);
+				}, 10l);
+
+		com.Ben12345rocks.AdvancedCore.Main.plugin.registerHook(this);
 
 	}
 

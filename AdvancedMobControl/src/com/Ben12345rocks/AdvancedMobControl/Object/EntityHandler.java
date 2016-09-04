@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.Ben12345rocks.AdvancedCore.Utils;
+import com.Ben12345rocks.AdvancedCore.Configs.ConfigRewards;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedMobControl.Config.Config;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
@@ -141,9 +142,20 @@ public class EntityHandler {
 		user.giveMoney(money);
 		// Main.plugin.debug("Money: " + money);
 		if (money != 0) {
-			user.sendMessage(Config.getInstance().getFormatMoney()
-					.replace("%Money%", Utils.getInstance().roundDecimals(money, 2))
+			user.sendMessage(Config
+					.getInstance()
+					.getFormatMoney()
+					.replace("%Money%",
+							Utils.getInstance().roundDecimals(money, 2))
 					.replace("%Entity%", entityType.toString()));
+		}
+
+		for (String reward : ConfigEntity.getInstance().getRewards(
+				entityType.toString())) {
+			if (reward != "") {
+				ConfigRewards.getInstance().getReward(reward)
+						.giveReward(user, true);
+			}
 		}
 
 		if (damage != null) {
@@ -153,10 +165,20 @@ public class EntityHandler {
 			user.giveMoney(money);
 			// Main.plugin.debug("SpecificDamageMoney: " + money);
 			if (money != 0) {
-				user.sendMessage(Config.getInstance().getFormatMoneyDamage()
-						.replace("%Money%", Utils.getInstance().roundDecimals(money, 2))
+				user.sendMessage(Config
+						.getInstance()
+						.getFormatMoneyDamage()
+						.replace("%Money%",
+								Utils.getInstance().roundDecimals(money, 2))
 						.replace("%Entity%", entityType.toString())
 						.replace("%Damage%", damage));
+			}
+			for (String reward : ConfigEntity.getInstance().getRewards(
+					entityType.toString(), damage)) {
+				if (reward != "") {
+					ConfigRewards.getInstance().getReward(reward)
+							.giveReward(user, true);
+				}
 			}
 
 		}
