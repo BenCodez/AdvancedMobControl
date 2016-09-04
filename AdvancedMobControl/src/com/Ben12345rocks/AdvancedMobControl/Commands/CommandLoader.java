@@ -162,7 +162,7 @@ public class CommandLoader {
 				lore.add("&cCurrently: &c&l"
 						+ ConfigEntity.getInstance().getMoney(args[1]));
 
-				inv.addButton(0, new BInventoryButton("SetMoney", Utils
+				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetMoney", Utils
 						.getInstance().convertArray(lore), new ItemStack(
 						Material.GOLDEN_APPLE)) {
 
@@ -211,7 +211,7 @@ public class CommandLoader {
 					}
 				});
 
-				inv.addButton(1, new BInventoryButton("SetMoneyDamage",
+				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetMoneyDamage",
 						new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
 
 					@Override
@@ -298,7 +298,7 @@ public class CommandLoader {
 
 				});
 
-				inv.addButton(2, new BInventoryButton("SetHealth",
+				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetHealth",
 						new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
 
 					@Override
@@ -395,7 +395,7 @@ public class CommandLoader {
 				lore.add("&cCurrently: &c&l"
 						+ ConfigEntity.getInstance().getExp(args[1]));
 
-				inv.addButton(3, new BInventoryButton("SetEXP", Utils
+				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetEXP", Utils
 						.getInstance().convertArray(lore), new ItemStack(
 						Material.EXP_BOTTLE)) {
 
