@@ -10,13 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Utils;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
+import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
 import com.Ben12345rocks.AdvancedCore.Util.Request.InputListener;
 import com.Ben12345rocks.AdvancedCore.Util.Request.RequestManager;
@@ -125,7 +125,7 @@ public class CommandLoader {
 								new String[0], new ItemStack(Material.STONE)) {
 
 							@Override
-							public void onClick(InventoryClickEvent event) {
+							public void onClick(ClickEvent event) {
 								if (event.getWhoClicked() instanceof Player) {
 									String entity = event.getCurrentItem()
 											.getItemMeta().getDisplayName();
@@ -167,7 +167,7 @@ public class CommandLoader {
 						Material.GOLDEN_APPLE)) {
 
 					@Override
-					public void onClick(InventoryClickEvent event) {
+					public void onClick(ClickEvent event) {
 						if (!(event.getWhoClicked() instanceof Player)) {
 							return;
 						}
@@ -215,7 +215,7 @@ public class CommandLoader {
 						new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
 
 					@Override
-					public void onClick(InventoryClickEvent event) {
+					public void onClick(ClickEvent event) {
 						if (!(event.getWhoClicked() instanceof Player)) {
 							return;
 						}
@@ -238,7 +238,7 @@ public class CommandLoader {
 
 									@Override
 									public void onClick(
-											InventoryClickEvent event) {
+											ClickEvent event) {
 										String entity = event.getInventory()
 												.getTitle().split(" ")[1];
 										Player player = (Player) event
@@ -302,7 +302,7 @@ public class CommandLoader {
 						new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
 
 					@Override
-					public void onClick(InventoryClickEvent event) {
+					public void onClick(ClickEvent event) {
 						if (!(event.getWhoClicked() instanceof Player)) {
 							return;
 						}
@@ -328,7 +328,7 @@ public class CommandLoader {
 
 											@Override
 											public void onClick(
-													InventoryClickEvent event) {
+													ClickEvent event) {
 												String entity = event
 														.getInventory()
 														.getTitle().split(" ")[1];
@@ -400,7 +400,7 @@ public class CommandLoader {
 						Material.EXP_BOTTLE)) {
 
 					@Override
-					public void onClick(InventoryClickEvent event) {
+					public void onClick(ClickEvent event) {
 						if (!(event.getWhoClicked() instanceof Player)) {
 							return;
 						}
