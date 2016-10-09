@@ -1,6 +1,7 @@
 package com.Ben12345rocks.AdvancedMobControl.Commands;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -13,13 +14,15 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Utils;
+import com.Ben12345rocks.AdvancedCore.Configs.ConfigRewards;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
-import com.Ben12345rocks.AdvancedCore.Util.Request.InputListener;
-import com.Ben12345rocks.AdvancedCore.Util.Request.RequestManager;
+import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequest;
+import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.NumberListener;
+import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.StringListener;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
@@ -162,9 +165,9 @@ public class CommandLoader {
 				lore.add("&cCurrently: &c&l"
 						+ ConfigEntity.getInstance().getMoney(args[1]));
 
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetMoney", Utils
-						.getInstance().convertArray(lore), new ItemStack(
-						Material.GOLDEN_APPLE)) {
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"SetMoney", Utils.getInstance().convertArray(lore),
+						new ItemStack(Material.GOLDEN_APPLE)) {
 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -175,44 +178,29 @@ public class CommandLoader {
 								.split(" ")[1];
 						Player player = (Player) event.getWhoClicked();
 						player.closeInventory();
-						User user = new User(Main.plugin, player);
-						new RequestManager(
-								player,
-								user.getInputMethod(),
-								new InputListener() {
+						new ValueRequest().requestNumber(player, ""
+								+ ConfigEntity.getInstance().getMoney(entity),
+								null, new NumberListener() {
 
 									@Override
 									public void onInput(Player player,
-											String input) {
+											Number value) {
 										String entity = event.getInventory()
 												.getTitle().split(" ")[1];
-										if (Utils.getInstance().isInt(input)) {
-											ConfigEntity
-													.getInstance()
-													.setMoney(
-															entity,
-															Integer.parseInt(input));
-											player.sendMessage("Value set");
-										} else {
-											player.sendMessage("Must be a interger");
-										}
+
+										ConfigEntity.getInstance().setMoney(
+												entity, value.intValue());
+										player.sendMessage("Value set");
 
 										plugin.reload();
-
 									}
-								}
-
-								,
-								"Type value in chat to send, cancel by typing cancel",
-								""
-										+ ConfigEntity.getInstance().getMoney(
-												entity));
-
+								});
 					}
 				});
 
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetMoneyDamage",
-						new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"SetMoneyDamage", new String[0], new ItemStack(
+								Material.GOLDEN_APPLE)) {
 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -237,54 +225,45 @@ public class CommandLoader {
 										new ItemStack(Material.STONE)) {
 
 									@Override
-									public void onClick(
-											ClickEvent event) {
+									public void onClick(ClickEvent event) {
 										String entity = event.getInventory()
 												.getTitle().split(" ")[1];
 										Player player = (Player) event
 												.getWhoClicked();
 										player.closeInventory();
-										User user = new User(Main.plugin,
-												player);
-										new RequestManager(
-												player,
-												user.getInputMethod(),
-												new InputListener() {
 
-													@Override
-													public void onInput(
-															Player player,
-															String input) {
-														String entity = event
-																.getInventory()
-																.getTitle()
-																.split(" ")[1];
-														if (Utils.getInstance()
-																.isInt(input)) {
-															ConfigEntity
-																	.getInstance()
-																	.setMoney(
-																			entity,
-																			damage.toString(),
-																			Integer.parseInt(input));
-															player.sendMessage("Value set");
-														} else {
-															player.sendMessage("Must be a interger");
-														}
+										new ValueRequest()
+												.requestNumber(
+														player,
+														""
+																+ ConfigEntity
+																		.getInstance()
+																		.getMoney(
+																				entity,
+																				damage.toString()),
+														null,
+														new NumberListener() {
 
-														plugin.reload();
+															@Override
+															public void onInput(
+																	Player player,
+																	Number value) {
+																String entity = event
+																		.getInventory()
+																		.getTitle()
+																		.split(" ")[1];
 
-													}
-												}
+																ConfigEntity
+																		.getInstance()
+																		.setMoney(
+																				entity,
+																				damage.toString(),
+																				value.intValue());
+																player.sendMessage("Value set");
 
-												,
-												"Type value in chat to send, cancel by typing cancel",
-												""
-														+ ConfigEntity
-																.getInstance()
-																.getMoney(
-																		entity,
-																		damage.toString()));
+																plugin.reload();
+															}
+														});
 
 									}
 								});
@@ -298,8 +277,9 @@ public class CommandLoader {
 
 				});
 
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetHealth",
-						new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"SetHealth", new String[0], new ItemStack(
+								Material.GOLDEN_APPLE)) {
 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -310,80 +290,67 @@ public class CommandLoader {
 						String entity = event.getInventory().getTitle()
 								.split(" ")[1];
 						BInventory inv = new BInventory("EntityGUI: " + entity);
-						int count = 0;
+
 						for (SpawnReason spawnReason : SpawnReason.values()) {
-							if (count < 54) {
-								ArrayList<String> lore = new ArrayList<String>();
-								lore.add("&cCurrently: &c&l"
-										+ ConfigEntity.getInstance().getHealth(
-												entity, spawnReason.toString()));
 
-								inv.addButton(
-										count,
-										new BInventoryButton(spawnReason
-												.toString(), Utils
-												.getInstance().convertArray(
-														lore), new ItemStack(
-												Material.STONE)) {
+							ArrayList<String> lore = new ArrayList<String>();
+							lore.add("&cCurrently: &c&l"
+									+ ConfigEntity.getInstance().getHealth(
+											entity, spawnReason.toString()));
 
-											@Override
-											public void onClick(
-													ClickEvent event) {
-												String entity = event
-														.getInventory()
-														.getTitle().split(" ")[1];
-												Player player = (Player) event
-														.getWhoClicked();
-												player.closeInventory();
-												User user = new User(
-														Main.plugin, player);
-												new RequestManager(
-														player,
-														user.getInputMethod(),
-														new InputListener() {
+							inv.addButton(inv.getNextSlot(),
+									new BInventoryButton(
+											spawnReason.toString(), Utils
+													.getInstance()
+													.convertArray(lore),
+											new ItemStack(Material.STONE)) {
 
-															@Override
-															public void onInput(
-																	Player player,
-																	String input) {
-																String entity = event
-																		.getInventory()
-																		.getTitle()
-																		.split(" ")[1];
-																if (Utils
-																		.getInstance()
-																		.isInt(input)) {
+										@Override
+										public void onClick(ClickEvent event) {
+											String entity = event
+													.getInventory().getTitle()
+													.split(" ")[1];
+											Player player = (Player) event
+													.getWhoClicked();
+											player.closeInventory();
+
+											new ValueRequest()
+													.requestNumber(
+															player,
+															""
+																	+ ConfigEntity
+																			.getInstance()
+																			.getHealth(
+																					entity,
+																					spawnReason
+																							.toString()),
+															null,
+															new NumberListener() {
+
+																@Override
+																public void onInput(
+																		Player player,
+																		Number value) {
+																	String entity = event
+																			.getInventory()
+																			.getTitle()
+																			.split(" ")[1];
+
 																	ConfigEntity
 																			.getInstance()
-																			.setMoney(
+																			.setHealth(
 																					entity,
 																					spawnReason
 																							.toString(),
-																					Integer.parseInt(input));
+																					value.intValue());
 																	player.sendMessage("Value set");
-																} else {
-																	player.sendMessage("Must be a interger");
+
+																	plugin.reload();
+
 																}
-
-																plugin.reload();
-
-															}
-														}
-
-														,
-														"Type value in chat to send, cancel by typing cancel",
-														""
-																+ ConfigEntity
-																		.getInstance()
-																		.getMoney(
-																				entity,
-																				spawnReason
-																						.toString()));
-
-											}
-										});
-								count++;
-							}
+															});
+										}
+									});
 
 						}
 						inv.openInventory(player);
@@ -395,9 +362,9 @@ public class CommandLoader {
 				lore.add("&cCurrently: &c&l"
 						+ ConfigEntity.getInstance().getExp(args[1]));
 
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetEXP", Utils
-						.getInstance().convertArray(lore), new ItemStack(
-						Material.EXP_BOTTLE)) {
+				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetEXP",
+						Utils.getInstance().convertArray(lore), new ItemStack(
+								Material.EXP_BOTTLE)) {
 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -407,36 +374,223 @@ public class CommandLoader {
 						String entity = event.getInventory().getTitle()
 								.split(" ")[1];
 						Player player = (Player) event.getWhoClicked();
-
-						player.closeInventory();
-						User user = new User(Main.plugin, player);
-						new RequestManager(
-								player,
-								user.getInputMethod(),
-								new InputListener() {
+						new ValueRequest().requestNumber(player, ""
+								+ ConfigEntity.getInstance().getExp(entity),
+								null, new NumberListener() {
 
 									@Override
 									public void onInput(Player player,
-											String input) {
+											Number value) {
 										String entity = event.getInventory()
 												.getTitle().split(" ")[1];
-										if (Utils.getInstance().isInt(input)) {
-											ConfigEntity.getInstance().setExp(
-													entity,
-													Integer.parseInt(input));
-											player.sendMessage("Value set");
-										} else {
-											player.sendMessage("Must be a interger");
-										}
+
+										ConfigEntity.getInstance().setExp(
+												entity, value.intValue());
+										player.sendMessage("Value set");
 
 										plugin.reload();
 
 									}
-								}
+								});
+					}
+				});
 
-								,
-								"Type value in chat to send, cancel by typing cancel",
-								"" + ConfigEntity.getInstance().getExp(entity));
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"Add reward file", new String[] {}, new ItemStack(
+								Material.PAPER)) {
+
+					@Override
+					public void onClick(ClickEvent clickEvent) {
+						new ValueRequest().requestString(
+								clickEvent.getPlayer(),
+								"",
+								Utils.getInstance().convertArray(
+										ConfigRewards.getInstance()
+												.getRewardNames()), true,
+								new StringListener() {
+
+									@Override
+									public void onInput(Player player,
+											String value) {
+										String entity = clickEvent.getEvent()
+												.getInventory().getTitle()
+												.split(" ")[1];
+										List<String> rewards = ConfigEntity
+												.getInstance().getRewards(
+														entity);
+										rewards.add(value);
+										ConfigEntity.getInstance().setRewards(
+												entity, rewards);
+										player.sendMessage("Reward added");
+										plugin.reload();
+									}
+								});
+
+					}
+				});
+
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"Remove reward file", new String[] {}, new ItemStack(
+								Material.PAPER)) {
+
+					@Override
+					public void onClick(ClickEvent clickEvent) {
+						String entity = clickEvent.getEvent().getInventory()
+								.getTitle().split(" ")[1];
+						new ValueRequest().requestString(
+								clickEvent.getPlayer(),
+								"",
+								Utils.getInstance().convertArray(
+										(ArrayList<String>) ConfigEntity
+												.getInstance().getRewards(
+														entity)), false,
+								new StringListener() {
+
+									@Override
+									public void onInput(Player player,
+											String value) {
+										String entity = clickEvent.getEvent()
+												.getInventory().getTitle()
+												.split(" ")[1];
+										List<String> rewards = ConfigEntity
+												.getInstance().getRewards(
+														entity);
+										rewards.remove(value);
+										ConfigEntity.getInstance().setRewards(
+												entity, rewards);
+										player.sendMessage("Reward removed");
+										plugin.reload();
+									}
+								});
+
+					}
+				});
+
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"Add reward file damage", new String[] {},
+						new ItemStack(Material.PAPER)) {
+
+					@Override
+					public void onClick(ClickEvent clickEvent) {
+						ArrayList<String> damages = new ArrayList<String>();
+						for (DamageCause d : DamageCause.values()) {
+							damages.add(d.toString());
+						}
+						new ValueRequest().requestString(
+								clickEvent.getPlayer(), "", Utils.getInstance()
+										.convertArray(damages),
+								new StringListener() {
+
+									@Override
+									public void onInput(Player player,
+											String damage) {
+										new ValueRequest()
+												.requestString(
+														player,
+														"",
+														Utils.getInstance()
+																.convertArray(
+																		ConfigRewards
+																				.getInstance()
+																				.getRewardNames()),
+														true,
+														new StringListener() {
+
+															@Override
+															public void onInput(
+																	Player player,
+																	String value) {
+																String entity = clickEvent
+																		.getEvent()
+																		.getInventory()
+																		.getTitle()
+																		.split(" ")[1];
+																List<String> rewards = ConfigEntity
+																		.getInstance()
+																		.getRewards(
+																				entity,
+																				damage);
+																rewards.add(value);
+																ConfigEntity
+																		.getInstance()
+																		.setRewards(
+																				entity,
+																				damage,
+																				rewards);
+																player.sendMessage("Reward added");
+																plugin.reload();
+															}
+														});
+
+									}
+								});
+
+					}
+				});
+
+				inv.addButton(inv.getNextSlot(), new BInventoryButton(
+						"Remove reward file damage", new String[] {},
+						new ItemStack(Material.PAPER)) {
+
+					@Override
+					public void onClick(ClickEvent clickEvent) {
+						ArrayList<String> damages = new ArrayList<String>();
+						for (DamageCause d : DamageCause.values()) {
+							damages.add(d.toString());
+						}
+						new ValueRequest().requestString(
+								clickEvent.getPlayer(), "", Utils.getInstance()
+										.convertArray(damages),
+								new StringListener() {
+
+									@Override
+									public void onInput(Player player,
+											String damage) {
+										String entity = clickEvent.getEvent()
+												.getInventory().getTitle()
+												.split(" ")[1];
+										new ValueRequest()
+												.requestString(
+														player,
+														"",
+														Utils.getInstance()
+																.convertArray(
+																		(ArrayList<String>) ConfigEntity
+																				.getInstance()
+																				.getRewards(
+																						entity,
+																						damage)),
+														false,
+														new StringListener() {
+
+															@Override
+															public void onInput(
+																	Player player,
+																	String value) {
+																String entity = clickEvent
+																		.getEvent()
+																		.getInventory()
+																		.getTitle()
+																		.split(" ")[1];
+																List<String> rewards = ConfigEntity
+																		.getInstance()
+																		.getRewards(
+																				entity,
+																				damage);
+																rewards.remove(value);
+																ConfigEntity
+																		.getInstance()
+																		.setRewards(
+																				entity,
+																				damage,
+																				rewards);
+																player.sendMessage("Reward removed");
+																plugin.reload();
+															}
+														});
+
+									}
+								});
 
 					}
 				});
