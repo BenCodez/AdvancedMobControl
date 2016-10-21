@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.Ben12345rocks.AdvancedCore.Objects.User;
+import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
 
@@ -18,6 +19,7 @@ import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
 public class EntityDeath implements Listener {
 
 	/** The plugin. */
+	@SuppressWarnings("unused")
 	private static Main plugin;
 
 	// VotingRewards voteReward = VotingRewards.getInstance();
@@ -48,7 +50,7 @@ public class EntityDeath implements Listener {
 						.getEntity().getLastDamageCause();
 				if (damage.getDamager() instanceof Player) {
 					Player player = (Player) damage.getDamager();
-					User user = new User(plugin, player);
+					User user = UserManager.getInstance().getUser(player);
 					handle.addKill(user);
 					handle.runRewards(user, damage.getCause().toString());
 				}
