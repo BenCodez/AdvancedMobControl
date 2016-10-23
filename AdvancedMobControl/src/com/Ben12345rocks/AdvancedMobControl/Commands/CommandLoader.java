@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import com.Ben12345rocks.AdvancedCore.Utils;
 import com.Ben12345rocks.AdvancedCore.Configs.ConfigRewards;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Objects.User;
+import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
@@ -86,7 +86,8 @@ public class CommandLoader {
 					msg.add(cmdHandle.getHelpLine("/advancedmobcontrol"));
 				}
 				if (sender instanceof Player) {
-					new User(plugin, (Player) sender).sendJson(msg);
+					UserManager.getInstance().getUser((Player) sender)
+							.sendJson(msg);
 				} else {
 					sender.sendMessage(Utils.getInstance().convertArray(
 							Utils.getInstance().comptoString(msg)));
@@ -105,7 +106,8 @@ public class CommandLoader {
 					msg.add(cmdHandle.getPerm());
 				}
 				if (sender instanceof Player) {
-					new User(plugin, (Player) sender).sendMessage(msg);
+					UserManager.getInstance().getUser((Player) sender)
+							.sendMessage(msg);
 				} else {
 					sender.sendMessage(Utils.getInstance().convertArray(msg));
 				}
