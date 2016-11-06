@@ -3,11 +3,13 @@ package com.Ben12345rocks.AdvancedMobControl.Object;
 import java.util.Set;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.Ben12345rocks.AdvancedCore.Utils;
 import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
+import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedMobControl.Config.Config;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
@@ -178,5 +180,13 @@ public class EntityHandler {
 		}
 
 		removeKills(user);
+	}
+
+	public void rightClicked(Player player) {
+		for (String rewardName : ConfigEntity.getInstance()
+				.getRightClickedRewards(entityType.toString())) {
+			RewardHandler.getInstance().giveReward(
+					UserManager.getInstance().getUser(player), rewardName);
+		}
 	}
 }
