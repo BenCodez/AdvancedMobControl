@@ -189,6 +189,7 @@ public class Main extends JavaPlugin {
 	 */
 	public void reload() {
 		Config.getInstance().reloadData();
+		com.Ben12345rocks.AdvancedCore.Main.plugin.reload();
 	}
 
 	/**
