@@ -1,5 +1,6 @@
 package com.Ben12345rocks.AdvancedMobControl;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.Metrics;
 import com.Ben12345rocks.AdvancedCore.Util.Updater.Updater;
@@ -16,6 +18,7 @@ import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMob
 import com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete.AdvancedMobControlTabCompleter;
 import com.Ben12345rocks.AdvancedMobControl.Config.Config;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.EntityDeath;
+import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
 
 // TODO: Auto-generated Javadoc
@@ -127,6 +130,9 @@ public class Main extends JavaPlugin {
 		registerEvents();
 		metrics();
 
+		RewardHandler.getInstance().addRewardFolder(
+				new File(plugin.getDataFolder(), "Rewards"));
+
 		plugin.getLogger().info(
 				"Enabled " + plugin.getName() + " "
 						+ plugin.getDescription().getVersion());
@@ -172,6 +178,7 @@ public class Main extends JavaPlugin {
 
 		pm.registerEvents(new EntityDeath(this), this);
 		pm.registerEvents(new MobSpawn(this), this);
+		pm.registerEvents(new MobClicked(this), this);
 
 		plugin.debug("Loaded Events");
 

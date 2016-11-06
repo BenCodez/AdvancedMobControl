@@ -163,6 +163,24 @@ public class ConfigEntity {
 				new ArrayList<String>());
 	}
 
+	public boolean getDisableNormalClick(String entity) {
+		return getData(entity).getBoolean("DisableRightClick");
+	}
+
+	public void setDisableNormalClick(String entity, boolean value) {
+		set(entity, "DisableRightClick", value);
+	}
+
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> getRightClickedRewards(String entity) {
+		return (ArrayList<String>) getData(entity).getList("RightClickRewards",
+				new ArrayList<String>());
+	}
+
+	public void setRightClickedRewards(String entity, ArrayList<String> value) {
+		set(entity, "RightClickRewards", value);
+	}
+
 	/**
 	 * Rename entity.
 	 *
@@ -251,7 +269,7 @@ public class ConfigEntity {
 	public void setRewards(String entity, List<String> value) {
 		set(entity, "Rewards", value);
 	}
-	
+
 	/**
 	 * Gets the money.
 	 *
@@ -262,7 +280,7 @@ public class ConfigEntity {
 	public int getMoney(String entity) {
 		return getData(entity).getInt("Money");
 	}
-	
+
 	/**
 	 * Sets the money.
 	 *

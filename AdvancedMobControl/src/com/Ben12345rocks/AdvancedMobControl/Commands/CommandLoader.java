@@ -14,8 +14,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Utils;
-import com.Ben12345rocks.AdvancedCore.Configs.ConfigRewards;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Objects.Reward;
+import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
@@ -403,12 +404,14 @@ public class CommandLoader {
 
 					@Override
 					public void onClick(ClickEvent clickEvent) {
+						ArrayList<String> rewardNames = new ArrayList<String>();
+						for (Reward reward : RewardHandler.getInstance()
+								.getRewards()) {
+							rewardNames.add(reward.getRewardName());
+						}
 						new ValueRequest().requestString(
-								clickEvent.getPlayer(),
-								"",
-								Utils.getInstance().convertArray(
-										ConfigRewards.getInstance()
-												.getRewardNames()), true,
+								clickEvent.getPlayer(), "", Utils.getInstance()
+										.convertArray(rewardNames), true,
 								new StringListener() {
 
 									@Override
@@ -486,43 +489,45 @@ public class CommandLoader {
 									@Override
 									public void onInput(Player player,
 											String damage) {
-										new ValueRequest()
-												.requestString(
-														player,
-														"",
-														Utils.getInstance()
-																.convertArray(
-																		ConfigRewards
-																				.getInstance()
-																				.getRewardNames()),
-														true,
-														new StringListener() {
+										ArrayList<String> rewardNames = new ArrayList<String>();
+										for (Reward reward : RewardHandler
+												.getInstance().getRewards()) {
+											rewardNames.add(reward
+													.getRewardName());
+										}
+										new ValueRequest().requestString(
+												player,
+												"",
+												Utils.getInstance()
+														.convertArray(
+																rewardNames),
+												true, new StringListener() {
 
-															@Override
-															public void onInput(
-																	Player player,
-																	String value) {
-																String entity = clickEvent
-																		.getEvent()
-																		.getInventory()
-																		.getTitle()
-																		.split(" ")[1];
-																List<String> rewards = ConfigEntity
-																		.getInstance()
-																		.getRewards(
-																				entity,
-																				damage);
-																rewards.add(value);
-																ConfigEntity
-																		.getInstance()
-																		.setRewards(
-																				entity,
-																				damage,
-																				rewards);
-																player.sendMessage("Reward added");
-																plugin.reload();
-															}
-														});
+													@Override
+													public void onInput(
+															Player player,
+															String value) {
+														String entity = clickEvent
+																.getEvent()
+																.getInventory()
+																.getTitle()
+																.split(" ")[1];
+														List<String> rewards = ConfigEntity
+																.getInstance()
+																.getRewards(
+																		entity,
+																		damage);
+														rewards.add(value);
+														ConfigEntity
+																.getInstance()
+																.setRewards(
+																		entity,
+																		damage,
+																		rewards);
+														player.sendMessage("Reward added");
+														plugin.reload();
+													}
+												});
 
 									}
 								});
