@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.Ben12345rocks.AdvancedCore.Utils;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
 // TODO: Auto-generated Javadoc
@@ -134,7 +134,7 @@ public class AdvancedMobControlTabCompleter implements TabCompleter {
 		}
 
 		for (String str : cmds) {
-			if (Utils.getInstance().startsWithIgnoreCase(str,
+			if (StringUtils.getInstance().startsWithIgnoreCase(str,
 					args[args.length - 1])) {
 				tab.add(str);
 			}

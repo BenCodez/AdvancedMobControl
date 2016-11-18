@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 
 // TODO: Auto-generated Javadoc
@@ -96,7 +97,7 @@ public class ConfigEntity {
 		File folder = new File(plugin.getDataFolder() + File.separator
 				+ "Entity");
 		String[] fileNames = folder.list();
-		return com.Ben12345rocks.AdvancedCore.Utils.getInstance().convertArray(
+		return ArrayUtils.getInstance().convert(
 				fileNames);
 	}
 
