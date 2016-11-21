@@ -6,10 +6,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
-import com.Ben12345rocks.AdvancedCore.Utils;
 import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedMobControl.Config.Config;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
@@ -148,7 +148,7 @@ public class EntityHandler {
 					.getInstance()
 					.getFormatMoney()
 					.replace("%Money%",
-							Utils.getInstance().roundDecimals(money, 2))
+							StringUtils.getInstance().roundDecimals(money, 2))
 					.replace("%Entity%", entityType.toString()));
 		}
 
@@ -168,7 +168,7 @@ public class EntityHandler {
 						.getInstance()
 						.getFormatMoneyDamage()
 						.replace("%Money%",
-								Utils.getInstance().roundDecimals(money, 2))
+								StringUtils.getInstance().roundDecimals(money, 2))
 						.replace("%Entity%", entityType.toString())
 						.replace("%Damage%", damage));
 			}

@@ -11,7 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
-import com.Ben12345rocks.AdvancedCore.Util.Metrics.Metrics;
+import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
+import com.Ben12345rocks.AdvancedCore.Util.Metrics.MCStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Updater.Updater;
 import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
 import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMobControl;
@@ -98,12 +99,14 @@ public class Main extends JavaPlugin {
 	 */
 	private void metrics() {
 		try {
-			Metrics metrics = new Metrics(this);
+			MCStatsMetrics metrics = new MCStatsMetrics(this);
 			metrics.start();
 			plugin.debug("Loaded Metrics");
 		} catch (IOException e) {
 			plugin.getLogger().info("Can't submit metrics stats");
 		}
+		
+		new BStatsMetrics(this);
 	}
 
 	/*
