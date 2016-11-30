@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
@@ -38,21 +39,6 @@ public class Main extends JavaPlugin {
 	public Updater updater;
 
 	/**
-	 * Check advanced core.
-	 */
-	public void checkAdvancedCore() {
-		if (Bukkit.getPluginManager().getPlugin("AdvancedCore") != null) {
-			plugin.getLogger().info("Found AdvancedCore");
-		} else {
-			plugin.getLogger().severe(
-					"Failed to find AdvancedCore, plugin disabling");
-			plugin.getLogger()
-					.severe("Download at: https://www.spigotmc.org/resources/advancedcore.28295/");
-			Bukkit.getPluginManager().disablePlugin(plugin);
-		}
-	}
-
-	/**
 	 * Check update.
 	 */
 	public void checkUpdate() {
@@ -60,22 +46,16 @@ public class Main extends JavaPlugin {
 		final Updater.UpdateResult result = plugin.updater.getResult();
 		switch (result) {
 		case FAIL_SPIGOT: {
-			plugin.getLogger().info(
-					"Failed to check for update for " + plugin.getName() + "!");
+			plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
 			break;
 		}
 		case NO_UPDATE: {
-			plugin.getLogger().info(
-					plugin.getName() + " is up to date! Version: "
-							+ plugin.updater.getVersion());
+			plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
 			break;
 		}
 		case UPDATE_AVAILABLE: {
-			plugin.getLogger().info(
-					plugin.getName()
-							+ " has an update available! Your Version: "
-							+ plugin.getDescription().getVersion()
-							+ " New Version: " + plugin.updater.getVersion());
+			plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
+					+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
 			break;
 		}
 		default: {
@@ -91,7 +71,7 @@ public class Main extends JavaPlugin {
 	 *            the message
 	 */
 	public void debug(String message) {
-		com.Ben12345rocks.AdvancedCore.Main.plugin.debug(plugin, message);
+		AdvancedCoreHook.getInstance().debug(plugin, message);
 	}
 
 	/**
@@ -105,7 +85,7 @@ public class Main extends JavaPlugin {
 		} catch (IOException e) {
 			plugin.getLogger().info("Can't submit metrics stats");
 		}
-		
+
 		new BStatsMetrics(this);
 	}
 
@@ -119,6 +99,13 @@ public class Main extends JavaPlugin {
 		plugin = null;
 	}
 
+	public void updateHook() {
+		AdvancedCoreHook.getInstance().setDebug(Config.getInstance().getDebug());
+		AdvancedCoreHook.getInstance().setFormatNoPerms(Config.getInstance().getFormatNoPerms());
+		AdvancedCoreHook.getInstance().setFormatNotNumber(Config.getInstance().getFormatNotNumber());
+		AdvancedCoreHook.getInstance().setHelpLine(Config.getInstance().getFormatHelpLine());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -127,35 +114,30 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
-		checkAdvancedCore();
+		AdvancedCoreHook.getInstance().loadHook(this);
+		updateHook();
 		setupFiles();
 		registerCommands();
 		registerEvents();
 		metrics();
 
-		RewardHandler.getInstance().addRewardFolder(
-				new File(plugin.getDataFolder(), "Rewards"));
+		RewardHandler.getInstance().addRewardFolder(new File(plugin.getDataFolder(), "Rewards"));
 
-		plugin.getLogger().info(
-				"Enabled " + plugin.getName() + " "
-						+ plugin.getDescription().getVersion());
+		plugin.getLogger().info("Enabled " + plugin.getName() + " " + plugin.getDescription().getVersion());
 
-		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin,
-				new Runnable() {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+
+			@Override
+			public void run() {
+				Thread.getInstance().run(new Runnable() {
 
 					@Override
 					public void run() {
-						Thread.getInstance().run(new Runnable() {
-
-							@Override
-							public void run() {
-								checkUpdate();
-							}
-						});
+						checkUpdate();
 					}
-				}, 10l);
-
-		com.Ben12345rocks.AdvancedCore.Main.plugin.registerHook(this);
+				});
+			}
+		}, 10l);
 
 	}
 
@@ -164,10 +146,8 @@ public class Main extends JavaPlugin {
 	 */
 	private void registerCommands() {
 		new CommandLoader();
-		Bukkit.getPluginCommand("advancedmobcontrol").setExecutor(
-				new CommandAdvancedMobControl(this));
-		Bukkit.getPluginCommand("advancedmobcontrol").setTabCompleter(
-				new AdvancedMobControlTabCompleter());
+		Bukkit.getPluginCommand("advancedmobcontrol").setExecutor(new CommandAdvancedMobControl(this));
+		Bukkit.getPluginCommand("advancedmobcontrol").setTabCompleter(new AdvancedMobControlTabCompleter());
 
 		plugin.debug("Loaded Commands");
 
@@ -192,7 +172,8 @@ public class Main extends JavaPlugin {
 	 */
 	public void reload() {
 		Config.getInstance().reloadData();
-		com.Ben12345rocks.AdvancedCore.Main.plugin.reload();
+		AdvancedCoreHook.getInstance().reload();
+		updateHook();
 	}
 
 	/**
