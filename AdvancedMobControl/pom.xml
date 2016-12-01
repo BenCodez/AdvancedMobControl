@@ -44,12 +44,23 @@
 				<configuration>
 					<shadedArtifactAttached>false</shadedArtifactAttached>
 					<relocations>
-                    <!-- Lets relocate the shaded API so we dont cause any conflicts with other plugins -->
-                    <relocation>
-                        <pattern>com.Ben12345rocks.AdvancedCore</pattern>
-                        <shadedPattern>${groupId}.${artifactId}.AdvancedCore</shadedPattern>
-                    </relocation>
-                </relocations>
+						<!-- Lets relocate the shaded API so we dont cause any conflicts with 
+							other plugins -->
+						<relocation>
+							<pattern>com.Ben12345rocks.AdvancedCore</pattern>
+							<shadedPattern>${groupId}.${artifactId}.AdvancedCore</shadedPattern>
+						</relocation>
+						<!-- Lets relocate the shaded API so we dont cause any conflicts with 
+							other plugins -->
+						<relocation>
+							<pattern>net.md_5.bungee</pattern>
+							<shadedPattern>${groupId}</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>net.pl3x.bukkit.chatapi</pattern>
+							<shadedPattern>${groupId}</shadedPattern>
+						</relocation>
+					</relocations>
 				</configuration>
 				<executions>
 					<execution>
@@ -81,6 +92,17 @@
 							<goal>jar</goal>
 						</goals>
 						<phase>deploy</phase>
+						<configuration>
+							<artifactSet>
+								<!-- Lets exclude google code, because the server already has this 
+									code in it (guava, etc) -->
+								<excludes>
+									<exclude>com.google.*:*</exclude>
+								</excludes>
+							</artifactSet>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -117,6 +139,7 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -126,11 +149,10 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
 			<version>1.11-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 </project>

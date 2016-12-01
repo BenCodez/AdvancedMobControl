@@ -1,6 +1,5 @@
 package com.Ben12345rocks.AdvancedMobControl;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -10,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.MCStatsMetrics;
@@ -115,13 +113,13 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 		AdvancedCoreHook.getInstance().loadHook(this);
-		updateHook();
+
 		setupFiles();
 		registerCommands();
 		registerEvents();
 		metrics();
 
-		RewardHandler.getInstance().addRewardFolder(new File(plugin.getDataFolder(), "Rewards"));
+		updateHook();
 
 		plugin.getLogger().info("Enabled " + plugin.getName() + " " + plugin.getDescription().getVersion());
 
