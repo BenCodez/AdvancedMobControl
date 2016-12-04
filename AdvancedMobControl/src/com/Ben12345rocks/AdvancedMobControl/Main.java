@@ -112,14 +112,12 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
-		AdvancedCoreHook.getInstance().loadHook(this);
-
 		setupFiles();
+		updateHook();
+		AdvancedCoreHook.getInstance().loadHook(this);
 		registerCommands();
 		registerEvents();
 		metrics();
-
-		updateHook();
 
 		plugin.getLogger().info("Enabled " + plugin.getName() + " " + plugin.getDescription().getVersion());
 
