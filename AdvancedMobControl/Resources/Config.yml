@@ -1,5 +1,8 @@
 # AdvancedMobControl by Ben12345rocks
 
+# Debug
+Debug: false
+
 # Max number of mobs before money is 0
 # Higher the number the more money players get
 MaxMobs: 20
@@ -9,3 +12,9 @@ Format:
   Money: 'You were given $%Money% for killing %Entity%'
   # Message when player is given money for killing entity via specific damage
   MoneyDamage: 'You were given $%Money% for killing %Entity% by %Damage%'
+  # Message when player tries to run command without required permissions
+  NoPerms: '&cYou do not have enough permission!'
+  # Message when player types a command but does not input a number where needed
+  NotNumber: '&cError on &6%arg%&c, number expected!'
+  # CommandHandler help message
+  HelpLine: '&3&l%Command% - &3%HelpMessage%'
