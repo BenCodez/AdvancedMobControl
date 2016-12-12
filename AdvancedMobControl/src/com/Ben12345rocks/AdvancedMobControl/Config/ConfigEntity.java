@@ -76,8 +76,8 @@ public class ConfigEntity extends YMLFile {
 	 *            the entity
 	 * @return the exp
 	 */
-	public int getExp(String entity) {
-		return getData(entity).getInt("EXP");
+	public int getExp(String entity, int looting) {
+		return getData(entity).getInt("EXP." + looting);
 	}
 
 	/**
@@ -128,8 +128,8 @@ public class ConfigEntity extends YMLFile {
 	 * @param value
 	 *            the value
 	 */
-	public void setExp(String entity, int value) {
-		set(entity + ".EXP", value);
+	public void setExp(String entity, int looting, int value) {
+		set(entity + ".EXP." + looting, value);
 	}
 
 	/**

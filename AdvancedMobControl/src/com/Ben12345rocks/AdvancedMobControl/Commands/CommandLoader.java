@@ -294,7 +294,7 @@ public class CommandLoader {
 						});
 
 				lore = new ArrayList<String>();
-				lore.add("&cCurrently: &c&l" + ConfigEntity.getInstance().getExp(args[1]));
+				lore.add("&cCurrently: &c&l" + ConfigEntity.getInstance().getExp(args[1], 0));
 
 				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetEXP", ArrayUtils.getInstance().convert(lore),
 						new ItemStack(Material.EXP_BOTTLE)) {
@@ -306,14 +306,14 @@ public class CommandLoader {
 						}
 						String entity = event.getInventory().getTitle().split(" ")[1];
 						Player player = (Player) event.getWhoClicked();
-						new ValueRequest().requestNumber(player, "" + ConfigEntity.getInstance().getExp(entity), null,
-								new NumberListener() {
+						new ValueRequest().requestNumber(player, "" + ConfigEntity.getInstance().getExp(entity, 0),
+								null, new NumberListener() {
 
 									@Override
 									public void onInput(Player player, Number value) {
 										String entity = event.getInventory().getTitle().split(" ")[1];
 
-										ConfigEntity.getInstance().setExp(entity, value.intValue());
+										ConfigEntity.getInstance().setExp(entity, 0, value.intValue());
 										player.sendMessage("Value set");
 
 										plugin.reload();
@@ -470,7 +470,8 @@ public class CommandLoader {
 
 									@Override
 									public void onInput(Player player, boolean value) {
-										String entity = (String) PlayerUtils.getInstance().getPlayerMeta(player, "Entity");
+										String entity = (String) PlayerUtils.getInstance().getPlayerMeta(player,
+												"Entity");
 										ConfigEntity.getInstance().setDisableNormalClick(entity, value);
 										plugin.reload();
 										player.sendMessage("Set disable right click to " + value);

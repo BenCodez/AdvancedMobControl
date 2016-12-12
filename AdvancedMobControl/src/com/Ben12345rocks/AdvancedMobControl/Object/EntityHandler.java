@@ -71,10 +71,10 @@ public class EntityHandler {
 	 *            the default exp
 	 * @return the exp
 	 */
-	public int getExp(int defaultExp) {
-		int exp = ConfigEntity.getInstance().getExp(entityType.toString());
+	public int getExp(int defaultExp, int looting) {
+		int exp = ConfigEntity.getInstance().getExp(entityType.toString(), looting);
 		if (exp == 0) {
-			ConfigEntity.getInstance().setExp(entityType.toString(), defaultExp);
+			ConfigEntity.getInstance().setExp(entityType.toString(), looting, defaultExp);
 			exp = defaultExp;
 		}
 		if (exp < 0) {

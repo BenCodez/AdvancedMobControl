@@ -47,8 +47,8 @@ public class EntityDeath implements Listener {
 	public void onCreatureDeath(EntityDeathEvent event) {
 		if (event.getEntity() instanceof LivingEntity) {
 			EntityHandler handle = new EntityHandler(event.getEntityType());
-			event.setDroppedExp(handle.getExp(event.getDroppedExp()));
 			int looting = 0;
+			event.setDroppedExp(handle.getExp(event.getDroppedExp(), looting));
 			if (ConfigEntity.getInstance().getDrops(event.getEntity().getType().toString(), looting).size() != 0) {
 				event.getDrops().clear();
 				for (String item : ConfigEntity.getInstance().getDrops(event.getEntity().getType().toString(),
@@ -80,6 +80,7 @@ public class EntityDeath implements Listener {
 														.toItemStack());
 							}
 						}
+						event.setDroppedExp(handle.getExp(event.getDroppedExp(), looting));
 					}
 				}
 			}
