@@ -29,7 +29,7 @@ public class EntityHandler {
 	 */
 	public EntityHandler(EntityType entityType) {
 		this.entityType = entityType;
-		ConfigEntity.getInstance().setup(this.entityType.toString());
+		ConfigEntity.getInstance().getData(entityType.toString());
 	}
 
 	/**
@@ -39,10 +39,8 @@ public class EntityHandler {
 	 *            the user
 	 */
 	public void addKill(User user) {
-		user.setPluginData(
-				"PriceReduction." + entityType.toString(),
-				user.getPluginData().getInt(
-						"PriceReduction." + entityType.toString()) + 1);
+		user.setPluginData("PriceReduction." + entityType.toString(),
+				user.getPluginData().getInt("PriceReduction." + entityType.toString()) + 1);
 
 	}
 
@@ -56,11 +54,9 @@ public class EntityHandler {
 	 * @return the double
 	 */
 	public double creatureSpawn(double health, SpawnReason reason) {
-		double reasonHealth = ConfigEntity.getInstance().getHealth(
-				entityType.toString(), reason.toString());
+		double reasonHealth = ConfigEntity.getInstance().getHealth(entityType.toString(), reason.toString());
 		if (reasonHealth == 0) {
-			ConfigEntity.getInstance().setHealth(entityType.toString(),
-					reason.toString(), health);
+			ConfigEntity.getInstance().setHealth(entityType.toString(), reason.toString(), health);
 		} else {
 			health = reasonHealth;
 		}
@@ -78,8 +74,7 @@ public class EntityHandler {
 	public int getExp(int defaultExp) {
 		int exp = ConfigEntity.getInstance().getExp(entityType.toString());
 		if (exp == 0) {
-			ConfigEntity.getInstance()
-					.setExp(entityType.toString(), defaultExp);
+			ConfigEntity.getInstance().setExp(entityType.toString(), defaultExp);
 			exp = defaultExp;
 		}
 		if (exp < 0) {
@@ -95,16 +90,13 @@ public class EntityHandler {
 	 *            the user
 	 */
 	public void removeKills(User user) {
-		Set<String> mobs = user.getPluginData()
-				.getConfigurationSection("PriceReduction").getKeys(false);
+		Set<String> mobs = user.getPluginData().getConfigurationSection("PriceReduction").getKeys(false);
 		if (mobs != null) {
 			for (String mob : mobs) {
 				if (!mob.equals(entityType.toString())) {
-					int mobKills = user.getPluginData().getInt(
-							"PriceReduction." + mob);
+					int mobKills = user.getPluginData().getInt("PriceReduction." + mob);
 					if (mobKills > 0) {
-						user.setPluginData("PriceReduction." + mob,
-								mobKills - 1);
+						user.setPluginData("PriceReduction." + mob, mobKills - 1);
 					}
 				}
 			}
@@ -120,11 +112,9 @@ public class EntityHandler {
 	 *            the damage
 	 */
 	public void runRewards(User user, String damage) {
-		int mobKills = user.getPluginData().getInt(
-				"PriceReduction." + entityType.toString());
+		int mobKills = user.getPluginData().getInt("PriceReduction." + entityType.toString());
 		// Main.plugin.debug("MobKills: " + mobKills);
-		double percent = (double) (mobKills - 1)
-				/ Config.getInstance().getMaxMobs();
+		double percent = (double) (mobKills - 1) / Config.getInstance().getMaxMobs();
 		// Main.plugin.debug("PrevPercent: " + percent);
 
 		// Main.plugin.debug("PrevPercent2: " + percent);
@@ -138,42 +128,31 @@ public class EntityHandler {
 
 		// Main.plugin.debug("Percent: " + percent);
 
-		double money = ConfigEntity.getInstance().getMoney(
-				entityType.toString());
+		double money = ConfigEntity.getInstance().getMoney(entityType.toString());
 		money = money * percent;
 		user.giveMoney(money);
 		// Main.plugin.debug("Money: " + money);
 		if (money != 0) {
-			user.sendMessage(Config
-					.getInstance()
-					.getFormatMoney()
-					.replace("%Money%",
-							StringUtils.getInstance().roundDecimals(money, 2))
+			user.sendMessage(Config.getInstance().getFormatMoney()
+					.replace("%Money%", StringUtils.getInstance().roundDecimals(money, 2))
 					.replace("%Entity%", entityType.toString()));
 		}
 
-		for (String reward : ConfigEntity.getInstance().getRewards(
-				entityType.toString())) {
+		for (String reward : ConfigEntity.getInstance().getRewards(entityType.toString())) {
 			RewardHandler.getInstance().giveReward(user, reward, true);
 		}
 
 		if (damage != null) {
-			money = ConfigEntity.getInstance().getMoney(entityType.toString(),
-					damage);
+			money = ConfigEntity.getInstance().getMoney(entityType.toString(), damage);
 			money = money * percent;
 			user.giveMoney(money);
 			// Main.plugin.debug("SpecificDamageMoney: " + money);
 			if (money != 0) {
-				user.sendMessage(Config
-						.getInstance()
-						.getFormatMoneyDamage()
-						.replace("%Money%",
-								StringUtils.getInstance().roundDecimals(money, 2))
-						.replace("%Entity%", entityType.toString())
-						.replace("%Damage%", damage));
+				user.sendMessage(Config.getInstance().getFormatMoneyDamage()
+						.replace("%Money%", StringUtils.getInstance().roundDecimals(money, 2))
+						.replace("%Entity%", entityType.toString()).replace("%Damage%", damage));
 			}
-			for (String reward : ConfigEntity.getInstance().getRewards(
-					entityType.toString(), damage)) {
+			for (String reward : ConfigEntity.getInstance().getRewards(entityType.toString(), damage)) {
 				RewardHandler.getInstance().giveReward(user, reward, true);
 			}
 
@@ -183,10 +162,8 @@ public class EntityHandler {
 	}
 
 	public void rightClicked(Player player) {
-		for (String rewardName : ConfigEntity.getInstance()
-				.getRightClickedRewards(entityType.toString())) {
-			RewardHandler.getInstance().giveReward(
-					UserManager.getInstance().getUser(player), rewardName);
+		for (String rewardName : ConfigEntity.getInstance().getRightClickedRewards(entityType.toString())) {
+			RewardHandler.getInstance().giveReward(UserManager.getInstance().getUser(player), rewardName);
 		}
 	}
 }

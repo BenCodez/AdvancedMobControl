@@ -17,6 +17,7 @@ import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
 import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMobControl;
 import com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete.AdvancedMobControlTabCompleter;
 import com.Ben12345rocks.AdvancedMobControl.Config.Config;
+import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.EntityDeath;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
@@ -168,6 +169,7 @@ public class Main extends JavaPlugin {
 	 */
 	public void reload() {
 		Config.getInstance().reloadData();
+		ConfigEntity.getInstance().reloadData();
 		AdvancedCoreHook.getInstance().reload();
 		updateHook();
 	}
@@ -176,7 +178,8 @@ public class Main extends JavaPlugin {
 	 * Setup files.
 	 */
 	public void setupFiles() {
-		Config.getInstance().setup(plugin);
+		Config.getInstance().setup();
+		ConfigEntity.getInstance().setup();
 		plugin.debug("Loaded Files");
 
 	}

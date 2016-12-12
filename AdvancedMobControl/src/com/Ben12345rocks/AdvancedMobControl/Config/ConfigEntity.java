@@ -1,23 +1,22 @@
 package com.Ben12345rocks.AdvancedMobControl.Config;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
+import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class ConfigEntity.
  */
-public class ConfigEntity {
+public class ConfigEntity extends YMLFile {
 
 	/** The instance. */
 	static ConfigEntity instance = new ConfigEntity();
@@ -37,17 +36,8 @@ public class ConfigEntity {
 	/**
 	 * Instantiates a new config entity.
 	 */
-	private ConfigEntity() {
-	}
-
-	/**
-	 * Instantiates a new config entity.
-	 *
-	 * @param plugin
-	 *            the plugin
-	 */
-	public ConfigEntity(Main plugin) {
-		ConfigEntity.plugin = plugin;
+	public ConfigEntity() {
+		super(new File(Main.plugin.getDataFolder(), "Entities.yml"));
 	}
 
 	/**
@@ -57,48 +47,12 @@ public class ConfigEntity {
 	 *            the entity
 	 * @return the data
 	 */
-	public FileConfiguration getData(String entity) {
-		File dFile = getEntityFile(entity);
-		FileConfiguration data = YamlConfiguration.loadConfiguration(dFile);
-		return data;
-	}
-
-	/**
-	 * Gets the entity file.
-	 *
-	 * @param entity
-	 *            the entity
-	 * @return the entity file
-	 */
-	public File getEntityFile(String entity) {
-		File dFile = new File(plugin.getDataFolder() + File.separator
-				+ "Entity", entity + ".yml");
-		FileConfiguration data = YamlConfiguration.loadConfiguration(dFile);
-		if (!dFile.exists()) {
-			try {
-				data.save(dFile);
-			} catch (IOException e) {
-				plugin.getLogger().severe(
-						ChatColor.RED + "Could not create Entity/" + entity
-								+ ".yml!");
-
-			}
+	public ConfigurationSection getData(String entity) {
+		if (getData().isConfigurationSection(entity)) {
+			return getData().getConfigurationSection(entity);
 		}
-		return dFile;
-
-	}
-
-	/**
-	 * Gets the entitys files.
-	 *
-	 * @return the entitys files
-	 */
-	public ArrayList<String> getEntitysFiles() {
-		File folder = new File(plugin.getDataFolder() + File.separator
-				+ "Entity");
-		String[] fileNames = folder.list();
-		return ArrayUtils.getInstance().convert(
-				fileNames);
+		getData().createSection(entity);
+		return getData().getConfigurationSection(entity);
 	}
 
 	/**
@@ -107,25 +61,12 @@ public class ConfigEntity {
 	 * @return the entitys names
 	 */
 	public ArrayList<String> getEntitysNames() {
-		ArrayList<String> Entitys = getEntitysFiles();
-		if (Entitys == null) {
-			return new ArrayList<String>();
-		}
-		for (int i = 0; i < Entitys.size(); i++) {
-			Entitys.set(i, Entitys.get(i).replace(".yml", ""));
-		}
-		for (int i = Entitys.size() - 1; i >= 0; i--) {
-			// plugin.getLogger().info(Entitys.get(i));
-			if (Entitys.get(i).equalsIgnoreCase("Example")
-					|| Entitys.get(i).equalsIgnoreCase("null")) {
-				// plugin.getLogger().info("Removed: " + Entitys.get(i));
-				Entitys.remove(i);
-
-			}
-
+		Set<String> entities = getData().getConfigurationSection("").getKeys(false);
+		if (entities == null) {
+			entities = new HashSet<String>();
 		}
 
-		return Entitys;
+		return ArrayUtils.getInstance().convert(entities);
 	}
 
 	/**
@@ -154,14 +95,12 @@ public class ConfigEntity {
 
 	@SuppressWarnings("unchecked")
 	public List<String> getRewards(String entity) {
-		return (List<String>) getData(entity).getList("Rewards",
-				new ArrayList<String>());
+		return (List<String>) getData(entity).getList("Rewards", new ArrayList<String>());
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<String> getRewards(String entity, String damage) {
-		return (List<String>) getData(entity).getList(damage + ".Rewards",
-				new ArrayList<String>());
+		return (List<String>) getData(entity).getList(damage + ".Rewards", new ArrayList<String>());
 	}
 
 	public boolean getDisableNormalClick(String entity) {
@@ -169,68 +108,16 @@ public class ConfigEntity {
 	}
 
 	public void setDisableNormalClick(String entity, boolean value) {
-		set(entity, "DisableRightClick", value);
+		set(entity + ".DisableRightClick", value);
 	}
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> getRightClickedRewards(String entity) {
-		return (ArrayList<String>) getData(entity).getList("RightClickRewards",
-				new ArrayList<String>());
+		return (ArrayList<String>) getData(entity).getList("RightClickRewards", new ArrayList<String>());
 	}
 
 	public void setRightClickedRewards(String entity, ArrayList<String> value) {
-		set(entity, "RightClickRewards", value);
-	}
-
-	/**
-	 * Rename entity.
-	 *
-	 * @param entity
-	 *            the entity
-	 * @param newName
-	 *            the new name
-	 * @return true, if successful
-	 */
-	public boolean renameEntity(String entity, String newName) {
-		return getEntityFile(entity).renameTo(
-				new File(plugin.getDataFolder() + File.separator + "Entity",
-						newName + ".yml"));
-	}
-
-	/**
-	 * Save data.
-	 *
-	 * @param dFile
-	 *            the d file
-	 * @param data
-	 *            the data
-	 */
-	public void saveData(File dFile, FileConfiguration data) {
-		try {
-			data.save(dFile);
-		} catch (IOException e) {
-			Bukkit.getServer()
-					.getLogger()
-					.severe(ChatColor.RED + "Could not save " + dFile.getName());
-		}
-	}
-
-	/**
-	 * Sets the.
-	 *
-	 * @param entity
-	 *            the entity
-	 * @param path
-	 *            the path
-	 * @param value
-	 *            the value
-	 */
-	public void set(String entity, String path, Object value) {
-		// String playerName = user.getPlayerName();
-		File dFile = getEntityFile(entity);
-		FileConfiguration data = YamlConfiguration.loadConfiguration(dFile);
-		data.set(path, value);
-		saveData(dFile, data);
+		set(entity + ".RightClickRewards", value);
 	}
 
 	/**
@@ -242,7 +129,7 @@ public class ConfigEntity {
 	 *            the value
 	 */
 	public void setExp(String entity, int value) {
-		set(entity, "EXP", value);
+		set(entity + ".EXP", value);
 	}
 
 	/**
@@ -256,7 +143,7 @@ public class ConfigEntity {
 	 *            the value
 	 */
 	public void setHealth(String entity, String spawnReason, double value) {
-		set(entity, spawnReason + ".Health", value);
+		set(entity + "." + spawnReason + ".Health", value);
 	}
 
 	/**
@@ -268,7 +155,12 @@ public class ConfigEntity {
 	 *            the value
 	 */
 	public void setRewards(String entity, List<String> value) {
-		set(entity, "Rewards", value);
+		set(entity + ".Rewards", value);
+	}
+
+	public void set(String path, Object value) {
+		getData().set(path, value);
+		saveData();
 	}
 
 	/**
@@ -291,7 +183,7 @@ public class ConfigEntity {
 	 *            the value
 	 */
 	public void setMoney(String entity, int value) {
-		set(entity, "Money", value);
+		set(entity + ".Money", value);
 	}
 
 	/**
@@ -305,7 +197,7 @@ public class ConfigEntity {
 	 *            the value
 	 */
 	public void setMoney(String entity, String damage, int value) {
-		set(entity, damage + ".Money", value);
+		set(entity + "." + damage + ".Money", value);
 	}
 
 	/**
@@ -332,35 +224,22 @@ public class ConfigEntity {
 	 *            the value
 	 */
 	public void setRewards(String entity, String damage, List<String> value) {
-		set(entity, damage + ".Rewards", value);
+		set(entity + "." + damage + ".Rewards", value);
 	}
 
-	/**
-	 * Sets the up.
-	 *
-	 * @param entity
-	 *            the new up
-	 */
-	public void setup(String entity) {
-		if (!plugin.getDataFolder().exists()) {
-			plugin.getDataFolder().mkdir();
+	public Set<String> getDrops(String entity, int looting) {
+		if (!getData(entity).isConfigurationSection("Drops." + looting)) {
+			getData(entity).createSection("Drops." + looting);
 		}
+		return getData(entity).getConfigurationSection("Drops." + looting).getKeys(false);
 
-		File dFile = new File(plugin.getDataFolder() + File.separator
-				+ "Entity", entity + ".yml");
-		FileConfiguration data = YamlConfiguration.loadConfiguration(dFile);
-		if (!dFile.exists()) {
-			try {
-				data.save(dFile);
-				if (entity.equalsIgnoreCase("ExampleEntity")) {
-					plugin.saveResource("Entity" + File.separator
-							+ "ExampleEntity.yml", true);
-				}
-			} catch (IOException e) {
-				plugin.getLogger().severe(
-						ChatColor.RED + "Could not create Entity/" + entity
-								+ ".yml!");
-			}
-		}
+	}
+
+	@Override
+	public void onFileCreation() {
+	}
+
+	public ConfigurationSection getDropsItem(String entity, int looting, String item) {
+		return getData(entity).getConfigurationSection("Drops." + looting + "." + item);
 	}
 }
