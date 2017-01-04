@@ -3,6 +3,11 @@
 # Debug
 Debug: false
 
+# Valid Options:
+# - FLAT
+# - SQLITE
+DataStorage: FLAT
+
 # Max number of mobs before money is 0
 # Higher the number the more money players get
 MaxMobs: 20

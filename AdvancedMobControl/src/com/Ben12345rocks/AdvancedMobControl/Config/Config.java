@@ -40,6 +40,10 @@ public class Config extends YMLFile {
 		return getData().getBoolean("Debug");
 	}
 
+	public String getDataStorage() {
+		return getData().getString("DataStorage", "FLAT");
+	}
+
 	/**
 	 * Gets the format help line.
 	 *

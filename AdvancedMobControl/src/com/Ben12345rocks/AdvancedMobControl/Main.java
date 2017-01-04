@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Objects.UserStorage;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.MCStatsMetrics;
@@ -21,6 +22,9 @@ import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.EntityDeath;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
+import com.Ben12345rocks.AdvancedMobControl.VersionHandle.AttributeHandle;
+import com.Ben12345rocks.AdvancedMobControl.VersionHandle.NewAttributeHandle;
+import com.Ben12345rocks.AdvancedMobControl.VersionHandle.OldAttributeHandle;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -35,7 +39,9 @@ public class Main extends JavaPlugin {
 	public ArrayList<CommandHandler> advancedMobControlCommands;
 
 	/** The updater. */
-	public Updater updater;
+	private Updater updater;
+
+	private AttributeHandle attributeHandle;
 
 	/**
 	 * Check update.
@@ -103,6 +109,11 @@ public class Main extends JavaPlugin {
 		AdvancedCoreHook.getInstance().setFormatNoPerms(Config.getInstance().getFormatNoPerms());
 		AdvancedCoreHook.getInstance().setFormatNotNumber(Config.getInstance().getFormatNotNumber());
 		AdvancedCoreHook.getInstance().setHelpLine(Config.getInstance().getFormatHelpLine());
+		try {
+			AdvancedCoreHook.getInstance().setStorageType(UserStorage.valueOf(Config.getInstance().getDataStorage()));
+		} catch (Exception e) {
+			plugin.getLogger().warning("Invalid storage type: " + Config.getInstance().getDataStorage());
+		}
 	}
 
 	/*
@@ -136,6 +147,18 @@ public class Main extends JavaPlugin {
 			}
 		}, 10l);
 
+		if (Bukkit.getVersion().contains("1.8") || Bukkit.getVersion().contains("1.7")) {
+			attributeHandle = new OldAttributeHandle();
+			plugin.getLogger().info("Using old attribute methods");
+		} else {
+			attributeHandle = new NewAttributeHandle();
+			plugin.getLogger().info("Using new attribute methods");
+		}
+
+	}
+
+	public AttributeHandle getAttributeHandle() {
+		return attributeHandle;
 	}
 
 	/**

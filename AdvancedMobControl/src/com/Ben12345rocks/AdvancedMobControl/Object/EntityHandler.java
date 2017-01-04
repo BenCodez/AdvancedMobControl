@@ -1,6 +1,6 @@
 package com.Ben12345rocks.AdvancedMobControl.Object;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -39,8 +39,8 @@ public class EntityHandler {
 	 *            the user
 	 */
 	public void addKill(User user) {
-		user.setPluginData("PriceReduction." + entityType.toString(),
-				user.getPluginData().getInt("PriceReduction." + entityType.toString()) + 1);
+		user.getUserData().setInt("PriceReduction_" + entityType.toString(),
+				user.getUserData().getInt("PriceReduction_" + entityType.toString()) + 1);
 
 	}
 
@@ -90,13 +90,13 @@ public class EntityHandler {
 	 *            the user
 	 */
 	public void removeKills(User user) {
-		Set<String> mobs = user.getPluginData().getConfigurationSection("PriceReduction").getKeys(false);
+		ArrayList<String> mobs = ConfigEntity.getInstance().getEntitysNames();
 		if (mobs != null) {
 			for (String mob : mobs) {
 				if (!mob.equals(entityType.toString())) {
-					int mobKills = user.getPluginData().getInt("PriceReduction." + mob);
+					int mobKills = user.getUserData().getInt("PriceReduction_" + mob);
 					if (mobKills > 0) {
-						user.setPluginData("PriceReduction." + mob, mobKills - 1);
+						user.getUserData().setInt("PriceReduction_" + mob, mobKills - 1);
 					}
 				}
 			}
@@ -112,7 +112,7 @@ public class EntityHandler {
 	 *            the damage
 	 */
 	public void runRewards(User user, String damage) {
-		int mobKills = user.getPluginData().getInt("PriceReduction." + entityType.toString());
+		int mobKills = user.getUserData().getInt("PriceReduction_" + entityType.toString());
 		// Main.plugin.debug("MobKills: " + mobKills);
 		double percent = (double) (mobKills - 1) / Config.getInstance().getMaxMobs();
 		// Main.plugin.debug("PrevPercent: " + percent);

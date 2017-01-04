@@ -25,8 +25,6 @@ public class EntityDeath implements Listener {
 	@SuppressWarnings("unused")
 	private static Main plugin;
 
-	// VotingRewards voteReward = VotingRewards.getInstance();
-
 	/**
 	 * Instantiates a new entity death.
 	 *
@@ -86,23 +84,5 @@ public class EntityDeath implements Listener {
 			}
 		}
 	}
-
-	/**
-	 * On creature spawn.
-	 *
-	 * @param event
-	 *            the event
-	 */
-	/*
-	 * @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	 * public void onCreatureDamage(EntityDamageByEntityEvent event) { if
-	 * (event.getDamager() instanceof Player && (event.getEntity() instanceof
-	 * LivingEntity)) { LivingEntity entity = (LivingEntity) event.getEntity();
-	 * if (event.getDamage() >= entity.getHealth()) { Player player = (Player)
-	 * event.getDamager(); EntityHandler handle = new
-	 * EntityHandler(event.getEntityType()); User user = new User(plugin,
-	 * player); handle.addKill(user); handle.runRewards(user,
-	 * event.getCause().toString()); } } }
-	 */
 
 }
