@@ -41,6 +41,7 @@ public class EntityDeath implements Listener {
 	 * @param event
 	 *            the event
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureDeath(EntityDeathEvent event) {
 		if (event.getEntity() instanceof LivingEntity) {
@@ -64,8 +65,7 @@ public class EntityDeath implements Listener {
 					User user = UserManager.getInstance().getUser(player);
 					handle.addKill(user);
 					handle.runRewards(user, damage.getCause().toString());
-					looting = player.getInventory().getItemInMainHand()
-							.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+					looting = player.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 					if (looting != 0) {
 						if (ConfigEntity.getInstance().getDrops(event.getEntity().getType().toString(), looting)
 								.size() != 0) {
