@@ -14,6 +14,7 @@ import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.MCStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Updater.Updater;
+import com.Ben12345rocks.AdvancedCore.mysql.MySQL;
 import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
 import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMobControl;
 import com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete.AdvancedMobControlTabCompleter;
@@ -105,15 +106,27 @@ public class Main extends JavaPlugin {
 	}
 
 	public void updateHook() {
+		AdvancedCoreHook.getInstance().setPreloadTable(Config.getInstance().getMySqlPreloadTable());
+		AdvancedCoreHook.getInstance().setStorageType(UserStorage.valueOf(Config.getInstance().getDataStorage()));
+		if (AdvancedCoreHook.getInstance().getStorageType().equals(UserStorage.MYSQL)) {
+			Thread.getInstance().run(new Runnable() {
+
+				@Override
+				public void run() {
+
+					AdvancedCoreHook.getInstance()
+							.setMysql(new MySQL(Config.getInstance().getMySqlHost(),
+									Config.getInstance().getMySqlPort(), Config.getInstance().getMySqlDatabase(),
+									Config.getInstance().getMySqlUsername(), Config.getInstance().getMySqlPassword(),
+									Config.getInstance().getMySqlMaxConnections()));
+				}
+			});
+
+		}
 		AdvancedCoreHook.getInstance().setDebug(Config.getInstance().getDebug());
 		AdvancedCoreHook.getInstance().setFormatNoPerms(Config.getInstance().getFormatNoPerms());
 		AdvancedCoreHook.getInstance().setFormatNotNumber(Config.getInstance().getFormatNotNumber());
 		AdvancedCoreHook.getInstance().setHelpLine(Config.getInstance().getFormatHelpLine());
-		try {
-			AdvancedCoreHook.getInstance().setStorageType(UserStorage.valueOf(Config.getInstance().getDataStorage()));
-		} catch (Exception e) {
-			plugin.getLogger().warning("Invalid storage type: " + Config.getInstance().getDataStorage());
-		}
 	}
 
 	/*

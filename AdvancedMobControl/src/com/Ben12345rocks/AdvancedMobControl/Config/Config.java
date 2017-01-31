@@ -35,6 +35,34 @@ public class Config extends YMLFile {
 	public Config() {
 		super(new File(Main.plugin.getDataFolder(), "Config.yml"));
 	}
+	
+	public String getMySqlHost() {
+		return getData().getString("MySQL.Host", "");
+	}
+
+	public int getMySqlPort() {
+		return getData().getInt("MySQL.Port");
+	}
+	
+	public boolean getMySqlPreloadTable() {
+		return getData().getBoolean("MySQL.PreLoadTable");
+	}
+
+	public int getMySqlMaxConnections() {
+		return getData().getInt("MySQL.MaxConnections", 1);
+	}
+
+	public String getMySqlDatabase() {
+		return getData().getString("MySQL.Database", "");
+	}
+
+	public String getMySqlUsername() {
+		return getData().getString("MySQL.Username", "");
+	}
+
+	public String getMySqlPassword() {
+		return getData().getString("MySQL.Password", "");
+	}
 
 	public boolean getDebug() {
 		return getData().getBoolean("Debug");

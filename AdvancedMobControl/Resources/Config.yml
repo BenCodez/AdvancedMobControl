@@ -6,7 +6,23 @@ Debug: false
 # Valid Options:
 # - FLAT
 # - SQLITE
+# - MYSQL
 DataStorage: FLAT
+
+# Information for mysql
+MySQL:
+  Host: ''
+  # Default port is 3306
+  Port: 3306 
+  Database: ''
+  Username: ''
+  Password: ''
+  # Max number of connections
+  MaxConnections: 1
+  # Wether or not to preload table
+  # Increases performance greatly when using mysql
+  # Set to false if you want multiple servers using the same table
+  PreLoadTable: true
 
 # Max number of mobs before money is 0
 # Higher the number the more money players get
