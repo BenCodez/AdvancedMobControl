@@ -138,9 +138,8 @@ public class EntityHandler {
 					.replace("%Entity%", entityType.toString()));
 		}
 
-		for (String reward : ConfigEntity.getInstance().getRewards(entityType.toString())) {
-			RewardHandler.getInstance().giveReward(user, reward, true);
-		}
+		RewardHandler.getInstance().giveReward(user, ConfigEntity.getInstance().getData(),
+				ConfigEntity.getInstance().getRewardsPath(entityType.toString()));
 
 		if (damage != null) {
 			money = ConfigEntity.getInstance().getMoney(entityType.toString(), damage);
@@ -152,9 +151,8 @@ public class EntityHandler {
 						.replace("%Money%", StringUtils.getInstance().roundDecimals(money, 2))
 						.replace("%Entity%", entityType.toString()).replace("%Damage%", damage));
 			}
-			for (String reward : ConfigEntity.getInstance().getRewards(entityType.toString(), damage)) {
-				RewardHandler.getInstance().giveReward(user, reward, true);
-			}
+			RewardHandler.getInstance().giveReward(user, ConfigEntity.getInstance().getData(),
+					ConfigEntity.getInstance().getRewardsPath(entityType.toString(), damage));
 
 		}
 
@@ -162,8 +160,8 @@ public class EntityHandler {
 	}
 
 	public void rightClicked(Player player) {
-		for (String rewardName : ConfigEntity.getInstance().getRightClickedRewards(entityType.toString())) {
-			RewardHandler.getInstance().giveReward(UserManager.getInstance().getUser(player), rewardName);
-		}
+		RewardHandler.getInstance().giveReward(UserManager.getInstance().getUser(player),
+				ConfigEntity.getInstance().getData(),
+				ConfigEntity.getInstance().getRightClickedRewardsPath(entityType.toString()));
 	}
 }

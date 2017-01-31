@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.Ben12345rocks</groupId>
 	<artifactId>AdvancedMobControl</artifactId>
-	<version>1.6.1</version>
+	<version>1.6.2</version>
 	<packaging>jar</packaging>
 	<name>AdvancedMobControl</name>
 	<properties>
@@ -54,11 +54,11 @@
 							other plugins -->
 						<relocation>
 							<pattern>net.md_5.bungee</pattern>
-							<shadedPattern>${groupId}</shadedPattern>
+							<shadedPattern>${groupId}.${artifactId}</shadedPattern>
 						</relocation>
 						<relocation>
 							<pattern>net.pl3x.bukkit.chatapi</pattern>
-							<shadedPattern>${groupId}</shadedPattern>
+							<shadedPattern>${groupId}.${artifactId}</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>

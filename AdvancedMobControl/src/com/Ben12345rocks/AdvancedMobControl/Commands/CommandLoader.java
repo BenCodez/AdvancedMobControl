@@ -1,7 +1,6 @@
 package com.Ben12345rocks.AdvancedMobControl.Commands;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,8 +11,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Objects.Reward;
-import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
@@ -24,7 +21,6 @@ import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequest;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.BooleanListener;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.NumberListener;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.StringListener;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
@@ -39,7 +35,7 @@ public class CommandLoader {
 	public Main plugin = Main.plugin;
 
 	/**
-	 * Instantiates a new command loader.
+	 * Instantiates a new command loader.	
 	 */
 	public CommandLoader() {
 		loadCommands();
@@ -324,141 +320,6 @@ public class CommandLoader {
 				});
 
 				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("Add reward file", new String[] {}, new ItemStack(Material.PAPER)) {
-
-							@Override
-							public void onClick(ClickEvent clickEvent) {
-								ArrayList<String> rewardNames = new ArrayList<String>();
-								for (Reward reward : RewardHandler.getInstance().getRewards()) {
-									rewardNames.add(reward.getRewardName());
-								}
-								new ValueRequest().requestString(clickEvent.getPlayer(), "",
-										ArrayUtils.getInstance().convert(rewardNames), true, new StringListener() {
-
-											@Override
-											public void onInput(Player player, String value) {
-												String entity = clickEvent.getEvent().getInventory().getTitle()
-														.split(" ")[1];
-												List<String> rewards = ConfigEntity.getInstance().getRewards(entity);
-												rewards.add(value);
-												ConfigEntity.getInstance().setRewards(entity, rewards);
-												player.sendMessage("Reward added");
-												plugin.reload();
-											}
-										});
-
-							}
-						});
-
-				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("Remove reward file", new String[] {}, new ItemStack(Material.PAPER)) {
-
-							@Override
-							public void onClick(ClickEvent clickEvent) {
-								String entity = clickEvent.getEvent().getInventory().getTitle().split(" ")[1];
-								new ValueRequest().requestString(clickEvent.getPlayer(), "",
-										ArrayUtils.getInstance().convert(
-												(ArrayList<String>) ConfigEntity.getInstance().getRewards(entity)),
-										false, new StringListener() {
-
-											@Override
-											public void onInput(Player player, String value) {
-												String entity = clickEvent.getEvent().getInventory().getTitle()
-														.split(" ")[1];
-												List<String> rewards = ConfigEntity.getInstance().getRewards(entity);
-												rewards.remove(value);
-												ConfigEntity.getInstance().setRewards(entity, rewards);
-												player.sendMessage("Reward removed");
-												plugin.reload();
-											}
-										});
-
-							}
-						});
-
-				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("Add reward file damage", new String[] {}, new ItemStack(Material.PAPER)) {
-
-							@Override
-							public void onClick(ClickEvent clickEvent) {
-								ArrayList<String> damages = new ArrayList<String>();
-								for (DamageCause d : DamageCause.values()) {
-									damages.add(d.toString());
-								}
-								new ValueRequest().requestString(clickEvent.getPlayer(), "",
-										ArrayUtils.getInstance().convert(damages), new StringListener() {
-
-											@Override
-											public void onInput(Player player, String damage) {
-												ArrayList<String> rewardNames = new ArrayList<String>();
-												for (Reward reward : RewardHandler.getInstance().getRewards()) {
-													rewardNames.add(reward.getRewardName());
-												}
-												new ValueRequest().requestString(player, "",
-														ArrayUtils.getInstance().convert(rewardNames), true,
-														new StringListener() {
-
-															@Override
-															public void onInput(Player player, String value) {
-																String entity = clickEvent.getEvent().getInventory()
-																		.getTitle().split(" ")[1];
-																List<String> rewards = ConfigEntity.getInstance()
-																		.getRewards(entity, damage);
-																rewards.add(value);
-																ConfigEntity.getInstance().setRewards(entity, damage,
-																		rewards);
-																player.sendMessage("Reward added");
-																plugin.reload();
-															}
-														});
-
-											}
-										});
-
-							}
-						});
-
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("Remove reward file damage", new String[] {},
-						new ItemStack(Material.PAPER)) {
-
-					@Override
-					public void onClick(ClickEvent clickEvent) {
-						ArrayList<String> damages = new ArrayList<String>();
-						for (DamageCause d : DamageCause.values()) {
-							damages.add(d.toString());
-						}
-						new ValueRequest().requestString(clickEvent.getPlayer(), "",
-								ArrayUtils.getInstance().convert(damages), new StringListener() {
-
-									@Override
-									public void onInput(Player player, String damage) {
-										String entity = clickEvent.getEvent().getInventory().getTitle().split(" ")[1];
-										new ValueRequest().requestString(player, "",
-												ArrayUtils.getInstance()
-														.convert((ArrayList<String>) ConfigEntity.getInstance()
-																.getRewards(entity, damage)),
-												false, new StringListener() {
-
-													@Override
-													public void onInput(Player player, String value) {
-														String entity = clickEvent.getEvent().getInventory().getTitle()
-																.split(" ")[1];
-														List<String> rewards = ConfigEntity.getInstance()
-																.getRewards(entity, damage);
-														rewards.remove(value);
-														ConfigEntity.getInstance().setRewards(entity, damage, rewards);
-														player.sendMessage("Reward removed");
-														plugin.reload();
-													}
-												});
-
-									}
-								});
-
-					}
-				});
-
-				inv.addButton(inv.getNextSlot(),
 						new BInventoryButton("DisableRightClick",
 								new String[] {
 										"Currently: " + ConfigEntity.getInstance().getDisableNormalClick(args[1]) },
@@ -480,64 +341,6 @@ public class CommandLoader {
 
 							}
 						});
-
-				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("Add right click reward", new String[] {}, new ItemStack(Material.STONE)) {
-
-							@Override
-							public void onClick(ClickEvent clickEvent) {
-								Player player = clickEvent.getPlayer();
-								ArrayList<String> rewardNames = new ArrayList<String>();
-								for (Reward reward : RewardHandler.getInstance().getRewards()) {
-									rewardNames.add(reward.getRewardName());
-								}
-								new ValueRequest().requestString(player, "",
-										ArrayUtils.getInstance().convert(rewardNames), true, new StringListener() {
-
-											@Override
-											public void onInput(Player player, String value) {
-												String entity = (String) PlayerUtils.getInstance().getPlayerMeta(player,
-														"Entity");
-												ArrayList<String> rewards = ConfigEntity.getInstance()
-														.getRightClickedRewards(entity);
-												rewards.add(value);
-												ConfigEntity.getInstance().setRightClickedRewards(entity, rewards);
-												player.sendMessage("Reward added");
-												plugin.reload();
-											}
-										});
-							}
-						});
-
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("Remove right click reward", new String[] {},
-						new ItemStack(Material.STONE)) {
-
-					@Override
-					public void onClick(ClickEvent clickEvent) {
-						Player player = clickEvent.getPlayer();
-
-						new ValueRequest()
-								.requestString(player, "",
-										ArrayUtils.getInstance()
-												.convert(ConfigEntity.getInstance()
-														.getRightClickedRewards((String) PlayerUtils.getInstance()
-																.getPlayerMeta(player, "Entity"))),
-										true, new StringListener() {
-
-											@Override
-											public void onInput(Player player, String value) {
-												String entity = (String) PlayerUtils.getInstance().getPlayerMeta(player,
-														"Entity");
-												ArrayList<String> rewards = ConfigEntity.getInstance()
-														.getRightClickedRewards(entity);
-												rewards.remove(value);
-												ConfigEntity.getInstance().setRightClickedRewards(entity, rewards);
-												player.sendMessage("Reward removed");
-												plugin.reload();
-											}
-										});
-					}
-				});
 
 				inv.openInventory((Player) sender);
 

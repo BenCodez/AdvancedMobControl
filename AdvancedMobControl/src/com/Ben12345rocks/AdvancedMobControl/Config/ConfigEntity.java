@@ -93,14 +93,12 @@ public class ConfigEntity extends YMLFile {
 		return getData(entity).getDouble(spawnReason + ".Health");
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<String> getRewards(String entity) {
-		return (List<String>) getData(entity).getList("Rewards", new ArrayList<String>());
+	public String getRewardsPath(String entity) {
+		return entity + ".Rewards";
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<String> getRewards(String entity, String damage) {
-		return (List<String>) getData(entity).getList(damage + ".Rewards", new ArrayList<String>());
+	public String getRewardsPath(String entity, String damage) {
+		return entity + "." + damage + ".Rewards";
 	}
 
 	public boolean getDisableNormalClick(String entity) {
@@ -111,9 +109,8 @@ public class ConfigEntity extends YMLFile {
 		set(entity + ".DisableRightClick", value);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ArrayList<String> getRightClickedRewards(String entity) {
-		return (ArrayList<String>) getData(entity).getList("RightClickRewards", new ArrayList<String>());
+	public String getRightClickedRewardsPath(String entity) {
+		return entity + ".RightClickRewards";
 	}
 
 	public void setRightClickedRewards(String entity, ArrayList<String> value) {
