@@ -106,7 +106,6 @@ public class Main extends JavaPlugin {
 	}
 
 	public void updateHook() {
-		AdvancedCoreHook.getInstance().setPreloadTable(Config.getInstance().getMySqlPreloadTable());
 		AdvancedCoreHook.getInstance().setStorageType(UserStorage.valueOf(Config.getInstance().getDataStorage()));
 		if (AdvancedCoreHook.getInstance().getStorageType().equals(UserStorage.MYSQL)) {
 			Thread.getInstance().run(new Runnable() {
