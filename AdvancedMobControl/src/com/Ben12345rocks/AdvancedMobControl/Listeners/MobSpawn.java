@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
+import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
 
 /**
  * The Class MobSpawn.
@@ -34,11 +34,16 @@ public class MobSpawn implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		EntityHandler entityHandle = new EntityHandler(event.getEntityType());
-		double health = entityHandle.creatureSpawn(plugin.getAttributeHandle().getMaxHealth(event.getEntity()),
-				event.getSpawnReason());
-		plugin.getAttributeHandle().setMaxHealth(event.getEntity(), health);
-		event.getEntity().setHealth(health);
+		EntityHandle handle = plugin.getEntityHandler().getHandle(event.getEntityType(), event.getLocation().getWorld(),
+				-1, event.getSpawnReason());
+
+		//double nHealth = plugin.getAttributeHandle().getMaxHealth(event.getEntity());
+		double health = handle.getHealth();
+		if (health >= 0) {
+			plugin.getAttributeHandle().setMaxHealth(event.getEntity(), health);
+			event.getEntity().setHealth(health);
+		}
+
 	}
 
 }

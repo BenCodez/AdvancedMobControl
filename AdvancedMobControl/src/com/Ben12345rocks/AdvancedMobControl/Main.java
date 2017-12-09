@@ -19,10 +19,10 @@ import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
 import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMobControl;
 import com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete.AdvancedMobControlTabCompleter;
 import com.Ben12345rocks.AdvancedMobControl.Config.Config;
-import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.EntityDeath;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
+import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
 import com.Ben12345rocks.AdvancedMobControl.VersionHandle.AttributeHandle;
 import com.Ben12345rocks.AdvancedMobControl.VersionHandle.NewAttributeHandle;
 import com.Ben12345rocks.AdvancedMobControl.VersionHandle.OldAttributeHandle;
@@ -43,6 +43,8 @@ public class Main extends JavaPlugin {
 	private Updater updater;
 
 	private AttributeHandle attributeHandle;
+
+	private EntityHandler entityHandler;
 
 	/**
 	 * Check update.
@@ -112,12 +114,8 @@ public class Main extends JavaPlugin {
 
 				@Override
 				public void run() {
-
 					AdvancedCoreHook.getInstance()
-							.setMysql(new MySQL("AdvancedMobControl_Users", Config.getInstance().getMySqlHost(),
-									Config.getInstance().getMySqlPort(), Config.getInstance().getMySqlDatabase(),
-									Config.getInstance().getMySqlUsername(), Config.getInstance().getMySqlPassword(),
-									Config.getInstance().getMySqlMaxConnections()));
+							.setMysql(new MySQL("AdvancedMobControl_Users", Config.getInstance().getMysql()));
 				}
 			});
 
@@ -136,11 +134,13 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
+
 		setupFiles();
 		updateHook();
 		AdvancedCoreHook.getInstance().loadHook(this);
 		registerCommands();
 		registerEvents();
+		entityHandler = new EntityHandler();
 		metrics();
 
 		plugin.getLogger().info("Enabled " + plugin.getName() + " " + plugin.getDescription().getVersion());
@@ -167,6 +167,13 @@ public class Main extends JavaPlugin {
 			plugin.getLogger().info("Using new attribute methods");
 		}
 
+	}
+
+	/**
+	 * @return the entityHandler
+	 */
+	public EntityHandler getEntityHandler() {
+		return entityHandler;
 	}
 
 	public AttributeHandle getAttributeHandle() {
@@ -204,8 +211,8 @@ public class Main extends JavaPlugin {
 	 */
 	public void reload() {
 		Config.getInstance().reloadData();
-		ConfigEntity.getInstance().reloadData();
 		AdvancedCoreHook.getInstance().reload();
+		entityHandler.load();
 		updateHook();
 	}
 
@@ -214,7 +221,6 @@ public class Main extends JavaPlugin {
 	 */
 	public void setupFiles() {
 		Config.getInstance().setup();
-		ConfigEntity.getInstance().setup();
 		plugin.debug("Loaded Files");
 
 	}

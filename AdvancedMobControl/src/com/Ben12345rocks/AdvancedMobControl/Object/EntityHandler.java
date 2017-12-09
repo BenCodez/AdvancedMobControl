@@ -1,167 +1,97 @@
 package com.Ben12345rocks.AdvancedMobControl.Object;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
-import com.Ben12345rocks.AdvancedCore.Objects.RewardHandler;
-import com.Ben12345rocks.AdvancedCore.Objects.User;
-import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
-import com.Ben12345rocks.AdvancedMobControl.Config.Config;
-import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
+import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
+import com.Ben12345rocks.AdvancedMobControl.Main;
 
 /**
  * The Class EntityHandler.
  */
 public class EntityHandler {
+	private HashMap<EntityType, ArrayList<EntityHandle>> entityHandles;
+	private Main plugin;
 
-	/** The entity type. */
-	private EntityType entityType;
+	public EntityHandler() {
+		plugin = Main.plugin;
 
-	/**
-	 * Instantiates a new entity handler.
-	 *
-	 * @param entityType
-	 *            the entity type
-	 */
-	public EntityHandler(EntityType entityType) {
-		this.entityType = entityType;
-		ConfigEntity.getInstance().getData(entityType.toString());
+		load();
 	}
 
-	/**
-	 * Adds the kill.
-	 *
-	 * @param user
-	 *            the user
-	 */
-	public void addKill(User user) {
-		user.getUserData().setInt("PriceReduction_" + entityType.toString(),
-				user.getUserData().getInt("PriceReduction_" + entityType.toString()) + 1);
+	public void load() {
+		entityHandles = new HashMap<EntityType, ArrayList<EntityHandle>>();
+		for (File file : new File(plugin.getDataFolder(), "Entities").listFiles()) {
 
-	}
+			if (file.isDirectory()) {
+				String world = file.getName();
+				ArrayList<EntityHandle> handles = new ArrayList<EntityHandle>();
+				for (File entityFile : file.listFiles()) {
+					String entityTypeStr = entityFile.getName();
+					try {
 
-	/**
-	 * Creature spawn.
-	 *
-	 * @param health
-	 *            the health
-	 * @param reason
-	 *            the reason
-	 * @return the double
-	 */
-	public double creatureSpawn(double health, SpawnReason reason) {
-		double reasonHealth = ConfigEntity.getInstance().getHealth(entityType.toString(), reason.toString());
-		if (reasonHealth == 0) {
-			ConfigEntity.getInstance().setHealth(entityType.toString(), reason.toString(), health);
-		} else {
-			health = reasonHealth;
+						YMLFile yml = new YMLFile(entityFile) {
+
+							@Override
+							public void onFileCreation() {
+
+							}
+						};
+
+						String str = yml.getData().getString("EntityType", "");
+						if (!str.isEmpty()) {
+							entityTypeStr = str;
+						}
+						EntityType type = EntityType.valueOf(entityTypeStr);
+						handles.add(new EntityHandle(entityFile.getName(), world,
+								yml.getData().getConfigurationSection(""), yml));
+						entityHandles.put(type, handles);
+
+					} catch (EnumConstantNotPresentException e) {
+						AdvancedCoreHook.getInstance().debug(e);
+						plugin.getLogger().warning("EntityType " + entityTypeStr + " does not exist!");
+					}
+				}
+
+			}
+
 		}
-
-		return health;
 	}
 
-	/**
-	 * Gets the exp.
-	 *
-	 * @param defaultExp
-	 *            the default exp
-	 * @return the exp
-	 */
-	public int getExp(int defaultExp, int looting) {
-		int exp = ConfigEntity.getInstance().getExp(entityType.toString(), looting);
-		if (exp == 0) {
-			ConfigEntity.getInstance().setExp(entityType.toString(), looting, defaultExp);
-			exp = defaultExp;
+	public EntityHandle getHandle(EntityType type, World world, int looting, SpawnReason spawn) {
+		String spawnReason = "";
+		if (spawn != null) {
+			spawnReason = spawn.toString();
 		}
-		if (exp < 0) {
-			return 0;
-		}
-		return exp;
-	}
-
-	/**
-	 * Removes the kills.
-	 *
-	 * @param user
-	 *            the user
-	 */
-	public void removeKills(User user) {
-		ArrayList<String> mobs = ConfigEntity.getInstance().getEntitysNames();
-		if (mobs != null) {
-			for (String mob : mobs) {
-				if (!mob.equals(entityType.toString())) {
-					int mobKills = user.getUserData().getInt("PriceReduction_" + mob);
-					if (mobKills > 0) {
-						user.getUserData().setInt("PriceReduction_" + mob, mobKills - 1);
+		if (entityHandles.get(type) != null) {
+			for (EntityHandle handle : entityHandles.get(type)) {
+				if (handle.getWorld().equalsIgnoreCase(world.getName())) {
+					if (handle.getLooting() == looting) {
+						if (spawnReason.equals(handle.getSpawnReason())) {
+							return handle;
+						}
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * Run rewards.
-	 *
-	 * @param user
-	 *            the user
-	 * @param damage
-	 *            the damage
-	 */
-	public void runRewards(User user, String damage) {
-		int mobKills = user.getUserData().getInt("PriceReduction_" + entityType.toString());
-		// Main.plugin.debug("MobKills: " + mobKills);
-		double percent = (double) (mobKills - 1) / Config.getInstance().getMaxMobs();
-		// Main.plugin.debug("PrevPercent: " + percent);
-
-		// Main.plugin.debug("PrevPercent2: " + percent);
-		if (percent > 1) {
-			percent = 1;
-		} else if (percent < 0) {
-			percent = 0;
-		}
-
-		percent = (1 - percent);
-
-		// Main.plugin.debug("Percent: " + percent);
-
-		double money = ConfigEntity.getInstance().getMoney(entityType.toString());
-		money = money * percent;
-		user.giveMoney(money);
-		// Main.plugin.debug("Money: " + money);
-		if (money != 0) {
-			user.sendMessage(Config.getInstance().getFormatMoney()
-					.replace("%Money%", StringUtils.getInstance().roundDecimals(money, 2))
-					.replace("%Entity%", entityType.toString()));
-		}
-
-		RewardHandler.getInstance().giveReward(user, ConfigEntity.getInstance().getData(),
-				ConfigEntity.getInstance().getRewardsPath(entityType.toString()));
-
-		if (damage != null) {
-			money = ConfigEntity.getInstance().getMoney(entityType.toString(), damage);
-			money = money * percent;
-			user.giveMoney(money);
-			// Main.plugin.debug("SpecificDamageMoney: " + money);
-			if (money != 0) {
-				user.sendMessage(Config.getInstance().getFormatMoneyDamage()
-						.replace("%Money%", StringUtils.getInstance().roundDecimals(money, 2))
-						.replace("%Entity%", entityType.toString()).replace("%Damage%", damage));
+		if (entityHandles.get(type) != null) {
+			for (EntityHandle handle : entityHandles.get(type)) {
+				if (handle.getWorld().equalsIgnoreCase("All")) {
+					if (handle.getLooting() == looting) {
+						if (spawnReason.equals(handle.getSpawnReason())) {
+							return handle;
+						}
+					}
+				}
 			}
-			RewardHandler.getInstance().giveReward(user, ConfigEntity.getInstance().getData(),
-					ConfigEntity.getInstance().getRewardsPath(entityType.toString(), damage));
-
 		}
-
-		removeKills(user);
+		return null;
 	}
 
-	public void rightClicked(Player player) {
-		RewardHandler.getInstance().giveReward(UserManager.getInstance().getUser(player),
-				ConfigEntity.getInstance().getData(),
-				ConfigEntity.getInstance().getRightClickedRewardsPath(entityType.toString()));
-	}
 }

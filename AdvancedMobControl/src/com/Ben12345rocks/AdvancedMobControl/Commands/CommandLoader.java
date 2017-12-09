@@ -3,26 +3,19 @@ package com.Ben12345rocks.AdvancedMobControl.Commands;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
+import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequest;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.BooleanListener;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.NumberListener;
 import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Config.ConfigEntity;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -35,7 +28,7 @@ public class CommandLoader {
 	public Main plugin = Main.plugin;
 
 	/**
-	 * Instantiates a new command loader.	
+	 * Instantiates a new command loader.
 	 */
 	public CommandLoader() {
 		loadCommands();
@@ -105,252 +98,12 @@ public class CommandLoader {
 					}
 				});
 
-		plugin.advancedMobControlCommands.add(
-				new CommandHandler(new String[] { "Entity" }, "AdvancedMobControl.Entity", "open list of entities") {
-
-					@Override
-					public void execute(CommandSender sender, String[] args) {
-
-						if (sender instanceof Player) {
-							BInventory inv = new BInventory("Entities");
-							int count = 0;
-							for (String entity : ConfigEntity.getInstance().getEntitysNames()) {
-								inv.addButton(count,
-										new BInventoryButton(entity, new String[0], new ItemStack(Material.STONE)) {
-
-											@Override
-											public void onClick(ClickEvent event) {
-												if (event.getWhoClicked() instanceof Player) {
-													String entity = event.getCurrentItem().getItemMeta()
-															.getDisplayName();
-													Player player = (Player) event.getWhoClicked();
-													player.closeInventory();
-													player.performCommand("advancedmobcontrol Entity " + entity);
-												}
-
-											}
-										});
-								count++;
-							}
-							inv.openInventory((Player) sender);
-						} else {
-							sender.sendMessage("Must be player");
-						}
-					}
-				});
-
-		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] { "Entity", "(Entity)" },
-				"AdvancedMobControl.Entity", "Open GUI to edit entities", false) {
-
-			@Override
-			public void execute(CommandSender sender, String[] args) {
-				PlayerUtils.getInstance().setPlayerMeta((Player) sender, "Entity", args[1]);
-
-				BInventory inv = new BInventory("EntityGUI: " + args[1]);
-
-				ArrayList<String> lore = new ArrayList<String>();
-				lore.add("&cCurrently: &c&l" + ConfigEntity.getInstance().getMoney(args[1]));
-
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetMoney",
-						ArrayUtils.getInstance().convert(lore), new ItemStack(Material.GOLDEN_APPLE)) {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						if (!(event.getWhoClicked() instanceof Player)) {
-							return;
-						}
-						String entity = event.getInventory().getTitle().split(" ")[1];
-						Player player = (Player) event.getWhoClicked();
-						player.closeInventory();
-						new ValueRequest().requestNumber(player, "" + ConfigEntity.getInstance().getMoney(entity), null,
-								new NumberListener() {
-
-									@Override
-									public void onInput(Player player, Number value) {
-										String entity = event.getInventory().getTitle().split(" ")[1];
-
-										ConfigEntity.getInstance().setMoney(entity, value.intValue());
-										player.sendMessage("Value set");
-
-										plugin.reload();
-									}
-								});
-					}
-				});
-
-				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("SetMoneyDamage", new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
-
-							@Override
-							public void onClick(ClickEvent event) {
-								if (!(event.getWhoClicked() instanceof Player)) {
-									return;
-								}
-								Player player = (Player) event.getWhoClicked();
-								String entity = event.getInventory().getTitle().split(" ")[1];
-								BInventory inv = new BInventory("EntityGUI: " + entity);
-								int count = 0;
-								for (DamageCause damage : DamageCause.values()) {
-									if (count < 54) {
-										ArrayList<String> lore = new ArrayList<String>();
-										lore.add("&cCurrently: &c&l"
-												+ ConfigEntity.getInstance().getMoney(entity, damage.toString()));
-
-										inv.addButton(count, new BInventoryButton(damage.toString(),
-												ArrayUtils.getInstance().convert(lore), new ItemStack(Material.STONE)) {
-
-											@Override
-											public void onClick(ClickEvent event) {
-												String entity = event.getInventory().getTitle().split(" ")[1];
-												Player player = (Player) event.getWhoClicked();
-												player.closeInventory();
-
-												new ValueRequest().requestNumber(player, "" + ConfigEntity.getInstance()
-														.getMoney(entity, damage.toString()), null,
-														new NumberListener() {
-
-															@Override
-															public void onInput(Player player, Number value) {
-																String entity = event.getInventory().getTitle()
-																		.split(" ")[1];
-
-																ConfigEntity.getInstance().setMoney(entity,
-																		damage.toString(), value.intValue());
-																player.sendMessage("Value set");
-
-																plugin.reload();
-															}
-														});
-
-											}
-										});
-										count++;
-									}
-
-								}
-								inv.openInventory(player);
-
-							}
-
-						});
-
-				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("SetHealth", new String[0], new ItemStack(Material.GOLDEN_APPLE)) {
-
-							@Override
-							public void onClick(ClickEvent event) {
-								if (!(event.getWhoClicked() instanceof Player)) {
-									return;
-								}
-								Player player = (Player) event.getWhoClicked();
-								String entity = event.getInventory().getTitle().split(" ")[1];
-								BInventory inv = new BInventory("EntityGUI: " + entity);
-
-								for (SpawnReason spawnReason : SpawnReason.values()) {
-
-									ArrayList<String> lore = new ArrayList<String>();
-									lore.add("&cCurrently: &c&l"
-											+ ConfigEntity.getInstance().getHealth(entity, spawnReason.toString()));
-
-									inv.addButton(inv.getNextSlot(), new BInventoryButton(spawnReason.toString(),
-											ArrayUtils.getInstance().convert(lore), new ItemStack(Material.STONE)) {
-
-										@Override
-										public void onClick(ClickEvent event) {
-											String entity = event.getInventory().getTitle().split(" ")[1];
-											Player player = (Player) event.getWhoClicked();
-											player.closeInventory();
-
-											new ValueRequest()
-													.requestNumber(player,
-															"" + ConfigEntity.getInstance().getHealth(entity,
-																	spawnReason.toString()),
-															null, new NumberListener() {
-
-																@Override
-																public void onInput(Player player, Number value) {
-																	String entity = event.getInventory().getTitle()
-																			.split(" ")[1];
-
-																	ConfigEntity.getInstance().setHealth(entity,
-																			spawnReason.toString(), value.intValue());
-																	player.sendMessage("Value set");
-
-																	plugin.reload();
-
-																}
-															});
-										}
-									});
-
-								}
-								inv.openInventory(player);
-
-							}
-						});
-
-				lore = new ArrayList<String>();
-				lore.add("&cCurrently: &c&l" + ConfigEntity.getInstance().getExp(args[1], 0));
-
-				inv.addButton(inv.getNextSlot(), new BInventoryButton("SetEXP", ArrayUtils.getInstance().convert(lore),
-						new ItemStack(Material.EXP_BOTTLE)) {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						if (!(event.getWhoClicked() instanceof Player)) {
-							return;
-						}
-						String entity = event.getInventory().getTitle().split(" ")[1];
-						Player player = (Player) event.getWhoClicked();
-						new ValueRequest().requestNumber(player, "" + ConfigEntity.getInstance().getExp(entity, 0),
-								null, new NumberListener() {
-
-									@Override
-									public void onInput(Player player, Number value) {
-										String entity = event.getInventory().getTitle().split(" ")[1];
-
-										ConfigEntity.getInstance().setExp(entity, 0, value.intValue());
-										player.sendMessage("Value set");
-
-										plugin.reload();
-
-									}
-								});
-					}
-				});
-
-				inv.addButton(inv.getNextSlot(),
-						new BInventoryButton("DisableRightClick",
-								new String[] {
-										"Currently: " + ConfigEntity.getInstance().getDisableNormalClick(args[1]) },
-								new ItemStack(Material.STONE)) {
-
-							@Override
-							public void onClick(ClickEvent clickEvent) {
-								new ValueRequest().requestBoolean(clickEvent.getPlayer(), new BooleanListener() {
-
-									@Override
-									public void onInput(Player player, boolean value) {
-										String entity = (String) PlayerUtils.getInstance().getPlayerMeta(player,
-												"Entity");
-										ConfigEntity.getInstance().setDisableNormalClick(entity, value);
-										plugin.reload();
-										player.sendMessage("Set disable right click to " + value);
-									}
-								});
-
-							}
-						});
-
-				inv.openInventory((Player) sender);
-
-			}
-		});
 	}
 
 	public void loadTabComplete() {
 		ArrayList<String> optionsEntity = new ArrayList<String>();
-		for (String entity : ConfigEntity.getInstance().getEntitysNames()) {
+		for (EntityType entityType : EntityType.values()) {
+			String entity = entityType.toString();
 			if (!optionsEntity.contains(entity)) {
 				optionsEntity.add(entity);
 			}
@@ -372,10 +125,43 @@ public class CommandLoader {
 			}
 		}
 
-		for (int i = 0; i < plugin.advancedMobControlCommands.size(); i++) {
-			plugin.advancedMobControlCommands.get(i).addTabCompleteOption("(Entity)", optionsEntity);
-			plugin.advancedMobControlCommands.get(i).addTabCompleteOption("(EntitySpawnReason)", optionsSpawn);
-			plugin.advancedMobControlCommands.get(i).addTabCompleteOption("(EntityDamageCause)", optionsDamage);
-		}
+		TabCompleteHandler.getInstance().addTabCompleteOption(new TabCompleteHandle("(Entity)", optionsEntity) {
+
+			@Override
+			public void updateReplacements() {
+
+			}
+
+			@Override
+			public void reload() {
+
+			}
+		});
+		TabCompleteHandler.getInstance()
+				.addTabCompleteOption(new TabCompleteHandle("(EntitySpawnReason)", optionsSpawn) {
+
+					@Override
+					public void updateReplacements() {
+
+					}
+
+					@Override
+					public void reload() {
+
+					}
+				});
+		TabCompleteHandler.getInstance()
+				.addTabCompleteOption(new TabCompleteHandle("(EntityDamageCause)", optionsDamage) {
+
+					@Override
+					public void updateReplacements() {
+
+					}
+
+					@Override
+					public void reload() {
+
+					}
+				});
 	}
 }
