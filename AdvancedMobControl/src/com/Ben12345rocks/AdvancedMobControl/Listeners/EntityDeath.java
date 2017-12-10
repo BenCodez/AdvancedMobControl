@@ -60,19 +60,26 @@ public class EntityDeath implements Listener {
 							event.getEntity().getLocation().getWorld(), looting, null);
 					looting = player.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 
-					user.giveMoney(handle.getMoney());
+					if (handle != null) {
+						user.giveMoney(handle.getMoney());
+
+					}
 				}
 			}
 
+			if (handle == null) {
+				return;
+			}
+			
 			int exp = handle.getExp();
 			if (exp >= 0) {
 				event.setDroppedExp(exp);
 			}
-			
+
 			ArrayList<ItemStack> drops = handle.getDrops();
 			if (handle.removeDrops()) {
 				event.getDrops().clear();
-				
+
 			}
 			event.getDrops().addAll(drops);
 		}

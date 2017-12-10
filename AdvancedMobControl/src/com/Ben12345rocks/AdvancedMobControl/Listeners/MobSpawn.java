@@ -37,13 +37,15 @@ public class MobSpawn implements Listener {
 		EntityHandle handle = plugin.getEntityHandler().getHandle(event.getEntityType(), event.getLocation().getWorld(),
 				-1, event.getSpawnReason());
 
-		//double nHealth = plugin.getAttributeHandle().getMaxHealth(event.getEntity());
-		double health = handle.getHealth();
-		if (health >= 0) {
-			plugin.getAttributeHandle().setMaxHealth(event.getEntity(), health);
-			event.getEntity().setHealth(health);
-		}
+		if (handle != null) {
+			// double nHealth = plugin.getAttributeHandle().getMaxHealth(event.getEntity());
+			double health = handle.getHealth();
+			if (health >= 0) {
+				plugin.getAttributeHandle().setMaxHealth(event.getEntity(), health);
+				event.getEntity().setHealth(health);
+			}
 
+		}
 	}
 
 }

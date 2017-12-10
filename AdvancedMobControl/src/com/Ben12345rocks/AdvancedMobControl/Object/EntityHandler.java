@@ -1,8 +1,10 @@
 package com.Ben12345rocks.AdvancedMobControl.Object;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -27,7 +29,16 @@ public class EntityHandler {
 
 	public void load() {
 		entityHandles = new HashMap<EntityType, ArrayList<EntityHandle>>();
-		for (File file : new File(plugin.getDataFolder(), "Entities").listFiles()) {
+		File folder = new File(plugin.getDataFolder(), "Worlds");
+		if (!folder.exists()) {
+			folder.mkdirs();
+			try {
+				folder.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		for (File file : folder.listFiles()) {
 
 			if (file.isDirectory()) {
 				String world = file.getName();
@@ -92,6 +103,21 @@ public class EntityHandler {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<String> getEntityTypes(String world) {
+
+		ArrayList<String> entities = new ArrayList<String>();
+		for (Entry<EntityType, ArrayList<EntityHandle>> entry : entityHandles.entrySet()) {
+			for (EntityHandle handle : entry.getValue()) {
+				if (handle.getWorld().equalsIgnoreCase(world)) {
+					if (!entities.contains(entry.getKey().toString())) {
+						entities.add(entry.getKey().toString());
+					}
+				}
+			}
+		}
+		return entities;
 	}
 
 }

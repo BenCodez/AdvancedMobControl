@@ -44,7 +44,7 @@ public class MobClicked implements Listener {
 		EntityHandle handle = plugin.getEntityHandler().getHandle(entity.getType(), entity.getLocation().getWorld(), -1,
 				null);
 
-		if (handle.isRightClickDisabled()) {
+		if (handle != null && handle.isRightClickDisabled()) {
 			event.setCancelled(true);
 		}
 	}

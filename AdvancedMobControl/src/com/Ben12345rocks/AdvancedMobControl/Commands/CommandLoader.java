@@ -16,6 +16,7 @@ import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedMobControl.Main;
+import com.Ben12345rocks.AdvancedMobControl.Commands.GUI.EntityGUI;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -80,6 +81,16 @@ public class CommandLoader {
 						}
 					}
 				});
+
+		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] { "ConfigureEntity" },
+				"AdvancedMobControl.ConfigureEntity", "Edit Entity", false) {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				EntityGUI.getInstance().openGUI((Player) sender);
+			}
+		});
+
 		plugin.advancedMobControlCommands
 				.add(new CommandHandler(new String[] { "Perms" }, "AdvancedMobControl.Perms", "View permissions list") {
 
