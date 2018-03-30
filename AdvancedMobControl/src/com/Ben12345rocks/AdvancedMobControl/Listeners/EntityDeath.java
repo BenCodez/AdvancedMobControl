@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.Ben12345rocks.AdvancedCore.Objects.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
@@ -46,8 +47,9 @@ public class EntityDeath implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureDeath(EntityDeathEvent event) {
-		Player killer = null;
+
 		if (event.getEntity() instanceof LivingEntity) {
+			Player killer = null;
 			int looting = 0;
 			EntityHandle handle = plugin.getEntityHandler().getHandle(event.getEntityType(),
 					event.getEntity().getLocation().getWorld(), looting, null);
@@ -64,8 +66,10 @@ public class EntityDeath implements Listener {
 
 					if (handle != null) {
 						user.giveMoney(handle.getMoney());
-
 					}
+
+					new RewardBuilder(handle.getData(), "Rewards").send(killer);
+
 				}
 			}
 

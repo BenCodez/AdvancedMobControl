@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
 import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
@@ -29,7 +30,7 @@ public class EntityHandle {
 		return file;
 	}
 
-	private ConfigurationSection data;
+	private FileConfiguration data;
 	private YMLFileHandler file;
 
 	public EntityHandle(File file) {
