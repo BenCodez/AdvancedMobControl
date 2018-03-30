@@ -9,12 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Objects.UserStorage;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.MCStatsMetrics;
 import com.Ben12345rocks.AdvancedCore.Util.Updater.Updater;
-import com.Ben12345rocks.AdvancedCore.mysql.MySQL;
 import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
 import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMobControl;
 import com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete.AdvancedMobControlTabCompleter;
@@ -108,22 +106,7 @@ public class Main extends JavaPlugin {
 	}
 
 	public void updateHook() {
-		AdvancedCoreHook.getInstance().setStorageType(UserStorage.valueOf(Config.getInstance().getDataStorage()));
-		if (AdvancedCoreHook.getInstance().getStorageType().equals(UserStorage.MYSQL)) {
-			Thread.getInstance().run(new Runnable() {
-
-				@Override
-				public void run() {
-					AdvancedCoreHook.getInstance()
-							.setMysql(new MySQL("AdvancedMobControl_Users", Config.getInstance().getMysql()));
-				}
-			});
-
-		}
-		AdvancedCoreHook.getInstance().setDebug(Config.getInstance().getDebug());
-		AdvancedCoreHook.getInstance().setFormatNoPerms(Config.getInstance().getFormatNoPerms());
-		AdvancedCoreHook.getInstance().setFormatNotNumber(Config.getInstance().getFormatNotNumber());
-		AdvancedCoreHook.getInstance().setHelpLine(Config.getInstance().getFormatHelpLine());
+		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
 	}
 
 	/*

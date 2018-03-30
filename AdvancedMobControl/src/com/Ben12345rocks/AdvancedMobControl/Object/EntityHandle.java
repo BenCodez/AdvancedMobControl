@@ -1,16 +1,26 @@
 package com.Ben12345rocks.AdvancedMobControl.Object;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
 import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
+import com.Ben12345rocks.AdvancedCore.YML.YMLFileHandler;
 
 public class EntityHandle {
-	private String type;
 	private String world;
+	private int health;
+	private String type;
+	private boolean disableRightClick;
+	private boolean removeDrops;
+	private String spawnReason;
+	private int looting;
+	private int money;
+	private int exp;
+	private int priority = 0;
+	private ArrayList<ItemBuilder> drops;
 
 	/**
 	 * @return the file
@@ -20,99 +30,89 @@ public class EntityHandle {
 	}
 
 	private ConfigurationSection data;
-	private YMLFile file;
+	private YMLFileHandler file;
 
-	public EntityHandle(String type, String world2, ConfigurationSection data, YMLFile file) {
-		this.type = type;
-		this.world = world2;
-		this.data = data;
-		this.file = file;
+	public EntityHandle(File file) {
+		this.file = new YMLFileHandler(file);
+		data = this.file.getData();
+		world = data.getString("World", "");
+		health = data.getInt("Health", -1);
+		type = data.getString("EnitytType", "");
+		disableRightClick = data.getBoolean("DisableRightClick");
+		removeDrops = data.getBoolean("RemoveDrops");
+		spawnReason = data.getString("SpawnReason", "");
+		looting = data.getInt("Looting", -1);
+		money = data.getInt("Money");
+		exp = data.getInt("Exp");
+		drops = new ArrayList<ItemBuilder>();
+		if (data.isConfigurationSection("Drops")) {
+			for (String sec : data.getConfigurationSection("Drops").getKeys(false)) {
+				ConfigurationSection d = data.getConfigurationSection("Drops." + sec);
+				drops.add(new ItemBuilder(d));
+			}
+		}
+
+		if (!world.isEmpty()) {
+			addPriority();
+		}
+		if (!spawnReason.isEmpty()) {
+			addPriority();
+		}
+		if (looting >= 0) {
+			addPriority();
+		}
 	}
 
-	/**
-	 * @return the type
-	 */
+	public ArrayList<ItemBuilder> getDrops() {
+		return drops;
+	}
+
+	private void addPriority() {
+		priority = priority + 1;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
 	public String getType() {
 		return type;
 	}
 
-	/**
-	 * @param type
-	 *            the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
+	public boolean isDisableRightClick() {
+		return disableRightClick;
 	}
 
-	/**
-	 * @return the world
-	 */
+	public boolean isRemoveDrops() {
+		return removeDrops;
+	}
+
+	public String getSpawnReason() {
+		return spawnReason;
+	}
+
+	public int getLooting() {
+		return looting;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
 	public String getWorld() {
 		return world;
 	}
 
-	/**
-	 * @param world
-	 *            the world to set
-	 */
-	public void setWorld(String world) {
-		this.world = world;
-	}
-
-	/**
-	 * @return the data
-	 */
 	public ConfigurationSection getData() {
 		return data;
-	}
-
-	/**
-	 * @param data
-	 *            the data to set
-	 */
-	public void setData(ConfigurationSection data) {
-		this.data = data;
-
-	}
-
-	public int getExp() {
-		return getData().getInt("Exp", -1);
-	}
-
-	public int getMoney() {
-		return getData().getInt("Money");
-	}
-
-	public int getLooting() {
-		return getData().getInt("Looting", -1);
-	}
-
-	public int getHealth() {
-		return getData().getInt("Health", -1);
-	}
-
-	public String getSpawnReason() {
-		return getData().getString("SpawnReason", "");
-	}
-
-	@SuppressWarnings("deprecation")
-	public ArrayList<ItemStack> getDrops() {
-		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-		ConfigurationSection data = getData().getConfigurationSection("Drops");
-		if (data != null) {
-			for (String str : data.getKeys(false)) {
-				items.add(new ItemBuilder(data.getConfigurationSection(str)).toItemStack());
-			}
-		}
-		return items;
-	}
-
-	public boolean removeDrops() {
-		return getData().getBoolean("RemoveDrops");
-	}
-
-	public boolean isRightClickDisabled() {
-		return getData().getBoolean("DisableRightClick");
 	}
 
 }

@@ -38,13 +38,13 @@ public class MobClicked implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureClick(PlayerInteractEntityEvent event) {
-	//	Player player = event.getPlayer();
+		// Player player = event.getPlayer();
 		Entity entity = event.getRightClicked();
 
 		EntityHandle handle = plugin.getEntityHandler().getHandle(entity.getType(), entity.getLocation().getWorld(), -1,
 				null);
 
-		if (handle != null && handle.isRightClickDisabled()) {
+		if (handle != null && handle.isDisableRightClick()) {
 			event.setCancelled(true);
 		}
 	}

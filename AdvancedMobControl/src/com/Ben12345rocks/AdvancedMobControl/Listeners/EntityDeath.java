@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
+import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
 
@@ -45,6 +46,7 @@ public class EntityDeath implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureDeath(EntityDeathEvent event) {
+		Player killer = null;
 		if (event.getEntity() instanceof LivingEntity) {
 			int looting = 0;
 			EntityHandle handle = plugin.getEntityHandler().getHandle(event.getEntityType(),
@@ -52,13 +54,13 @@ public class EntityDeath implements Listener {
 			if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 				if (damage.getDamager() instanceof Player) {
-					Player player = (Player) damage.getDamager();
-					User user = UserManager.getInstance().getUser(player);
+					killer = (Player) damage.getDamager();
+					User user = UserManager.getInstance().getUser(killer);
 					// handle.addKill(user);
 					// handle.runRewards(user, damage.getCause().toString());
 					handle = plugin.getEntityHandler().getHandle(event.getEntityType(),
 							event.getEntity().getLocation().getWorld(), looting, null);
-					looting = player.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+					looting = killer.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 
 					if (handle != null) {
 						user.giveMoney(handle.getMoney());
@@ -70,18 +72,23 @@ public class EntityDeath implements Listener {
 			if (handle == null) {
 				return;
 			}
-			
+
 			int exp = handle.getExp();
 			if (exp >= 0) {
 				event.setDroppedExp(exp);
 			}
 
-			ArrayList<ItemStack> drops = handle.getDrops();
-			if (handle.removeDrops()) {
+			ArrayList<ItemBuilder> drops = handle.getDrops();
+			if (handle.isRemoveDrops()) {
 				event.getDrops().clear();
 
 			}
-			event.getDrops().addAll(drops);
+
+			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+			for (ItemBuilder build : drops) {
+				items.add(build.toItemStack(killer));
+			}
+			event.getDrops().addAll(items);
 		}
 	}
 
