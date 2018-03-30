@@ -67,6 +67,8 @@ public class EntityHandler {
 			}
 		}
 
+		plugin.debug("" + (highestPriority != null));
+
 		return highestPriority;
 	}
 

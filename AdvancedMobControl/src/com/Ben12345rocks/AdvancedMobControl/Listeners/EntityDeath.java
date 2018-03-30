@@ -53,6 +53,9 @@ public class EntityDeath implements Listener {
 			int looting = 0;
 			EntityHandle handle = plugin.getEntityHandler().getHandle(event.getEntityType(),
 					event.getEntity().getLocation().getWorld(), looting, null);
+			if (handle == null) {
+				return;
+			}
 			if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 				if (damage.getDamager() instanceof Player) {
@@ -71,10 +74,6 @@ public class EntityDeath implements Listener {
 					new RewardBuilder(handle.getData(), "Rewards").send(killer);
 
 				}
-			}
-
-			if (handle == null) {
-				return;
 			}
 
 			int exp = handle.getExp();

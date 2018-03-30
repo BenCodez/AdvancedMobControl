@@ -35,7 +35,8 @@ public class EntityGUI {
 		BInventory inv = new BInventory("EntityHandles");
 
 		for (EntityHandle h : plugin.getEntityHandler().getEntityHandles()) {
-			BInventoryButton b = new BInventoryButton(new ItemBuilder(Material.STONE)) {
+			BInventoryButton b = new BInventoryButton(
+					new ItemBuilder(Material.STONE).setName(h.getFile().getdFile().getName())) {
 
 				@Override
 				public void onClick(ClickEvent event) {
