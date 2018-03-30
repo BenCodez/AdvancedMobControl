@@ -46,13 +46,17 @@ public class EntityHandler {
 
 		for (EntityHandle h : entityHandles) {
 			// entity matches
-			if (h.getType().equalsIgnoreCase(entityType.toString())) {
+			if ((h.getType().equalsIgnoreCase("Living") && entityType.isAlive())|| h.getType().equalsIgnoreCase(entityType.toString())) {
+				plugin.debug("Entities match");
 				// world check
-				if (h.getWorld().equals("") || h.getWorld().equalsIgnoreCase(world.getName())) {
+				if (h.getWorld().isEmpty() || h.getWorld().equalsIgnoreCase(world.getName())) {
+					plugin.debug("worlds matched");
 					// check looting
 					if (h.getLooting() == -1 || h.getLooting() == looting) {
+						plugin.debug("looting matched");
 						// check spawn reason
 						if (reason == null || h.getSpawnReason().equalsIgnoreCase(reason.toString())) {
+							plugin.debug("reason matched");
 							matchedHandles.add(h);
 						}
 					}
@@ -67,7 +71,7 @@ public class EntityHandler {
 			}
 		}
 
-		plugin.debug("" + (highestPriority != null));
+		plugin.debug(matchedHandles.size() + ":" + (highestPriority != null));
 
 		return highestPriority;
 	}

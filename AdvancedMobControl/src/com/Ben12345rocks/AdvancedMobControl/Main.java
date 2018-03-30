@@ -194,9 +194,10 @@ public class Main extends JavaPlugin {
 	 */
 	public void reload() {
 		Config.getInstance().reloadData();
+		updateHook();
 		AdvancedCoreHook.getInstance().reload();
 		entityHandler.load();
-		updateHook();
+
 	}
 
 	/**

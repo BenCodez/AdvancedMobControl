@@ -102,7 +102,7 @@ public class Config extends YMLFile {
 
 	@Override
 	public void onFileCreation() {
-		plugin.saveResource("Config.yml", false);
+		plugin.saveResource("Config.yml", true);
 	}
 
 	public ConfigurationSection getMysql() {

@@ -41,7 +41,7 @@ public class EntityHandle {
 	public void loadValues() {
 		world = getData().getString("World", "");
 		health = getData().getInt("Health", -1);
-		type = getData().getString("EnitytType", "");
+		type = getData().getString("EntityType", "");
 		disableRightClick = getData().getBoolean("DisableRightClick");
 		removeDrops = getData().getBoolean("RemoveDrops");
 		spawnReason = getData().getString("SpawnReason", "");
