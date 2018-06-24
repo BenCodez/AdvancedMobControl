@@ -38,6 +38,9 @@ public class EntityHandler {
 		for (File file : folder.listFiles()) {
 
 			EntityHandle handle = new EntityHandle(file);
+			if (handle.getType().isEmpty()) {
+				plugin.getLogger().warning("Missing entity type in file: " + handle.getFile().getdFile().getName());
+			}
 			entityHandles.add(handle);
 		}
 	}
@@ -47,17 +50,18 @@ public class EntityHandler {
 
 		for (EntityHandle h : entityHandles) {
 			// entity matches
-			if ((h.getType().equalsIgnoreCase("Living") && entityType.isAlive())|| h.getType().equalsIgnoreCase(entityType.toString())) {
-				//plugin.debug("Entities match");
+			if ((h.getType().equalsIgnoreCase("Living") && entityType.isAlive())
+					|| h.getType().equalsIgnoreCase(entityType.toString())) {
+				// plugin.debug("Entities match");
 				// world check
 				if (h.getWorld().isEmpty() || h.getWorld().equalsIgnoreCase(world.getName())) {
-					//plugin.debug("worlds matched");
+					// plugin.debug("worlds matched");
 					// check looting
 					if (h.getLooting() == -1 || h.getLooting() == looting) {
-					//	plugin.debug("looting matched");
+						// plugin.debug("looting matched");
 						// check spawn reason
 						if (reason == null || h.getSpawnReason().equalsIgnoreCase(reason.toString())) {
-						//	plugin.debug("reason matched");
+							// plugin.debug("reason matched");
 							matchedHandles.add(h);
 						}
 					}
@@ -72,7 +76,7 @@ public class EntityHandler {
 			}
 		}
 
-	//	plugin.debug(matchedHandles.size() + ":" + (highestPriority != null));
+		// plugin.debug(matchedHandles.size() + ":" + (highestPriority != null));
 
 		return highestPriority;
 	}
@@ -82,7 +86,8 @@ public class EntityHandler {
 	}
 
 	public void create(String value) {
-		YMLFileHandler handle = new YMLFileHandler(new File(plugin.getDataFolder() + File.separator + "Entities", value + ".yml"));
+		YMLFileHandler handle = new YMLFileHandler(
+				new File(plugin.getDataFolder() + File.separator + "Entities", value + ".yml"));
 		handle.setup();
 		load();
 	}

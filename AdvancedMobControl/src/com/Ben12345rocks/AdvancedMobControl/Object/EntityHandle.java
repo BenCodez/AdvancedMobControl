@@ -24,7 +24,7 @@ public class EntityHandle {
 	private int money;
 	private int exp;
 	private int priority = 0;
-	private ArrayList<ItemBuilder> drops;
+	private ArrayList<ConfigurationSection> drops;
 
 	/**
 	 * @return the file
@@ -51,11 +51,11 @@ public class EntityHandle {
 		looting = getData().getInt("Looting", -1);
 		money = getData().getInt("Money");
 		exp = getData().getInt("Exp");
-		drops = new ArrayList<ItemBuilder>();
+		drops = new ArrayList<ConfigurationSection>();
 		if (getData().isConfigurationSection("Drops")) {
 			for (String sec : getData().getConfigurationSection("Drops").getKeys(false)) {
 				ConfigurationSection d = getData().getConfigurationSection("Drops." + sec);
-				drops.add(new ItemBuilder(d));
+				drops.add(d);
 			}
 		}
 
@@ -76,6 +76,10 @@ public class EntityHandle {
 	}
 
 	public ArrayList<ItemBuilder> getDrops() {
+		ArrayList<ItemBuilder> drops = new ArrayList<ItemBuilder>();
+		for (ConfigurationSection d : this.drops) {
+			drops.add(new ItemBuilder(d));
+		}
 		return drops;
 	}
 
@@ -150,14 +154,14 @@ public class EntityHandle {
 				itemSec += "1";
 			}
 		}
-		
+
 		HashMap<String, Object> data = new ItemBuilder(itemInHand).createConfigurationData();
 
 		for (Entry<String, Object> entry : data.entrySet()) {
 			getData().set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
 		}
 		file.saveData();
-		
+
 		loadValues();
 	}
 
