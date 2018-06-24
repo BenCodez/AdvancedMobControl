@@ -116,7 +116,8 @@ public class EntityGUI {
 									StringUtils.getInstance().colorize("&cSetting " + entry.getKey() + " to " + value));
 						}
 					}, ArrayUtils.getInstance().convert(entry.getValue())).allowCustomOption(true)
-							.currentValue(handle.getData().getString(entry.getKey(), "")).request(event.getPlayer());
+							.currentValue(handle.getData().getString(entry.getKey(), ""))
+							.usingMethod(InputMethod.INVENTORY).request(event.getPlayer());
 
 				}
 			});
@@ -181,7 +182,7 @@ public class EntityGUI {
 
 							@Override
 							public void onClick(ClickEvent arg0) {
-								
+
 							}
 						});
 				for (ItemBuilder item : handle.getDrops()) {
