@@ -15,6 +15,8 @@ import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.MiscUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.InputMethod;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequestBuilder;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.BooleanListener;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.NumberListener;
@@ -59,21 +61,37 @@ public class EntityGUI {
 			inv.addButton(b);
 		}
 
+		inv.addButton(new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cCreate").addLoreLine("&cCreate entity handle file, can be any name").addLoreLine("&cSet EntityType after")) {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				new ValueRequestBuilder(new StringListener() {
+
+					@Override
+					public void onInput(Player player, String value) {
+						plugin.getEntityHandler().create(value);
+						openGUI(player);
+					}
+				}, new String[] {}).usingMethod(InputMethod.CHAT).allowCustomOption(true).currentValue("")
+						.request(event.getPlayer());
+			}
+		});
+
 		inv.openInventory(player);
 	}
 
 	public void openEntityGUI(Player player, EntityHandle handle) {
-		BInventory inv = new BInventory("EntityHandle - WIP");
+		BInventory inv = new BInventory("EntityHandle: " + handle.getFile().getdFile().getName());
 
 		LinkedHashMap<String, ArrayList<String>> stringOptions = new LinkedHashMap<String, ArrayList<String>>();
-
-		stringOptions.put("World", MiscUtils.getInstance().getWorldNames());
 
 		ArrayList<String> entityTypes = new ArrayList<String>();
 		for (EntityType type : EntityType.values()) {
 			entityTypes.add(type.toString());
 		}
 		stringOptions.put("EntityType", entityTypes);
+
+		stringOptions.put("World", MiscUtils.getInstance().getWorldNames());
 
 		ArrayList<String> spawnReasons = new ArrayList<String>();
 		for (SpawnReason type : SpawnReason.values()) {
@@ -92,10 +110,11 @@ public class EntityGUI {
 						@Override
 						public void onInput(Player player, String value) {
 							handle.set(entry.getKey(), value);
+							player.sendMessage(
+									StringUtils.getInstance().colorize("&cSetting " + entry.getKey() + " to " + value));
 						}
 					}, ArrayUtils.getInstance().convert(entry.getValue())).allowCustomOption(true)
-							.currentValue(handle.getData().getString(entry.getKey()).toString())
-							.request(event.getPlayer());
+							.currentValue(handle.getData().getString(entry.getKey(), "")).request(event.getPlayer());
 
 				}
 			});
@@ -116,6 +135,7 @@ public class EntityGUI {
 						@Override
 						public void onInput(Player player, boolean value) {
 							handle.set(key, value);
+							player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + key + " to " + value));
 						}
 					}).currentValue("" + handle.getData().getBoolean(key)).request(event.getPlayer());
 				}
@@ -127,6 +147,7 @@ public class EntityGUI {
 		intOptions.add("Looting");
 		intOptions.add("Money");
 		intOptions.add("Exp");
+		intOptions.add("Priority");
 
 		for (final String key : intOptions) {
 			inv.addButton(new BInventoryButton(
@@ -139,9 +160,11 @@ public class EntityGUI {
 						@Override
 						public void onInput(Player player, Number value) {
 							handle.set(key, value.intValue());
+							player.sendMessage(
+									StringUtils.getInstance().colorize("&cSetting " + key + " to " + value.intValue()));
 						}
-					}, new Number[] { 0, 1, 2, 3, 10, 50, 100.1000 }).currentValue("" + handle.getData().getInt(key))
-							.request(event.getPlayer());
+					}, new Number[] { 0, 1, 2, 3, 10, 50, 100, 1000 }).allowCustomOption(true)
+							.currentValue("" + handle.getData().getInt(key)).request(event.getPlayer());
 				}
 			});
 		}
