@@ -82,8 +82,8 @@ public class CommandLoader {
 					}
 				});
 
-		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] { "ConfigureEntity" },
-				"AdvancedMobControl.ConfigureEntity", "Edit Entity", false) {
+		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] { "Configure" },
+				"AdvancedMobControl.Configure", "Edit EntityHandles", false) {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
