@@ -129,4 +129,15 @@ public class EntityHandle {
 		file.saveData();
 	}
 
+	public void removeDrop(ItemBuilder item) {
+		if (getData().isConfigurationSection("Drops")) {
+			for (String sec : getData().getConfigurationSection("Drops").getKeys(false)) {
+				ConfigurationSection d = getData().getConfigurationSection("Drops." + sec);
+				if (new ItemBuilder(d).equals(item)) {
+					set("Drops." + sec, null);
+				}
+			}
+		}
+	}
+
 }

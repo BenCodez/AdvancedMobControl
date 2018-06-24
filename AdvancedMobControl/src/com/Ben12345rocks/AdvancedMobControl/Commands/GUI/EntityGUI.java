@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.inventory.ClickType;
 
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
@@ -61,7 +62,8 @@ public class EntityGUI {
 			inv.addButton(b);
 		}
 
-		inv.addButton(new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cCreate").addLoreLine("&cCreate entity handle file, can be any name").addLoreLine("&cSet EntityType after")) {
+		inv.addButton(new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cCreate")
+				.addLoreLine("&cCreate entity handle file, can be any name").addLoreLine("&cSet EntityType after")) {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -168,6 +170,34 @@ public class EntityGUI {
 				}
 			});
 		}
+
+		inv.addButton(new BInventoryButton(new ItemBuilder(Material.BONE).setName("&cDrops")) {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				BInventory dInv = new BInventory("Drops");
+				dInv.addButton(
+						new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cRight click drosp to remove")) {
+
+							@Override
+							public void onClick(ClickEvent arg0) {
+								
+							}
+						});
+				for (ItemBuilder item : handle.getDrops()) {
+					dInv.addButton(new BInventoryButton(item) {
+
+						@Override
+						public void onClick(ClickEvent event) {
+							if (event.getClick().equals(ClickType.RIGHT)) {
+								handle.removeDrop(item);
+							}
+						}
+					});
+				}
+
+			}
+		});
 
 		inv.openInventory(player);
 
