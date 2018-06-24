@@ -2,9 +2,12 @@ package com.Ben12345rocks.AdvancedMobControl.Object;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
 import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
@@ -137,6 +140,19 @@ public class EntityHandle {
 					set("Drops." + sec, null);
 				}
 			}
+		}
+	}
+
+	public void addDrop(ItemStack itemInHand) {
+		String itemSec = itemInHand.getType().toString();
+		while (getData().getConfigurationSection("Drops").getKeys(false).contains(itemSec)) {
+			itemSec += "1";
+		}
+
+		HashMap<String, Object> data = new ItemBuilder(itemInHand).createConfigurationData();
+
+		for (Entry<String, Object> entry : data.entrySet()) {
+			set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
 		}
 	}
 

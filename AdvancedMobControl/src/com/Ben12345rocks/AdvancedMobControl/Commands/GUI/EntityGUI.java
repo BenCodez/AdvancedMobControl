@@ -77,6 +77,7 @@ public class EntityGUI {
 				}, new String[] {}).usingMethod(InputMethod.CHAT).allowCustomOption(true).currentValue("")
 						.request(event.getPlayer());
 			}
+
 		});
 
 		inv.openInventory(player);
@@ -111,6 +112,9 @@ public class EntityGUI {
 
 						@Override
 						public void onInput(Player player, String value) {
+							if (value.equals("null")) {
+								value = "";
+							}
 							handle.set(entry.getKey(), value);
 							player.sendMessage(
 									StringUtils.getInstance().colorize("&cSetting " + entry.getKey() + " to " + value));
@@ -128,8 +132,8 @@ public class EntityGUI {
 		booleanOptions.add("RemoveDrops");
 
 		for (final String key : booleanOptions) {
-			inv.addButton(new BInventoryButton(
-					new ItemBuilder(Material.STONE).setName("&c" + key + " = " + handle.getData().getBoolean(key))) {
+			inv.addButton(new BInventoryButton(new ItemBuilder(Material.REDSTONE_TORCH_OFF)
+					.setName("&c" + key + " = " + handle.getData().getBoolean(key))) {
 
 				@Override
 				public void onClick(ClickEvent event) {
@@ -196,7 +200,15 @@ public class EntityGUI {
 						}
 					});
 				}
+				dInv.addButton(
+						new BInventoryButton(new ItemBuilder(Material.STONE).setName("&cAdd item in hand to drops")) {
 
+							@Override
+							public void onClick(ClickEvent event) {
+								handle.addDrop(event.getPlayer().getInventory().getItemInMainHand());
+							}
+						});
+				dInv.openInventory(event.getPlayer());
 			}
 		});
 
