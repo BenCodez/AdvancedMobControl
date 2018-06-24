@@ -157,6 +157,8 @@ public class EntityHandle {
 			getData().set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
 		}
 		file.saveData();
+		
+		loadValues();
 	}
 
 }
