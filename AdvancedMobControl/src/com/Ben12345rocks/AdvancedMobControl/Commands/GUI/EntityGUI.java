@@ -132,7 +132,7 @@ public class EntityGUI {
 		booleanOptions.add("RemoveDrops");
 
 		for (final String key : booleanOptions) {
-			inv.addButton(new BInventoryButton(new ItemBuilder(Material.REDSTONE_TORCH_OFF)
+			inv.addButton(new BInventoryButton(new ItemBuilder(Material.REDSTONE_BLOCK)
 					.setName("&c" + key + " = " + handle.getData().getBoolean(key))) {
 
 				@Override
@@ -182,7 +182,7 @@ public class EntityGUI {
 			public void onClick(ClickEvent event) {
 				BInventory dInv = new BInventory("Drops");
 				dInv.addButton(
-						new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cRight click drosp to remove")) {
+						new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cRight click drops to remove")) {
 
 							@Override
 							public void onClick(ClickEvent arg0) {

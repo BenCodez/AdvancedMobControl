@@ -145,15 +145,18 @@ public class EntityHandle {
 
 	public void addDrop(ItemStack itemInHand) {
 		String itemSec = itemInHand.getType().toString();
-		while (getData().getConfigurationSection("Drops").getKeys(false).contains(itemSec)) {
-			itemSec += "1";
+		if (getData().isConfigurationSection("Drops")) {
+			while (getData().getConfigurationSection("Drops").getKeys(false).contains(itemSec)) {
+				itemSec += "1";
+			}
 		}
-
+		
 		HashMap<String, Object> data = new ItemBuilder(itemInHand).createConfigurationData();
 
 		for (Entry<String, Object> entry : data.entrySet()) {
-			set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
+			getData().set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
 		}
+		file.saveData();
 	}
 
 }
