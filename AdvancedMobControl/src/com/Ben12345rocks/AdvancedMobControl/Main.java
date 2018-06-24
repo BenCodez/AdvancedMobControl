@@ -119,6 +119,7 @@ public class Main extends JavaPlugin {
 		plugin = this;
 
 		setupFiles();
+		AdvancedCoreHook.getInstance().setJenkinsSite("ben12345rocks.com");
 		updateHook();
 		AdvancedCoreHook.getInstance().loadHook(this);
 		registerCommands();

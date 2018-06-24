@@ -124,4 +124,9 @@ public class EntityHandle {
 		return file.getData();
 	}
 
+	public void set(String key, Object value) {
+		getData().set(key, value);
+		file.saveData();
+	}
+
 }

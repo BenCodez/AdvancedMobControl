@@ -14,11 +14,7 @@ import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
  */
 public class MobClicked implements Listener {
 
-	/** The plugin. */
-	@SuppressWarnings("unused")
 	private static Main plugin;
-
-	// VotingRewards voteReward = VotingRewards.getInstance();
 
 	/**
 	 * Instantiates a new mob spawn.
@@ -38,7 +34,6 @@ public class MobClicked implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureClick(PlayerInteractEntityEvent event) {
-		// Player player = event.getPlayer();
 		Entity entity = event.getRightClicked();
 
 		EntityHandle handle = plugin.getEntityHandler().getHandle(entity.getType(), entity.getLocation().getWorld(), -1,

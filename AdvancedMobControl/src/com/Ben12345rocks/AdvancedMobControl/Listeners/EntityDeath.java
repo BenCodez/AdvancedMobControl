@@ -24,8 +24,6 @@ import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
  */
 public class EntityDeath implements Listener {
 
-	/** The plugin. */
-	@SuppressWarnings("unused")
 	private static Main plugin;
 
 	/**
@@ -63,9 +61,9 @@ public class EntityDeath implements Listener {
 					User user = UserManager.getInstance().getUser(killer);
 					// handle.addKill(user);
 					// handle.runRewards(user, damage.getCause().toString());
+					looting = killer.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 					handle = plugin.getEntityHandler().getHandle(event.getEntityType(),
 							event.getEntity().getLocation().getWorld(), looting, null);
-					looting = killer.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 
 					if (handle != null) {
 						user.giveMoney(handle.getMoney());
