@@ -26,6 +26,52 @@ public class EntityHandle {
 	private int priority = 0;
 	private ArrayList<ConfigurationSection> drops;
 
+	private YMLFileHandler file;
+
+	public EntityHandle(File file) {
+		this.file = new YMLFileHandler(file);
+		this.file.setup();
+		loadValues();
+	}
+
+	public void addDrop(ItemStack itemInHand) {
+		String itemSec = itemInHand.getType().toString();
+		if (getData().isConfigurationSection("Drops")) {
+			while (getData().getConfigurationSection("Drops").getKeys(false).contains(itemSec)) {
+				itemSec += "1";
+			}
+		}
+
+		HashMap<String, Object> data = new ItemBuilder(itemInHand).createConfigurationData();
+
+		for (Entry<String, Object> entry : data.entrySet()) {
+			getData().set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
+		}
+		file.saveData();
+
+		loadValues();
+	}
+
+	private void addPriority() {
+		priority = priority + 1;
+	}
+
+	public FileConfiguration getData() {
+		return file.getData();
+	}
+
+	public ArrayList<ItemBuilder> getDrops() {
+		ArrayList<ItemBuilder> drops = new ArrayList<ItemBuilder>();
+		for (ConfigurationSection d : this.drops) {
+			drops.add(new ItemBuilder(d));
+		}
+		return drops;
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
 	/**
 	 * @return the file
 	 */
@@ -33,12 +79,40 @@ public class EntityHandle {
 		return file;
 	}
 
-	private YMLFileHandler file;
+	public int getHealth() {
+		return health;
+	}
 
-	public EntityHandle(File file) {
-		this.file = new YMLFileHandler(file);
-		this.file.setup();
-		loadValues();
+	public int getLooting() {
+		return looting;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public String getSpawnReason() {
+		return spawnReason;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getWorld() {
+		return world;
+	}
+
+	public boolean isDisableRightClick() {
+		return disableRightClick;
+	}
+
+	public boolean isRemoveDrops() {
+		return removeDrops;
 	}
 
 	public void loadValues() {
@@ -75,67 +149,6 @@ public class EntityHandle {
 		}
 	}
 
-	public ArrayList<ItemBuilder> getDrops() {
-		ArrayList<ItemBuilder> drops = new ArrayList<ItemBuilder>();
-		for (ConfigurationSection d : this.drops) {
-			drops.add(new ItemBuilder(d));
-		}
-		return drops;
-	}
-
-	private void addPriority() {
-		priority = priority + 1;
-	}
-
-	public int getPriority() {
-		return priority;
-	}
-
-	public int getHealth() {
-		return health;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public boolean isDisableRightClick() {
-		return disableRightClick;
-	}
-
-	public boolean isRemoveDrops() {
-		return removeDrops;
-	}
-
-	public String getSpawnReason() {
-		return spawnReason;
-	}
-
-	public int getLooting() {
-		return looting;
-	}
-
-	public int getMoney() {
-		return money;
-	}
-
-	public int getExp() {
-		return exp;
-	}
-
-	public String getWorld() {
-		return world;
-	}
-
-	public FileConfiguration getData() {
-		return file.getData();
-	}
-
-	public void set(String key, Object value) {
-		getData().set(key, value);
-		file.saveData();
-	}
-
 	public void removeDrop(ItemBuilder item) {
 		if (getData().isConfigurationSection("Drops")) {
 			for (String sec : getData().getConfigurationSection("Drops").getKeys(false)) {
@@ -147,22 +160,9 @@ public class EntityHandle {
 		}
 	}
 
-	public void addDrop(ItemStack itemInHand) {
-		String itemSec = itemInHand.getType().toString();
-		if (getData().isConfigurationSection("Drops")) {
-			while (getData().getConfigurationSection("Drops").getKeys(false).contains(itemSec)) {
-				itemSec += "1";
-			}
-		}
-
-		HashMap<String, Object> data = new ItemBuilder(itemInHand).createConfigurationData();
-
-		for (Entry<String, Object> entry : data.entrySet()) {
-			getData().set("Drops." + itemSec + "." + entry.getKey(), entry.getValue());
-		}
+	public void set(String key, Object value) {
+		getData().set(key, value);
 		file.saveData();
-
-		loadValues();
 	}
 
 }

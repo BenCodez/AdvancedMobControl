@@ -24,25 +24,15 @@ public class EntityHandler {
 		load();
 	}
 
-	public void load() {
-		entityHandles = new ArrayList<EntityHandle>();
-		File folder = new File(plugin.getDataFolder(), "Entities");
-		if (!folder.exists()) {
-			folder.mkdirs();
-			try {
-				folder.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		for (File file : folder.listFiles()) {
+	public void create(String value) {
+		YMLFileHandler handle = new YMLFileHandler(
+				new File(plugin.getDataFolder() + File.separator + "Entities", value + ".yml"));
+		handle.setup();
+		load();
+	}
 
-			EntityHandle handle = new EntityHandle(file);
-			if (handle.getType().isEmpty()) {
-				plugin.getLogger().warning("Missing entity type in file: " + handle.getFile().getdFile().getName());
-			}
-			entityHandles.add(handle);
-		}
+	public ArrayList<EntityHandle> getEntityHandles() {
+		return entityHandles;
 	}
 
 	public EntityHandle getHandle(EntityType entityType, World world, int looting, SpawnReason reason) {
@@ -81,14 +71,24 @@ public class EntityHandler {
 		return highestPriority;
 	}
 
-	public ArrayList<EntityHandle> getEntityHandles() {
-		return entityHandles;
-	}
+	public void load() {
+		entityHandles = new ArrayList<EntityHandle>();
+		File folder = new File(plugin.getDataFolder(), "Entities");
+		if (!folder.exists()) {
+			folder.mkdirs();
+			try {
+				folder.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		for (File file : folder.listFiles()) {
 
-	public void create(String value) {
-		YMLFileHandler handle = new YMLFileHandler(
-				new File(plugin.getDataFolder() + File.separator + "Entities", value + ".yml"));
-		handle.setup();
-		load();
+			EntityHandle handle = new EntityHandle(file);
+			if (handle.getType().isEmpty()) {
+				plugin.getLogger().warning("Missing entity type in file: " + handle.getFile().getdFile().getName());
+			}
+			entityHandles.add(handle);
+		}
 	}
 }

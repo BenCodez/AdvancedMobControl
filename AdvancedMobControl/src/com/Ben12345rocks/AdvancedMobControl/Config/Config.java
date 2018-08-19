@@ -38,12 +38,12 @@ public class Config extends YMLFile {
 		super(new File(Main.plugin.getDataFolder(), "Config.yml"));
 	}
 
-	public boolean getDebug() {
-		return getData().getBoolean("Debug");
-	}
-
 	public String getDataStorage() {
 		return getData().getString("DataStorage", "FLAT");
+	}
+
+	public boolean getDebug() {
+		return getData().getBoolean("Debug");
 	}
 
 	/**
@@ -53,24 +53,6 @@ public class Config extends YMLFile {
 	 */
 	public String getFormatHelpLine() {
 		return getData().getString("Format.HelpLine", "&3&l%Command% - &3%HelpMessage%");
-	}
-
-	/**
-	 * Gets the format no perms.
-	 *
-	 * @return the format no perms
-	 */
-	public String getFormatNoPerms() {
-		return getData().getString("Format.NoPerms", "&cYou do not have enough permission!");
-	}
-
-	/**
-	 * Gets the format not number.
-	 *
-	 * @return the format not number
-	 */
-	public String getFormatNotNumber() {
-		return getData().getString("Format.NotNumber", "&cError on &6%arg%&c, number expected!");
 	}
 
 	/**
@@ -92,6 +74,24 @@ public class Config extends YMLFile {
 	}
 
 	/**
+	 * Gets the format no perms.
+	 *
+	 * @return the format no perms
+	 */
+	public String getFormatNoPerms() {
+		return getData().getString("Format.NoPerms", "&cYou do not have enough permission!");
+	}
+
+	/**
+	 * Gets the format not number.
+	 *
+	 * @return the format not number
+	 */
+	public String getFormatNotNumber() {
+		return getData().getString("Format.NotNumber", "&cError on &6%arg%&c, number expected!");
+	}
+
+	/**
 	 * Gets the max mobs.
 	 *
 	 * @return the max mobs
@@ -100,13 +100,13 @@ public class Config extends YMLFile {
 		return getData().getInt("MaxMobs", 20);
 	}
 
+	public ConfigurationSection getMysql() {
+		return getData().getConfigurationSection("MySQL");
+	}
+
 	@Override
 	public void onFileCreation() {
 		plugin.saveResource("Config.yml", true);
-	}
-
-	public ConfigurationSection getMysql() {
-		return getData().getConfigurationSection("MySQL");
 	}
 
 }

@@ -139,12 +139,12 @@ public class CommandLoader {
 		TabCompleteHandler.getInstance().addTabCompleteOption(new TabCompleteHandle("(Entity)", optionsEntity) {
 
 			@Override
-			public void updateReplacements() {
+			public void reload() {
 
 			}
 
 			@Override
-			public void reload() {
+			public void updateReplacements() {
 
 			}
 		});
@@ -152,12 +152,12 @@ public class CommandLoader {
 				.addTabCompleteOption(new TabCompleteHandle("(EntitySpawnReason)", optionsSpawn) {
 
 					@Override
-					public void updateReplacements() {
+					public void reload() {
 
 					}
 
 					@Override
-					public void reload() {
+					public void updateReplacements() {
 
 					}
 				});
@@ -165,12 +165,12 @@ public class CommandLoader {
 				.addTabCompleteOption(new TabCompleteHandle("(EntityDamageCause)", optionsDamage) {
 
 					@Override
-					public void updateReplacements() {
+					public void reload() {
 
 					}
 
 					@Override
-					public void reload() {
+					public void updateReplacements() {
 
 					}
 				});

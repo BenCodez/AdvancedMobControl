@@ -10,13 +10,13 @@ public class NewAttributeHandle implements AttributeHandle {
 	}
 
 	@Override
-	public void setMaxHealth(LivingEntity entity, double health) {
-		entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+	public double getMaxHealth(LivingEntity entity) {
+		return entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 	}
 
 	@Override
-	public double getMaxHealth(LivingEntity entity) {
-		return entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+	public void setMaxHealth(LivingEntity entity, double health) {
+		entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
 	}
 
 }

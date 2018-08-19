@@ -80,6 +80,17 @@ public class Main extends JavaPlugin {
 		AdvancedCoreHook.getInstance().debug(plugin, message);
 	}
 
+	public AttributeHandle getAttributeHandle() {
+		return attributeHandle;
+	}
+
+	/**
+	 * @return the entityHandler
+	 */
+	public EntityHandler getEntityHandler() {
+		return entityHandler;
+	}
+
 	/**
 	 * Metrics.
 	 */
@@ -97,7 +108,7 @@ public class Main extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
 	 */
 	@Override
@@ -105,13 +116,9 @@ public class Main extends JavaPlugin {
 		plugin = null;
 	}
 
-	public void updateHook() {
-		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
 	 */
 	@Override
@@ -151,17 +158,6 @@ public class Main extends JavaPlugin {
 			plugin.getLogger().info("Using new attribute methods");
 		}
 
-	}
-
-	/**
-	 * @return the entityHandler
-	 */
-	public EntityHandler getEntityHandler() {
-		return entityHandler;
-	}
-
-	public AttributeHandle getAttributeHandle() {
-		return attributeHandle;
 	}
 
 	/**
@@ -208,6 +204,10 @@ public class Main extends JavaPlugin {
 		Config.getInstance().setup();
 		plugin.debug("Loaded Files");
 
+	}
+
+	public void updateHook() {
+		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
 	}
 
 }

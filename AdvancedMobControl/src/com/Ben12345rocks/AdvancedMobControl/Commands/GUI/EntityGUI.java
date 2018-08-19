@@ -46,43 +46,6 @@ public class EntityGUI {
 	private EntityGUI() {
 	}
 
-	public void openGUI(Player player) {
-		BInventory inv = new BInventory("EntityHandles");
-
-		for (EntityHandle h : plugin.getEntityHandler().getEntityHandles()) {
-			BInventoryButton b = new BInventoryButton(
-					new ItemBuilder(Material.STONE).setName(h.getFile().getdFile().getName())) {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					openEntityGUI(event.getPlayer(), (EntityHandle) event.getButton().getData().get("Handle"));
-				}
-			};
-			b.addData("Handle", h);
-			inv.addButton(b);
-		}
-
-		inv.addButton(new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cCreate")
-				.addLoreLine("&cCreate entity handle file, can be any name").addLoreLine("&cSet EntityType after")) {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				new ValueRequestBuilder(new StringListener() {
-
-					@Override
-					public void onInput(Player player, String value) {
-						plugin.getEntityHandler().create(value);
-						openGUI(player);
-					}
-				}, new String[] {}).usingMethod(InputMethod.CHAT).allowCustomOption(true).currentValue("")
-						.request(event.getPlayer());
-			}
-
-		});
-
-		inv.openInventory(player);
-	}
-
 	public void openEntityGUI(Player player, EntityHandle handle) {
 		BInventory inv = new BInventory("EntityHandle: " + handle.getFile().getdFile().getName());
 
@@ -214,5 +177,42 @@ public class EntityGUI {
 
 		inv.openInventory(player);
 
+	}
+
+	public void openGUI(Player player) {
+		BInventory inv = new BInventory("EntityHandles");
+
+		for (EntityHandle h : plugin.getEntityHandler().getEntityHandles()) {
+			BInventoryButton b = new BInventoryButton(
+					new ItemBuilder(Material.STONE).setName(h.getFile().getdFile().getName())) {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					openEntityGUI(event.getPlayer(), (EntityHandle) event.getButton().getData().get("Handle"));
+				}
+			};
+			b.addData("Handle", h);
+			inv.addButton(b);
+		}
+
+		inv.addButton(new BInventoryButton(new ItemBuilder(Material.PAPER).setName("&cCreate")
+				.addLoreLine("&cCreate entity handle file, can be any name").addLoreLine("&cSet EntityType after")) {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				new ValueRequestBuilder(new StringListener() {
+
+					@Override
+					public void onInput(Player player, String value) {
+						plugin.getEntityHandler().create(value);
+						openGUI(player);
+					}
+				}, new String[] {}).usingMethod(InputMethod.CHAT).allowCustomOption(true).currentValue("")
+						.request(event.getPlayer());
+			}
+
+		});
+
+		inv.openInventory(player);
 	}
 }
