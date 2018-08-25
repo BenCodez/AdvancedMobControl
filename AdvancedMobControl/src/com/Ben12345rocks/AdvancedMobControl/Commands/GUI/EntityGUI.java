@@ -96,8 +96,12 @@ public class EntityGUI {
 		booleanOptions.add("RemoveDrops");
 
 		for (final String key : booleanOptions) {
-			inv.addButton(new BInventoryButton(new ItemBuilder(Material.REDSTONE_BLOCK)
-					.setName("&c" + key + " = " + handle.getData().getBoolean(key))) {
+			Material material = Material.REDSTONE_BLOCK;
+			if (handle.getData().getBoolean(key)) {
+				material = Material.EMERALD_BLOCK;
+			}
+			inv.addButton(new BInventoryButton(
+					new ItemBuilder(material).setName("&c" + key + " = " + handle.getData().getBoolean(key))) {
 
 				@Override
 				public void onClick(ClickEvent event) {
