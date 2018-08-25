@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 
 import com.Ben12345rocks.AdvancedCore.Rewards.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.UserManager.User;
@@ -54,22 +55,30 @@ public class EntityDeath implements Listener {
 			if (handle == null) {
 				return;
 			}
+			boolean spawner = false;
+			for (MetadataValue data : event.getEntity().getMetadata("Spawner")) {
+				if (data.getOwningPlugin().equals(plugin)) {
+					spawner = data.asBoolean();
+				}
+			}
 			if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 				if (damage.getDamager() instanceof Player) {
 					killer = (Player) damage.getDamager();
 					User user = UserManager.getInstance().getUser(killer);
-					// handle.addKill(user);
-					// handle.runRewards(user, damage.getCause().toString());
 					looting = killer.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-					handle = plugin.getEntityHandler().getHandle(event.getEntityType(),
+					EntityHandle handle2 = plugin.getEntityHandler().getHandle(event.getEntityType(),
 							event.getEntity().getLocation().getWorld(), looting, null);
-
-					if (handle != null) {
+					if (handle2 != null) {
+						handle = handle2;
+					}
+					if (!spawner) {
 						user.giveMoney(handle.getMoney());
 					}
 
-					new RewardBuilder(handle.getData(), "Rewards").send(killer);
+					RewardBuilder rewardBuilder = new RewardBuilder(handle.getData(), "Rewards");
+					rewardBuilder.getRewardOptions().getPlaceholders().put("spawner", "" + spawner);
+					rewardBuilder.send(killer);
 
 				}
 			}

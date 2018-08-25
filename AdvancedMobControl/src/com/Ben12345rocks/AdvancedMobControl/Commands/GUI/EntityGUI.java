@@ -81,6 +81,7 @@ public class EntityGUI {
 							handle.set(entry.getKey(), value);
 							player.sendMessage(
 									StringUtils.getInstance().colorize("&cSetting " + entry.getKey() + " to " + value));
+							plugin.reload();
 						}
 					}, ArrayUtils.getInstance().convert(entry.getValue())).allowCustomOption(true)
 							.currentValue(handle.getData().getString(entry.getKey(), ""))
@@ -106,6 +107,7 @@ public class EntityGUI {
 						public void onInput(Player player, boolean value) {
 							handle.set(key, value);
 							player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + key + " to " + value));
+							plugin.reload();
 						}
 					}).currentValue("" + handle.getData().getBoolean(key)).request(event.getPlayer());
 				}
@@ -132,6 +134,7 @@ public class EntityGUI {
 							handle.set(key, value.intValue());
 							player.sendMessage(
 									StringUtils.getInstance().colorize("&cSetting " + key + " to " + value.intValue()));
+							plugin.reload();
 						}
 					}, new Number[] { 0, 1, 2, 3, 10, 50, 100, 1000 }).allowCustomOption(true)
 							.currentValue("" + handle.getData().getInt(key)).request(event.getPlayer());
@@ -160,6 +163,7 @@ public class EntityGUI {
 							if (event.getClick().equals(ClickType.RIGHT)) {
 								handle.removeDrop(item);
 							}
+							plugin.reload();
 						}
 					});
 				}
@@ -169,6 +173,7 @@ public class EntityGUI {
 							@Override
 							public void onClick(ClickEvent event) {
 								handle.addDrop(event.getPlayer().getInventory().getItemInMainHand());
+								plugin.reload();
 							}
 						});
 				dInv.openInventory(event.getPlayer());

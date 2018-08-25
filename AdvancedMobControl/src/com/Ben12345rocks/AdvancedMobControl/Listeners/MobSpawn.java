@@ -5,6 +5,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
@@ -45,7 +48,66 @@ public class MobSpawn implements Listener {
 				event.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
 				event.getEntity().setHealth(health);
 			}
+		}
 
+		if (event.getSpawnReason().equals(SpawnReason.SPAWNER)) {
+			event.getEntity().setMetadata("Spawner", new MetadataValue() {
+
+				@Override
+				public Object value() {
+					return true;
+				}
+
+				@Override
+				public void invalidate() {
+				}
+
+				@Override
+				public Plugin getOwningPlugin() {
+					return plugin;
+				}
+
+				@Override
+				public String asString() {
+					return "true";
+				}
+
+				@Override
+				public short asShort() {
+					return 0;
+				}
+
+				@Override
+				public long asLong() {
+					return 0;
+				}
+
+				@Override
+				public int asInt() {
+					return 0;
+				}
+
+				@Override
+				public float asFloat() {
+					return 0;
+				}
+
+				@Override
+				public double asDouble() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+
+				@Override
+				public byte asByte() {
+					return 0;
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return true;
+				}
+			});
 		}
 	}
 
