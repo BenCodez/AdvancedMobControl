@@ -21,9 +21,6 @@ import com.Ben12345rocks.AdvancedMobControl.Listeners.EntityDeath;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
 import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
-import com.Ben12345rocks.AdvancedMobControl.VersionHandle.AttributeHandle;
-import com.Ben12345rocks.AdvancedMobControl.VersionHandle.NewAttributeHandle;
-import com.Ben12345rocks.AdvancedMobControl.VersionHandle.OldAttributeHandle;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -39,8 +36,6 @@ public class Main extends JavaPlugin {
 
 	/** The updater. */
 	private Updater updater;
-
-	private AttributeHandle attributeHandle;
 
 	private EntityHandler entityHandler;
 
@@ -78,10 +73,6 @@ public class Main extends JavaPlugin {
 	 */
 	public void debug(String message) {
 		AdvancedCoreHook.getInstance().debug(plugin, message);
-	}
-
-	public AttributeHandle getAttributeHandle() {
-		return attributeHandle;
 	}
 
 	/**
@@ -149,14 +140,6 @@ public class Main extends JavaPlugin {
 				});
 			}
 		}, 10l);
-
-		if (Bukkit.getVersion().contains("1.8") || Bukkit.getVersion().contains("1.7")) {
-			attributeHandle = new OldAttributeHandle();
-			plugin.getLogger().info("Using old attribute methods");
-		} else {
-			attributeHandle = new NewAttributeHandle();
-			plugin.getLogger().info("Using new attribute methods");
-		}
 
 	}
 

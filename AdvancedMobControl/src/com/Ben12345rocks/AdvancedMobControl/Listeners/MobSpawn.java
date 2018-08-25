@@ -1,5 +1,6 @@
 package com.Ben12345rocks.AdvancedMobControl.Listeners;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,7 +42,7 @@ public class MobSpawn implements Listener {
 			// double nHealth = plugin.getAttributeHandle().getMaxHealth(event.getEntity());
 			double health = handle.getHealth();
 			if (health >= 0) {
-				plugin.getAttributeHandle().setMaxHealth(event.getEntity(), health);
+				event.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
 				event.getEntity().setHealth(health);
 			}
 
