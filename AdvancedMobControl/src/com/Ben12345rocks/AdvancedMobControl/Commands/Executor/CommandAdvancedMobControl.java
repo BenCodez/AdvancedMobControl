@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 
 // TODO: Auto-generated Javadoc
@@ -53,8 +53,7 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
 		for (CommandHandler commandHandler : plugin.advancedMobControlCommands) {
 			if (commandHandler.runCommand(sender, args)) {
@@ -63,8 +62,7 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 		}
 
 		// invalid command
-		sender.sendMessage(ChatColor.RED
-				+ "No valid arguments, see /mobcontrol help!");
+		sender.sendMessage(ChatColor.RED + "No valid arguments, see /mobcontrol help!");
 		return true;
 	}
 

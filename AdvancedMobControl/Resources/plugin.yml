@@ -2,6 +2,7 @@ name: ${project.name}
 version: ${project.version}
 main: com.Ben12345rocks.AdvancedMobControl.Main
 softdepend: [AdvancedCore]
+api-version: 1.13
 commands:
   advancedmobcontrol:
     description: Plugin command

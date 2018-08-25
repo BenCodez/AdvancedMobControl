@@ -1,12 +1,16 @@
 package com.Ben12345rocks.AdvancedMobControl.Listeners;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 
 import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
+import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
 
 /**
  * The Class MobSpawn.
@@ -34,11 +38,77 @@ public class MobSpawn implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		EntityHandler entityHandle = new EntityHandler(event.getEntityType());
-		double health = entityHandle.creatureSpawn(plugin.getAttributeHandle().getMaxHealth(event.getEntity()),
-				event.getSpawnReason());
-		plugin.getAttributeHandle().setMaxHealth(event.getEntity(), health);
-		event.getEntity().setHealth(health);
+		EntityHandle handle = plugin.getEntityHandler().getHandle(event.getEntityType(), event.getLocation().getWorld(),
+				-1, event.getSpawnReason());
+
+		if (handle != null) {
+			// double nHealth = plugin.getAttributeHandle().getMaxHealth(event.getEntity());
+			double health = handle.getHealth();
+			if (health >= 0) {
+				event.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+				event.getEntity().setHealth(health);
+			}
+		}
+
+		if (event.getSpawnReason().equals(SpawnReason.SPAWNER)) {
+			event.getEntity().setMetadata("Spawner", new MetadataValue() {
+
+				@Override
+				public Object value() {
+					return true;
+				}
+
+				@Override
+				public void invalidate() {
+				}
+
+				@Override
+				public Plugin getOwningPlugin() {
+					return plugin;
+				}
+
+				@Override
+				public String asString() {
+					return "true";
+				}
+
+				@Override
+				public short asShort() {
+					return 0;
+				}
+
+				@Override
+				public long asLong() {
+					return 0;
+				}
+
+				@Override
+				public int asInt() {
+					return 0;
+				}
+
+				@Override
+				public float asFloat() {
+					return 0;
+				}
+
+				@Override
+				public double asDouble() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+
+				@Override
+				public byte asByte() {
+					return 0;
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return true;
+				}
+			});
+		}
 	}
 
 }
