@@ -47,7 +47,6 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 
 	/*
 	 * (non-Javadoc)
-	 *
 	 * @see
 	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
@@ -55,7 +54,7 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		for (CommandHandler commandHandler : plugin.advancedMobControlCommands) {
+		for (CommandHandler commandHandler : plugin.getAdvancedMobControlCommands()) {
 			if (commandHandler.runCommand(sender, args)) {
 				return true;
 			}

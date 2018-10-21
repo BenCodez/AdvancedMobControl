@@ -10,22 +10,33 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
-import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
 import com.Ben12345rocks.AdvancedCore.YML.YMLFileHandler;
 
+import lombok.Getter;
+
 public class EntityHandle {
+	@Getter
 	private String world;
+	@Getter
 	private int health;
+	@Getter
 	private String type;
+	@Getter
 	private boolean disableRightClick;
+	@Getter
 	private boolean removeDrops;
+	@Getter
 	private String spawnReason;
+	@Getter
 	private int looting;
+	@Getter
 	private int money;
+	@Getter
 	private int exp;
+	@Getter
 	private int priority = 0;
 	private ArrayList<ConfigurationSection> drops;
-
+	@Getter
 	private YMLFileHandler file;
 
 	public EntityHandle(File file) {
@@ -66,53 +77,6 @@ public class EntityHandle {
 			drops.add(new ItemBuilder(d));
 		}
 		return drops;
-	}
-
-	public int getExp() {
-		return exp;
-	}
-
-	/**
-	 * @return the file
-	 */
-	public YMLFile getFile() {
-		return file;
-	}
-
-	public int getHealth() {
-		return health;
-	}
-
-	public int getLooting() {
-		return looting;
-	}
-
-	public int getMoney() {
-		return money;
-	}
-
-	public int getPriority() {
-		return priority;
-	}
-
-	public String getSpawnReason() {
-		return spawnReason;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public String getWorld() {
-		return world;
-	}
-
-	public boolean isDisableRightClick() {
-		return disableRightClick;
-	}
-
-	public boolean isRemoveDrops() {
-		return removeDrops;
 	}
 
 	public void loadValues() {

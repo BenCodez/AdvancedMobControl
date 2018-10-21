@@ -11,10 +11,13 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import com.Ben12345rocks.AdvancedCore.YML.YMLFileHandler;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 
+import lombok.Getter;
+
 /**
  * The Class EntityHandler.
  */
 public class EntityHandler {
+	@Getter
 	private ArrayList<EntityHandle> entityHandles;
 	private Main plugin;
 
@@ -29,10 +32,6 @@ public class EntityHandler {
 				new File(plugin.getDataFolder() + File.separator + "Entities", value + ".yml"));
 		handle.setup();
 		load();
-	}
-
-	public ArrayList<EntityHandle> getEntityHandles() {
-		return entityHandles;
 	}
 
 	public EntityHandle getHandle(EntityType entityType, World world, int looting, SpawnReason reason) {

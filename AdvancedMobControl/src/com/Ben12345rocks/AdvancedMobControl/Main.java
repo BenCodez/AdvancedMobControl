@@ -22,6 +22,9 @@ import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
 import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
 import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Main.
@@ -32,11 +35,14 @@ public class Main extends JavaPlugin {
 	public static Main plugin;
 
 	/** The advanced mob control commands. */
-	public ArrayList<CommandHandler> advancedMobControlCommands;
+	@Getter
+	@Setter
+	private ArrayList<CommandHandler> advancedMobControlCommands;
 
 	/** The updater. */
 	private Updater updater;
 
+	@Getter
 	private EntityHandler entityHandler;
 
 	/**
@@ -73,13 +79,6 @@ public class Main extends JavaPlugin {
 	 */
 	public void debug(String message) {
 		AdvancedCoreHook.getInstance().debug(plugin, message);
-	}
-
-	/**
-	 * @return the entityHandler
-	 */
-	public EntityHandler getEntityHandler() {
-		return entityHandler;
 	}
 
 	/**

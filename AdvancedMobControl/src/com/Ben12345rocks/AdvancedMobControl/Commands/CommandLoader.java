@@ -52,8 +52,8 @@ public class CommandLoader {
 	 * Load commands.
 	 */
 	public void loadCommands() {
-		plugin.advancedMobControlCommands = new ArrayList<CommandHandler>();
-		plugin.advancedMobControlCommands
+		plugin.setAdvancedMobControlCommands(new ArrayList<CommandHandler>());
+		plugin.getAdvancedMobControlCommands()
 				.add(new CommandHandler(new String[] { "Reload" }, "AdvancedMobControl.Reload", "Reload the plugin") {
 
 					@Override
@@ -63,14 +63,14 @@ public class CommandLoader {
 								"&c" + plugin.getName() + " v" + plugin.getDescription().getVersion() + " reloaded"));
 					}
 				});
-		plugin.advancedMobControlCommands
+		plugin.getAdvancedMobControlCommands()
 				.add(new CommandHandler(new String[] { "Help" }, "AdvancedMobControl.Help", "View this page") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
 						ArrayList<TextComponent> msg = new ArrayList<TextComponent>();
 						msg.add(StringUtils.getInstance().stringToComp("&c" + plugin.getName() + " help"));
-						for (CommandHandler cmdHandle : plugin.advancedMobControlCommands) {
+						for (CommandHandler cmdHandle : plugin.getAdvancedMobControlCommands()) {
 							msg.add(cmdHandle.getHelpLine("/advancedmobcontrol"));
 						}
 						if (sender instanceof Player) {
@@ -82,7 +82,7 @@ public class CommandLoader {
 					}
 				});
 
-		plugin.advancedMobControlCommands.add(new CommandHandler(new String[] { "Configure" },
+		plugin.getAdvancedMobControlCommands().add(new CommandHandler(new String[] { "Configure" },
 				"AdvancedMobControl.Configure", "Edit EntityHandles", false) {
 
 			@Override
@@ -91,14 +91,14 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.advancedMobControlCommands
+		plugin.getAdvancedMobControlCommands()
 				.add(new CommandHandler(new String[] { "Perms" }, "AdvancedMobControl.Perms", "View permissions list") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
 						ArrayList<String> msg = new ArrayList<String>();
 						msg.add("&c" + plugin.getName() + " permissions");
-						for (CommandHandler cmdHandle : plugin.advancedMobControlCommands) {
+						for (CommandHandler cmdHandle : plugin.getAdvancedMobControlCommands()) {
 							msg.add(cmdHandle.getPerm());
 						}
 						if (sender instanceof Player) {
@@ -108,6 +108,22 @@ public class CommandLoader {
 						}
 					}
 				});
+
+		ArrayList<CommandHandler> advancedCoreCommands = new ArrayList<CommandHandler>();
+		advancedCoreCommands.addAll(com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance()
+				.getBasicAdminCommands(Main.plugin.getName()));
+		advancedCoreCommands.addAll(com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance()
+				.getBasicCommands(Main.plugin.getName()));
+		for (CommandHandler handle : advancedCoreCommands) {
+			String[] args = handle.getArgs();
+			String[] newArgs = new String[args.length + 1];
+			newArgs[0] = "AdvancedCore";
+			for (int i = 0; i < args.length; i++) {
+				newArgs[i + 1] = args[i];
+			}
+			handle.setArgs(newArgs);
+			plugin.getAdvancedMobControlCommands().add(handle);
+		}
 
 	}
 
