@@ -5,9 +5,8 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
 import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Thread.Thread;
 import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
@@ -29,7 +28,7 @@ import lombok.Setter;
 /**
  * The Class Main.
  */
-public class Main extends JavaPlugin {
+public class Main extends AdvancedCorePlugin {
 
 	/** The plugin. */
 	public static Main plugin;
@@ -52,33 +51,23 @@ public class Main extends JavaPlugin {
 		plugin.updater = new Updater(plugin, 28297, false);
 		final Updater.UpdateResult result = plugin.updater.getResult();
 		switch (result) {
-		case FAIL_SPIGOT: {
-			plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
-			break;
+			case FAIL_SPIGOT: {
+				plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
+				break;
+			}
+			case NO_UPDATE: {
+				plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
+				break;
+			}
+			case UPDATE_AVAILABLE: {
+				plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
+						+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
+				break;
+			}
+			default: {
+				break;
+			}
 		}
-		case NO_UPDATE: {
-			plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
-			break;
-		}
-		case UPDATE_AVAILABLE: {
-			plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
-					+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
-			break;
-		}
-		default: {
-			break;
-		}
-		}
-	}
-
-	/**
-	 * Debug.
-	 *
-	 * @param message
-	 *            the message
-	 */
-	public void debug(String message) {
-		AdvancedCoreHook.getInstance().debug(plugin, message);
 	}
 
 	/**
@@ -98,27 +87,16 @@ public class Main extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
 	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
 	 */
 	@Override
-	public void onDisable() {
+	public void onUnLoad() {
 		plugin = null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
-	 */
 	@Override
-	public void onEnable() {
-		plugin = this;
+	public void onPostLoad() {
 
-		setupFiles();
-		AdvancedCoreHook.getInstance().setJenkinsSite("ben12345rocks.com");
-		updateHook();
-		AdvancedCoreHook.getInstance().loadHook(this);
 		registerCommands();
 		registerEvents();
 		entityHandler = new EntityHandler();
@@ -139,6 +117,19 @@ public class Main extends JavaPlugin {
 				});
 			}
 		}, 10l);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
+	 */
+	@Override
+	public void onLoad() {
+		plugin = this;
+
+		setupFiles();
+		setJenkinsSite("ben12345rocks.com");
+		updateHook();
 
 	}
 
@@ -174,7 +165,7 @@ public class Main extends JavaPlugin {
 	public void reload() {
 		Config.getInstance().reloadData();
 		updateHook();
-		AdvancedCoreHook.getInstance().reload();
+		super.reload();
 		entityHandler.load();
 
 	}
@@ -189,7 +180,7 @@ public class Main extends JavaPlugin {
 	}
 
 	public void updateHook() {
-		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
+		setConfigData(Config.getInstance().getData());
 	}
 
 }
