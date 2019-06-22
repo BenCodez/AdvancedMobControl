@@ -124,7 +124,7 @@ public class Main extends AdvancedCorePlugin {
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
 	 */
 	@Override
-	public void onLoad() {
+	public void onPreLoad() {
 		plugin = this;
 
 		setupFiles();
