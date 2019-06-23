@@ -165,7 +165,7 @@ public class Main extends AdvancedCorePlugin {
 	public void reload() {
 		Config.getInstance().reloadData();
 		updateHook();
-		super.reload();
+		updateHook();
 		entityHandler.load();
 
 	}
