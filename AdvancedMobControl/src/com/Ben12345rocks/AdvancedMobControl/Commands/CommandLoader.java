@@ -13,8 +13,8 @@ import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
+import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedMobControl.Main;
 import com.Ben12345rocks.AdvancedMobControl.Commands.GUI.EntityGUI;
 
@@ -59,7 +59,7 @@ public class CommandLoader {
 					@Override
 					public void execute(CommandSender sender, String[] args) {
 						plugin.reload();
-						sender.sendMessage(StringUtils.getInstance().colorize(
+						sender.sendMessage(StringParser.getInstance().colorize(
 								"&c" + plugin.getName() + " v" + plugin.getDescription().getVersion() + " reloaded"));
 					}
 				});
@@ -69,7 +69,7 @@ public class CommandLoader {
 					@Override
 					public void execute(CommandSender sender, String[] args) {
 						ArrayList<TextComponent> msg = new ArrayList<TextComponent>();
-						msg.add(StringUtils.getInstance().stringToComp("&c" + plugin.getName() + " help"));
+						msg.add(StringParser.getInstance().stringToComp("&c" + plugin.getName() + " help"));
 						for (CommandHandler cmdHandle : plugin.getAdvancedMobControlCommands()) {
 							msg.add(cmdHandle.getHelpLine("/advancedmobcontrol"));
 						}

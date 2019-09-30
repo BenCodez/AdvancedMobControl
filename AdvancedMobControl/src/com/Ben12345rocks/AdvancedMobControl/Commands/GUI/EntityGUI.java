@@ -14,9 +14,9 @@ import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
+import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.MiscUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.InputMethod;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequestBuilder;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.BooleanListener;
@@ -80,7 +80,7 @@ public class EntityGUI {
 							}
 							handle.set(entry.getKey(), value);
 							player.sendMessage(
-									StringUtils.getInstance().colorize("&cSetting " + entry.getKey() + " to " + value));
+									StringParser.getInstance().colorize("&cSetting " + entry.getKey() + " to " + value));
 							plugin.reload();
 						}
 					}, ArrayUtils.getInstance().convert(entry.getValue())).allowCustomOption(true)
@@ -110,7 +110,7 @@ public class EntityGUI {
 						@Override
 						public void onInput(Player player, boolean value) {
 							handle.set(key, value);
-							player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + key + " to " + value));
+							player.sendMessage(StringParser.getInstance().colorize("&cSetting " + key + " to " + value));
 							plugin.reload();
 						}
 					}).currentValue("" + handle.getData().getBoolean(key)).request(event.getPlayer());
@@ -137,7 +137,7 @@ public class EntityGUI {
 						public void onInput(Player player, Number value) {
 							handle.set(key, value.intValue());
 							player.sendMessage(
-									StringUtils.getInstance().colorize("&cSetting " + key + " to " + value.intValue()));
+									StringParser.getInstance().colorize("&cSetting " + key + " to " + value.intValue()));
 							plugin.reload();
 						}
 					}, new Number[] { 0, 1, 2, 3, 10, 50, 100, 1000 }).allowCustomOption(true)

@@ -47,6 +47,9 @@ public class MobSpawn implements Listener {
 			if (health >= 0) {
 				event.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
 				event.getEntity().setHealth(health);
+			} else {
+				event.getEntity().setHealth(0);
+				event.getEntity().remove();
 			}
 		}
 
