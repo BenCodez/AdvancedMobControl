@@ -1,7 +1,10 @@
 # AdvancedMobControl by Ben12345rocks
 
-# Debug
-Debug: false
+# Debug levels:
+# NONE
+# INFO
+# EXTRA
+DebugLevel: NONE
 
 # Valid Options:
 # - FLAT
