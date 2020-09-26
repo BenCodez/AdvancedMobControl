@@ -3,6 +3,7 @@ version: ${project.version}
 main: com.Ben12345rocks.AdvancedMobControl.Main
 softdepend: [AdvancedCore]
 api-version: 1.13
+author: BenCodez
 commands:
   advancedmobcontrol:
     description: Plugin command
