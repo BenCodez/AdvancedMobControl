@@ -4,6 +4,8 @@ main: com.Ben12345rocks.AdvancedMobControl.Main
 softdepend: [AdvancedCore]
 api-version: 1.13
 author: BenCodez
+libraries:
+  - org.openjdk.nashorn:nashorn-core:15.2
 commands:
   advancedmobcontrol:
     description: Plugin command
