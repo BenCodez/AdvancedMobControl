@@ -1,12 +1,12 @@
-package com.Ben12345rocks.AdvancedMobControl.Commands.Executor;
+package com.bencodez.advancedmobcontrol.commands.executor;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AdvancedMobControl.Main;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -18,7 +18,7 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 	private static CommandAdvancedMobControl instance = new CommandAdvancedMobControl();
 
 	/** The plugin. */
-	private static Main plugin;
+	private static AdvancedMobControlMain plugin;
 
 	/**
 	 * Gets the single instance of CommandAdvancedMobControl.
@@ -41,7 +41,7 @@ public class CommandAdvancedMobControl implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin
 	 */
-	public CommandAdvancedMobControl(Main plugin) {
+	public CommandAdvancedMobControl(AdvancedMobControlMain plugin) {
 		CommandAdvancedMobControl.plugin = plugin;
 	}
 

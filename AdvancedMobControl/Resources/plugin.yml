@@ -1,7 +1,6 @@
 name: ${project.name}
 version: ${project.version}
-main: com.Ben12345rocks.AdvancedMobControl.Main
-softdepend: [AdvancedCore]
+main: com.bencodez.advancedmobcontrol.AdvancedMobControlMain
 api-version: 1.13
 author: BenCodez
 libraries:

@@ -1,25 +1,22 @@
-package com.Ben12345rocks.AdvancedMobControl;
+package com.bencodez.advancedmobcontrol;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Thread.Thread;
-import com.Ben12345rocks.AdvancedCore.Util.Metrics.BStatsMetrics;
-import com.Ben12345rocks.AdvancedCore.Util.Metrics.MCStatsMetrics;
-import com.Ben12345rocks.AdvancedCore.Util.Updater.Updater;
-import com.Ben12345rocks.AdvancedMobControl.Commands.CommandLoader;
-import com.Ben12345rocks.AdvancedMobControl.Commands.Executor.CommandAdvancedMobControl;
-import com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete.AdvancedMobControlTabCompleter;
-import com.Ben12345rocks.AdvancedMobControl.Config.Config;
-import com.Ben12345rocks.AdvancedMobControl.Listeners.EntityDeath;
-import com.Ben12345rocks.AdvancedMobControl.Listeners.MobClicked;
-import com.Ben12345rocks.AdvancedMobControl.Listeners.MobSpawn;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandler;
+import com.bencodez.advancedcore.AdvancedCorePlugin;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.advancedcore.api.metrics.BStatsMetrics;
+import com.bencodez.advancedcore.api.updater.Updater;
+import com.bencodez.advancedmobcontrol.commands.CommandLoader;
+import com.bencodez.advancedmobcontrol.commands.executor.CommandAdvancedMobControl;
+import com.bencodez.advancedmobcontrol.commands.tabcomplete.AdvancedMobControlTabCompleter;
+import com.bencodez.advancedmobcontrol.config.Config;
+import com.bencodez.advancedmobcontrol.listeners.EntityDeath;
+import com.bencodez.advancedmobcontrol.listeners.MobClicked;
+import com.bencodez.advancedmobcontrol.listeners.MobSpawn;
+import com.bencodez.advancedmobcontrol.object.EntityHandler;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,10 +25,10 @@ import lombok.Setter;
 /**
  * The Class Main.
  */
-public class Main extends AdvancedCorePlugin {
+public class AdvancedMobControlMain extends AdvancedCorePlugin {
 
 	/** The plugin. */
-	public static Main plugin;
+	public static AdvancedMobControlMain plugin;
 
 	/** The advanced mob control commands. */
 	@Getter
@@ -44,6 +41,9 @@ public class Main extends AdvancedCorePlugin {
 	@Getter
 	private EntityHandler entityHandler;
 
+	@Getter
+	private Config configFile;
+
 	/**
 	 * Check update.
 	 */
@@ -51,22 +51,22 @@ public class Main extends AdvancedCorePlugin {
 		plugin.updater = new Updater(plugin, 28297, false);
 		final Updater.UpdateResult result = plugin.updater.getResult();
 		switch (result) {
-			case FAIL_SPIGOT: {
-				plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
-				break;
-			}
-			case NO_UPDATE: {
-				plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
-				break;
-			}
-			case UPDATE_AVAILABLE: {
-				plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
-						+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
-				break;
-			}
-			default: {
-				break;
-			}
+		case FAIL_SPIGOT: {
+			plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
+			break;
+		}
+		case NO_UPDATE: {
+			plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
+			break;
+		}
+		case UPDATE_AVAILABLE: {
+			plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
+					+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 	}
 
@@ -74,19 +74,12 @@ public class Main extends AdvancedCorePlugin {
 	 * Metrics.
 	 */
 	private void metrics() {
-		try {
-			MCStatsMetrics metrics = new MCStatsMetrics(this);
-			metrics.start();
-			plugin.debug("Loaded Metrics");
-		} catch (IOException e) {
-			plugin.getLogger().info("Can't submit metrics stats");
-		}
-
-		new BStatsMetrics(this);
+		new BStatsMetrics(this, 41);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
 	 */
 	@Override
@@ -99,7 +92,7 @@ public class Main extends AdvancedCorePlugin {
 
 		registerCommands();
 		registerEvents();
-		entityHandler = new EntityHandler();
+		entityHandler = new EntityHandler(this);
 		metrics();
 
 		plugin.getLogger().info("Enabled " + plugin.getName() + " " + plugin.getDescription().getVersion());
@@ -108,7 +101,7 @@ public class Main extends AdvancedCorePlugin {
 
 			@Override
 			public void run() {
-				Thread.getInstance().run(new Runnable() {
+				com.bencodez.advancedcore.thread.Thread.getInstance().run(new Runnable() {
 
 					@Override
 					public void run() {
@@ -121,6 +114,7 @@ public class Main extends AdvancedCorePlugin {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
 	 */
 	@Override
@@ -163,7 +157,7 @@ public class Main extends AdvancedCorePlugin {
 	 * Reload.
 	 */
 	public void reload() {
-		Config.getInstance().reloadData();
+		configFile.reloadData();
 		updateHook();
 		updateHook();
 		entityHandler.load();
@@ -174,13 +168,13 @@ public class Main extends AdvancedCorePlugin {
 	 * Setup files.
 	 */
 	public void setupFiles() {
-		Config.getInstance().setup();
+		configFile = new Config(this);
 		plugin.debug("Loaded Files");
 
 	}
 
 	public void updateHook() {
-		setConfigData(Config.getInstance().getData());
+		setConfigData(configFile.getData());
 	}
 
 }

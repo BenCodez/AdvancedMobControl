@@ -1,14 +1,14 @@
 /*
  *
  */
-package com.Ben12345rocks.AdvancedMobControl.Config;
+package com.bencodez.advancedmobcontrol.config;
 
 import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
-import com.Ben12345rocks.AdvancedMobControl.Main;
+import com.bencodez.advancedcore.api.yml.YMLFile;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,26 +16,16 @@ import com.Ben12345rocks.AdvancedMobControl.Main;
  */
 public class Config extends YMLFile {
 
-	/** The instance. */
-	static Config instance = new Config();
 
-	/** The plugin. */
-	static Main plugin = Main.plugin;
+	 private AdvancedMobControlMain plugin;
 
-	/**
-	 * Gets the single instance of Config.
-	 *
-	 * @return single instance of Config
-	 */
-	public static Config getInstance() {
-		return instance;
-	}
 
 	/**
 	 * Instantiates a new config.
 	 */
-	public Config() {
-		super(new File(Main.plugin.getDataFolder(), "Config.yml"));
+	public Config(AdvancedMobControlMain plugin) {
+		super(plugin, new File(plugin.getDataFolder(), "Config.yml"));
+		this.plugin = plugin;
 	}
 
 	public String getDataStorage() {

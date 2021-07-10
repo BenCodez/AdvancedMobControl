@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Commands;
+package com.bencodez.advancedmobcontrol.commands;
 
 import java.util.ArrayList;
 
@@ -9,14 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandle;
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandler;
-import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Commands.GUI.EntityGUI;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.advancedcore.api.command.TabCompleteHandle;
+import com.bencodez.advancedcore.api.command.TabCompleteHandler;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.advancedcore.api.user.UserManager;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
+import com.bencodez.advancedmobcontrol.commands.gui.EntityGUI;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -26,7 +26,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class CommandLoader {
 
 	/** The plugin. */
-	public Main plugin = Main.plugin;
+	public AdvancedMobControlMain plugin = AdvancedMobControlMain.plugin;
 
 	/**
 	 * Instantiates a new command loader.
@@ -37,7 +37,7 @@ public class CommandLoader {
 
 			@Override
 			public void run() {
-				com.Ben12345rocks.AdvancedCore.Thread.Thread.getInstance().run(new Runnable() {
+				com.bencodez.advancedcore.thread.Thread.getInstance().run(new Runnable() {
 
 					@Override
 					public void run() {
@@ -110,10 +110,10 @@ public class CommandLoader {
 				});
 
 		ArrayList<CommandHandler> advancedCoreCommands = new ArrayList<CommandHandler>();
-		advancedCoreCommands.addAll(com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance()
-				.getBasicAdminCommands(Main.plugin.getName()));
-		advancedCoreCommands.addAll(com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance()
-				.getBasicCommands(Main.plugin.getName()));
+		advancedCoreCommands.addAll(com.bencodez.advancedcore.command.CommandLoader.getInstance()
+				.getBasicAdminCommands(AdvancedMobControlMain.plugin.getName()));
+		advancedCoreCommands.addAll(com.bencodez.advancedcore.command.CommandLoader.getInstance()
+				.getBasicCommands(AdvancedMobControlMain.plugin.getName()));
 		for (CommandHandler handle : advancedCoreCommands) {
 			String[] args = handle.getArgs();
 			String[] newArgs = new String[args.length + 1];

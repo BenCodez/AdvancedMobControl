@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Commands.GUI;
+package com.bencodez.advancedmobcontrol.commands.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,20 +10,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.inventory.ClickType;
 
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
-import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.MiscUtils;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.InputMethod;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequestBuilder;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.BooleanListener;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.NumberListener;
-import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.StringListener;
-import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
+import com.bencodez.advancedcore.api.inventory.BInventory;
+import com.bencodez.advancedcore.api.inventory.BInventory.ClickEvent;
+import com.bencodez.advancedcore.api.inventory.BInventoryButton;
+import com.bencodez.advancedcore.api.item.ItemBuilder;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.advancedcore.api.misc.MiscUtils;
+import com.bencodez.advancedcore.api.valuerequest.InputMethod;
+import com.bencodez.advancedcore.api.valuerequest.ValueRequestBuilder;
+import com.bencodez.advancedcore.api.valuerequest.listeners.BooleanListener;
+import com.bencodez.advancedcore.api.valuerequest.listeners.NumberListener;
+import com.bencodez.advancedcore.api.valuerequest.listeners.StringListener;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
+import com.bencodez.advancedmobcontrol.object.EntityHandle;
 
 public class EntityGUI {
 	static EntityGUI instance = new EntityGUI();
@@ -38,7 +38,7 @@ public class EntityGUI {
 	}
 
 	/** The plugin. */
-	Main plugin = Main.plugin;
+	AdvancedMobControlMain plugin = AdvancedMobControlMain.plugin;
 
 	/**
 	 * Instantiates a new commands.

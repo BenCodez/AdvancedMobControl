@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Commands.TabComplete;
+package com.bencodez.advancedmobcontrol.commands.tabcomplete;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,8 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandler;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
+import com.bencodez.advancedcore.api.command.TabCompleteHandler;
+import com.bencodez.advancedcore.api.messages.StringParser;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -20,7 +20,7 @@ import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 public class AdvancedMobControlTabCompleter implements TabCompleter {
 
 	/** The plugin. */
-	com.Ben12345rocks.AdvancedMobControl.Main plugin = com.Ben12345rocks.AdvancedMobControl.Main.plugin;
+	com.bencodez.advancedmobcontrol.AdvancedMobControlMain plugin = com.bencodez.advancedmobcontrol.AdvancedMobControlMain.plugin;
 
 	/*
 	 * (non-Javadoc)

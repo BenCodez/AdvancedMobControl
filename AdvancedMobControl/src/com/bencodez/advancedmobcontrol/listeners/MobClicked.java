@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Listeners;
+package com.bencodez.advancedmobcontrol.listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -6,15 +6,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
+import com.bencodez.advancedmobcontrol.object.EntityHandle;
 
 /**
  * The Class MobSpawn.
  */
 public class MobClicked implements Listener {
 
-	private static Main plugin;
+	private static AdvancedMobControlMain plugin;
 
 	/**
 	 * Instantiates a new mob spawn.
@@ -22,7 +22,7 @@ public class MobClicked implements Listener {
 	 * @param plugin
 	 *            the plugin
 	 */
-	public MobClicked(Main plugin) {
+	public MobClicked(AdvancedMobControlMain plugin) {
 		MobClicked.plugin = plugin;
 	}
 

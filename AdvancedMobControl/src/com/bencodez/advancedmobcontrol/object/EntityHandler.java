@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Object;
+package com.bencodez.advancedmobcontrol.object;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
-import com.Ben12345rocks.AdvancedCore.YML.YMLFileHandler;
-import com.Ben12345rocks.AdvancedMobControl.Main;
+import com.bencodez.advancedcore.api.yml.YMLFileHandler;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
 
 import lombok.Getter;
 
@@ -19,16 +19,16 @@ import lombok.Getter;
 public class EntityHandler {
 	@Getter
 	private ArrayList<EntityHandle> entityHandles;
-	private Main plugin;
+	private AdvancedMobControlMain plugin;
 
-	public EntityHandler() {
-		plugin = Main.plugin;
+	public EntityHandler(AdvancedMobControlMain plugin) {
+		this.plugin = plugin;
 
 		load();
 	}
 
 	public void create(String value) {
-		YMLFileHandler handle = new YMLFileHandler(
+		YMLFileHandler handle = new YMLFileHandler(plugin,
 				new File(plugin.getDataFolder() + File.separator + "Entities", value + ".yml"));
 		handle.setup();
 		load();
@@ -83,7 +83,7 @@ public class EntityHandler {
 		}
 		for (File file : folder.listFiles()) {
 
-			EntityHandle handle = new EntityHandle(file);
+			EntityHandle handle = new EntityHandle(plugin, file);
 			if (handle.getType().isEmpty()) {
 				plugin.getLogger().warning("Missing entity type in file: " + handle.getFile().getdFile().getName());
 			}

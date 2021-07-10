@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Listeners;
+package com.bencodez.advancedmobcontrol.listeners;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventHandler;
@@ -9,8 +9,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
-import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
+import com.bencodez.advancedmobcontrol.object.EntityHandle;
 
 /**
  * The Class MobSpawn.
@@ -18,7 +18,7 @@ import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
 public class MobSpawn implements Listener {
 
 	/** The plugin. */
-	private static Main plugin;
+	private static AdvancedMobControlMain plugin;
 
 	/**
 	 * Instantiates a new mob spawn.
@@ -26,7 +26,7 @@ public class MobSpawn implements Listener {
 	 * @param plugin
 	 *            the plugin
 	 */
-	public MobSpawn(Main plugin) {
+	public MobSpawn(AdvancedMobControlMain plugin) {
 		MobSpawn.plugin = plugin;
 	}
 

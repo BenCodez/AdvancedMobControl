@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Listeners;
+package com.bencodez.advancedmobcontrol.listeners;
 
 import java.util.ArrayList;
 
@@ -13,19 +13,19 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 
-import com.Ben12345rocks.AdvancedCore.Rewards.RewardBuilder;
-import com.Ben12345rocks.AdvancedCore.UserManager.User;
-import com.Ben12345rocks.AdvancedCore.UserManager.UserManager;
-import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
-import com.Ben12345rocks.AdvancedMobControl.Main;
-import com.Ben12345rocks.AdvancedMobControl.Object.EntityHandle;
+import com.bencodez.advancedcore.api.item.ItemBuilder;
+import com.bencodez.advancedcore.api.rewards.RewardBuilder;
+import com.bencodez.advancedcore.api.user.AdvancedCoreUser;
+import com.bencodez.advancedcore.api.user.UserManager;
+import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
+import com.bencodez.advancedmobcontrol.object.EntityHandle;
 
 /**
  * The Class EntityDeath.
  */
 public class EntityDeath implements Listener {
 
-	private static Main plugin;
+	private static AdvancedMobControlMain plugin;
 
 	/**
 	 * Instantiates a new entity death.
@@ -33,7 +33,7 @@ public class EntityDeath implements Listener {
 	 * @param plugin
 	 *            the plugin
 	 */
-	public EntityDeath(Main plugin) {
+	public EntityDeath(AdvancedMobControlMain plugin) {
 		EntityDeath.plugin = plugin;
 	}
 
@@ -65,7 +65,7 @@ public class EntityDeath implements Listener {
 				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 				if (damage.getDamager() instanceof Player) {
 					killer = (Player) damage.getDamager();
-					User user = UserManager.getInstance().getUser(killer);
+					AdvancedCoreUser user = UserManager.getInstance().getUser(killer);
 					looting = killer.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 					EntityHandle handle2 = plugin.getEntityHandler().getHandle(event.getEntityType(),
 							event.getEntity().getLocation().getWorld(), looting, null);

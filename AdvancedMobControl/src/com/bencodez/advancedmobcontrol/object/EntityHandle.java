@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AdvancedMobControl.Object;
+package com.bencodez.advancedmobcontrol.object;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,8 +9,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
-import com.Ben12345rocks.AdvancedCore.YML.YMLFileHandler;
+import com.bencodez.advancedcore.AdvancedCorePlugin;
+import com.bencodez.advancedcore.api.item.ItemBuilder;
+import com.bencodez.advancedcore.api.yml.YMLFileHandler;
 
 import lombok.Getter;
 
@@ -39,8 +40,8 @@ public class EntityHandle {
 	@Getter
 	private YMLFileHandler file;
 
-	public EntityHandle(File file) {
-		this.file = new YMLFileHandler(file);
+	public EntityHandle(AdvancedCorePlugin plugin, File file) {
+		this.file = new YMLFileHandler(plugin, file);
 		this.file.setup();
 		loadValues();
 	}
