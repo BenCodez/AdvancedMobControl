@@ -16,15 +16,13 @@ import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
  */
 public class Config extends YMLFile {
 
-
-	 private AdvancedMobControlMain plugin;
-
+	private AdvancedMobControlMain plugin;
 
 	/**
 	 * Instantiates a new config.
 	 */
 	public Config(AdvancedMobControlMain plugin) {
-		super(plugin, new File(plugin.getDataFolder(), "Config.yml"));
+		super(plugin, new File(plugin.getDataFolder(), "Config.yml"), true);
 		this.plugin = plugin;
 	}
 
