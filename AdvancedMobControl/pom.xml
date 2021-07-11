@@ -107,7 +107,7 @@
 								<resource>
 									<directory>${basedir}/target</directory>
 									<includes>
-										<include>${project.artifactId}.jar</include>
+										<include>AdvancedMobControl.jar</include>
 									</includes>
 								</resource>
 							</resources>
