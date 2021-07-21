@@ -30,8 +30,7 @@ public class EntityDeath implements Listener {
 	/**
 	 * Instantiates a new entity death.
 	 *
-	 * @param plugin
-	 *            the plugin
+	 * @param plugin the plugin
 	 */
 	public EntityDeath(AdvancedMobControlMain plugin) {
 		EntityDeath.plugin = plugin;
@@ -40,8 +39,7 @@ public class EntityDeath implements Listener {
 	/**
 	 * On creature death.
 	 *
-	 * @param event
-	 *            the event
+	 * @param event the event
 	 */
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -96,7 +94,11 @@ public class EntityDeath implements Listener {
 
 			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 			for (ItemBuilder build : drops) {
-				items.add(build.toItemStack(killer));
+				if (killer != null) {
+					items.add(build.toItemStack(killer));
+				} else {
+					items.add(build.toItemStack());
+				}
 			}
 			event.getDrops().addAll(items);
 		}
