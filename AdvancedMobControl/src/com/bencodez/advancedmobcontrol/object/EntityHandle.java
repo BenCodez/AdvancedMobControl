@@ -31,7 +31,7 @@ public class EntityHandle {
 	@Getter
 	private int looting;
 	@Getter
-	private int money;
+	private double money;
 	@Getter
 	private int exp;
 	@Getter
@@ -100,7 +100,7 @@ public class EntityHandle {
 		removeDrops = getData().getBoolean("RemoveDrops");
 		spawnReason = getData().getString("SpawnReason", "");
 		looting = getData().getInt("Looting", -1);
-		money = getData().getInt("Money");
+		money = getData().getDouble("Money");
 		exp = getData().getInt("Exp");
 		drops = new ArrayList<ConfigurationSection>();
 		if (getData().isConfigurationSection("Drops")) {
