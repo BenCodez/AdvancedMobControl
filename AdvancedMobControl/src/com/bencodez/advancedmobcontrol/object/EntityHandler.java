@@ -49,7 +49,7 @@ public class EntityHandler {
 					if (h.getLooting() == -1 || h.getLooting() == looting) {
 						// plugin.debug("looting matched");
 						// check spawn reason
-						if (reason == null || h.getSpawnReason().equalsIgnoreCase(reason.toString())) {
+						if (reason == null || h.isSpawnReason(reason.toString())) {
 							// plugin.debug("reason matched");
 							matchedHandles.add(h);
 						}

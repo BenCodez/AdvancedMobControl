@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,7 +27,6 @@ public class EntityHandle {
 	private boolean disableRightClick;
 	@Getter
 	private boolean removeDrops;
-	@Getter
 	private String spawnReason;
 	@Getter
 	private int looting;
@@ -44,6 +44,18 @@ public class EntityHandle {
 		this.file = new YMLFileHandler(plugin, file);
 		this.file.setup();
 		loadValues();
+	}
+
+	public boolean isSpawnReason(String spawnReason) {
+		if (spawnReason.isEmpty()) {
+			return true;
+		}
+		for (String str : this.spawnReason.split(Pattern.quote("|"))) {
+			if (str.equalsIgnoreCase(spawnReason)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void addDrop(ItemStack itemInHand) {
