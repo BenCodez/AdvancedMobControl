@@ -16,7 +16,6 @@ import org.bukkit.metadata.MetadataValue;
 import com.bencodez.advancedcore.api.item.ItemBuilder;
 import com.bencodez.advancedcore.api.rewards.RewardBuilder;
 import com.bencodez.advancedcore.api.user.AdvancedCoreUser;
-import com.bencodez.advancedcore.api.user.UserManager;
 import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
 import com.bencodez.advancedmobcontrol.object.EntityHandle;
 
@@ -63,7 +62,7 @@ public class EntityDeath implements Listener {
 				EntityDamageByEntityEvent damage = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
 				if (damage.getDamager() instanceof Player) {
 					killer = (Player) damage.getDamager();
-					AdvancedCoreUser user = UserManager.getInstance().getUser(killer);
+					AdvancedCoreUser user = plugin.getUserManager().getUser(killer);
 					looting = killer.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 					EntityHandle handle2 = plugin.getEntityHandler().getHandle(event.getEntityType(),
 							event.getEntity().getLocation().getWorld(), looting, null);

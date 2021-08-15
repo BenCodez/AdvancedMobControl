@@ -160,6 +160,7 @@ public class EntityGUI {
 							}
 						});
 				for (ItemBuilder item : handle.getDrops()) {
+					
 					dInv.addButton(new BInventoryButton(item) {
 
 						@Override

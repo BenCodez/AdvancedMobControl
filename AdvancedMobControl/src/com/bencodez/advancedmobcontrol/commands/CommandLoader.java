@@ -14,7 +14,6 @@ import com.bencodez.advancedcore.api.command.TabCompleteHandle;
 import com.bencodez.advancedcore.api.command.TabCompleteHandler;
 import com.bencodez.advancedcore.api.messages.StringParser;
 import com.bencodez.advancedcore.api.misc.ArrayUtils;
-import com.bencodez.advancedcore.api.user.UserManager;
 import com.bencodez.advancedmobcontrol.AdvancedMobControlMain;
 import com.bencodez.advancedmobcontrol.commands.gui.EntityGUI;
 
@@ -74,7 +73,7 @@ public class CommandLoader {
 							msg.add(cmdHandle.getHelpLine("/advancedmobcontrol"));
 						}
 						if (sender instanceof Player) {
-							UserManager.getInstance().getUser((Player) sender).sendJson(msg);
+							plugin.getUserManager().getUser((Player) sender).sendJson(msg);
 						} else {
 							sender.sendMessage(
 									ArrayUtils.getInstance().convert(ArrayUtils.getInstance().comptoString(msg)));
@@ -102,7 +101,7 @@ public class CommandLoader {
 							msg.add(cmdHandle.getPerm());
 						}
 						if (sender instanceof Player) {
-							UserManager.getInstance().getUser((Player) sender).sendMessage(msg);
+							plugin.getUserManager().getUser((Player) sender).sendMessage(msg);
 						} else {
 							sender.sendMessage(ArrayUtils.getInstance().convert(msg));
 						}
