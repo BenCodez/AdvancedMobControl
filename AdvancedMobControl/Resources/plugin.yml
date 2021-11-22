@@ -4,7 +4,7 @@ main: com.bencodez.advancedmobcontrol.AdvancedMobControlMain
 api-version: 1.13
 author: BenCodez
 libraries:
-  - org.openjdk.nashorn:nashorn-core:15.2
+  - org.openjdk.nashorn:nashorn-core:15.3
 commands:
   advancedmobcontrol:
     description: Plugin command
