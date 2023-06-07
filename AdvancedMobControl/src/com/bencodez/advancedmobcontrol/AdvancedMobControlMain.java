@@ -101,13 +101,7 @@ public class AdvancedMobControlMain extends AdvancedCorePlugin {
 
 			@Override
 			public void run() {
-				com.bencodez.advancedcore.thread.Thread.getInstance().run(new Runnable() {
-
-					@Override
-					public void run() {
-						checkUpdate();
-					}
-				});
+				checkUpdate();
 			}
 		}, 10l);
 	}

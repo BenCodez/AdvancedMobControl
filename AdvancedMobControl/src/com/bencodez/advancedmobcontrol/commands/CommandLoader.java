@@ -36,13 +36,7 @@ public class CommandLoader {
 
 			@Override
 			public void run() {
-				com.bencodez.advancedcore.thread.Thread.getInstance().run(new Runnable() {
-
-					@Override
-					public void run() {
-						loadTabComplete();
-					}
-				});
+				loadTabComplete();
 			}
 		});
 	}
