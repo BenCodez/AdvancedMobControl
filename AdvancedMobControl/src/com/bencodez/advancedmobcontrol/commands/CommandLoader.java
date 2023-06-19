@@ -47,7 +47,7 @@ public class CommandLoader {
 	public void loadCommands() {
 		plugin.setAdvancedMobControlCommands(new ArrayList<CommandHandler>());
 		plugin.getAdvancedMobControlCommands()
-				.add(new CommandHandler(new String[] { "Reload" }, "AdvancedMobControl.Reload", "Reload the plugin") {
+				.add(new CommandHandler(plugin, new String[] { "Reload" }, "AdvancedMobControl.Reload", "Reload the plugin") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -57,7 +57,7 @@ public class CommandLoader {
 					}
 				});
 		plugin.getAdvancedMobControlCommands()
-				.add(new CommandHandler(new String[] { "Help" }, "AdvancedMobControl.Help", "View this page") {
+				.add(new CommandHandler(plugin, new String[] { "Help" }, "AdvancedMobControl.Help", "View this page") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -75,7 +75,7 @@ public class CommandLoader {
 					}
 				});
 
-		plugin.getAdvancedMobControlCommands().add(new CommandHandler(new String[] { "Configure" },
+		plugin.getAdvancedMobControlCommands().add(new CommandHandler(plugin, new String[] { "Configure" },
 				"AdvancedMobControl.Configure", "Edit EntityHandles", false) {
 
 			@Override
@@ -85,7 +85,7 @@ public class CommandLoader {
 		});
 
 		plugin.getAdvancedMobControlCommands()
-				.add(new CommandHandler(new String[] { "Perms" }, "AdvancedMobControl.Perms", "View permissions list") {
+				.add(new CommandHandler(plugin, new String[] { "Perms" }, "AdvancedMobControl.Perms", "View permissions list") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
