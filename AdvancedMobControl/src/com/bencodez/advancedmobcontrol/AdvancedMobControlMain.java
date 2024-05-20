@@ -7,7 +7,6 @@ import org.bukkit.plugin.PluginManager;
 
 import com.bencodez.advancedcore.AdvancedCorePlugin;
 import com.bencodez.advancedcore.api.command.CommandHandler;
-import com.bencodez.advancedcore.api.metrics.BStatsMetrics;
 import com.bencodez.advancedcore.api.updater.Updater;
 import com.bencodez.advancedmobcontrol.commands.CommandLoader;
 import com.bencodez.advancedmobcontrol.commands.executor.CommandAdvancedMobControl;
@@ -17,6 +16,7 @@ import com.bencodez.advancedmobcontrol.listeners.EntityDeath;
 import com.bencodez.advancedmobcontrol.listeners.MobClicked;
 import com.bencodez.advancedmobcontrol.listeners.MobSpawn;
 import com.bencodez.advancedmobcontrol.object.EntityHandler;
+import com.bencodez.simpleapi.metrics.BStatsMetrics;
 
 import lombok.Getter;
 import lombok.Setter;
